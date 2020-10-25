@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import appNavigate from './appNavigate';
 
 const RootStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -43,4 +44,5 @@ const RootNavigation = () => {
   );
 };
 
+export {appNavigate};
 export default RootNavigation;

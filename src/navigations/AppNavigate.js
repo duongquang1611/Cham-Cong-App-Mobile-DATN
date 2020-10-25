@@ -7,9 +7,4 @@ function navToAccountScreen(dispatch, params) {
   dispatch(StackActions.push('AccountScreen', params));
 }
 
-const AppNavigate = {
-  navToOtherScreen,
-  navToAccountScreen,
-};
-
-export default AppNavigate;
+export default {navToOtherScreen, navToAccountScreen};
