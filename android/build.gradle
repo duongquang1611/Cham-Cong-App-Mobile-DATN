@@ -6,6 +6,9 @@ buildscript {
         minSdkVersion = 16
         compileSdkVersion = 29
         targetSdkVersion = 29
+        
+        // https://github.com/react-native-netinfo/react-native-netinfo
+        androidXCore = "1.0.2"
     }
     repositories {
         google()
