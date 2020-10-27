@@ -1,0 +1,9 @@
+export const LOGIN_TABLE = 'LOGIN_TABLE'; // Thong tin dang nhap
+// export const APP_CONFIG_TABLE = 'APP_CONFIG'//Config app
+export const USER_INFO_TABLE = 'USER_INFO'; // Thong tin nguoi dung
+// export const MENU_APP_TABLE = 'MENU_APP'// Loai BDS
+// export const CATEGORIES_TABLE = 'CATEGORIES'// Loai BDS
+// export const PROVINCIAL_CITIES_TABLE = 'PROVINCIAL_CITIES'// Danh sach tinh thanh
+// export const DEFINED_FILTER_TABLE = 'DEFINED_FILTER'// Danh sach tinh thanh
+// export const PACKAGES_PRODUCT_TABLE = 'PACKAGES_PRODUCT'// Danh sach goi
+// export const BASE_URL = 'BASE_URL'
