@@ -15,7 +15,7 @@ function iconLeft(props) {
         onPress={props.onPressIconLeft && onPress}
         style={[styles.styleIcon, props.styleIconLeft]}
         name={props.nameIconLeft}
-        type={props.typeIconLeft || 'FontAwesome'}
+        type={props.typeIconLeft || 'LocalIcon'}
         size={props.sizeIconLeft || commons.sizeIconText}
         color={props.colorIconLeft || commons.colorIcon}
       />
@@ -88,7 +88,7 @@ function iconRight(props) {
         onPress={props.onPressIconRight && onPress}
         style={[styles.styleIcon, props.styleIconRight]}
         name={props.nameIconRight}
-        type={props.typeIconRight || 'FontAwesome'}
+        type={props.typeIconRight || 'LocalIcon'}
         size={props.sizeIconRight || commons.sizeIconText}
         color={props.colorIconRight || commons.colorIcon}
       />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -14,6 +14,9 @@ import actions from '../../../redux/actions';
 import {HeaderView, IconView, InputView, TextView} from '../../components';
 import commons from '../../commons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {GET, isSuccess, POST} from '../../../networking';
+import urlAPI from '../../../networking/urlAPI';
+import models from '../../../models';
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
@@ -30,6 +33,41 @@ const HomeScreen = (props) => {
   };
   const onPressAbc = (data) => {
     console.log('onPressAbc -> data', data);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+  useEffect(() => {
+    alert(models.getTokenSignIn());
+  }, [models.getTokenSignIn()]);
+
+  const getUser = async () => {
+    // let res = await GET(urlAPI.allUsers);
+    let body = {
+      username: 'quang_077',
+      password: 123456,
+      name: 'Duong Quang',
+      phoneNumber: '0123456755',
+      roleId: '5f905b70d20a752c708d6632',
+      companyId: '5f9060db047bf739f070688e',
+    };
+    let admin = {
+      username: 'admin',
+      password: '123456',
+    };
+    let res = await POST(urlAPI.signin, admin);
+    if (isSuccess(res)) {
+      let data = {
+        userId: res.data.user._id,
+        token: res.data.token,
+        roleId: res.data.user.roleId._id,
+      };
+      console.log(isSuccess(res), res.data);
+      models.handleLogin(data);
+    } else {
+      console.log(isSuccess(res), res.response.data);
+    }
   };
   return (
     <>
@@ -55,7 +93,7 @@ const HomeScreen = (props) => {
           abc
         </TextView>
         <IconView name="calendar" size={30} />
-        <IconView name="icon-pacman" size={30} />
+        <IconView name="back" size={30} />
         <IconView name="ios-checkmark-circle-outline" type="Ionicons" />
         <IconView name="arrow-back-ios" type="MaterialIcons" />
         <Icon name="user" size={20} color={commons.colorMain} />

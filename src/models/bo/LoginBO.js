@@ -22,8 +22,8 @@ class LoginBO extends DbHelper {
 
   getTokenSignIn() {
     let loginData = this.getAll();
-    if (loginData && loginData.length > 0 && loginData[0].Token) {
-      return loginData[0].Token;
+    if (loginData && loginData.length > 0 && loginData[0].token) {
+      return loginData[0].token;
     }
     return null;
   }
@@ -39,12 +39,12 @@ class LoginBO extends DbHelper {
 export function handleLogin(responseData) {
   let loginBO = new LoginBO();
   loginBO.clearLogin();
-  if (responseData.id_token) {
-    let loginData = {Token: responseData.id_token};
-    loginBO.insertOrUpdate(loginData, true);
-    return true;
-  }
-  return false;
+  // if (responseData.token) {
+  // let loginData = {token: responseData.token};
+  loginBO.insertOrUpdate(responseData, true);
+  // return true;
+  // }
+  // return false;
 }
 
 export function handleSignOut() {
@@ -53,17 +53,17 @@ export function handleSignOut() {
   return true;
 }
 
-//Lay Token Login
+//Lay token Login
 export function getTokenSignIn() {
   return new LoginBO().getTokenSignIn();
 }
 
-//Lay Token Login
+//Lay token Login
 export function isLoggedIn() {
   return new LoginBO().getTokenSignIn() ? true : false;
 }
 
-//Lay Token Login
+//Lay token Login
 export function roleOfUser() {
   return new LoginBO().getTokenSignIn() ? true : false;
 }
