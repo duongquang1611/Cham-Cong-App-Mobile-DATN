@@ -69,7 +69,7 @@ function getRightElement(props) {
         onPress={props.onPressMenuRight}
         style={[styles.styleIconRight, props.styleMenuRight]}
         name={props.nameMenuRight}
-        type={props.typeIconLeft || 'LocalIcon'}
+        type={props.typeIconRight || 'FontAwesome'}
         size={props.sizeMenuRight || commons.sizeIcon}
         color={props.colorMenuRight || 'white'}
       />

@@ -289,7 +289,7 @@ export default class BaseInput extends Component {
           style={style}
           name={iconLeft || 'home'}
           size={size}
-          type={typeIconLeft || 'EVIcon'}
+          type={typeIconLeft || 'LocalIcon'}
           color={colorIconLeft || commons.colorIcon}
         />
       );
@@ -303,6 +303,7 @@ export default class BaseInput extends Component {
       onPressIconRight,
       height,
       styleIconRight,
+      typeIconRight,
     } = this.props;
     let style = [stylesIconRight, {height: height}, styleIconRight];
     let size = iconRightSize || commons.sizeIcon18;
@@ -312,6 +313,7 @@ export default class BaseInput extends Component {
           onPress={onPressIconRight}
           style={style}
           name={iconRight || 'home'}
+          type={typeIconRight || 'LocalIcon'}
           size={size}
           color={commons.colorIcon}
         />
@@ -322,7 +324,13 @@ export default class BaseInput extends Component {
   };
 
   iconClean = (styleIconCleared) => {
-    let {styleIconClear, height, iconClean, isShowClean = true} = this.props;
+    let {
+      styleIconClear,
+      height,
+      iconClean,
+      isShowClean = true,
+      typeIconClean,
+    } = this.props;
     if (!this.props || (iconClean && iconClean.props)) {
       return {iconClean};
     }
@@ -333,6 +341,7 @@ export default class BaseInput extends Component {
         onPress={this.onClearText}
         style={style}
         name={iconClean || 'clear'}
+        type={typeIconClean || 'LocalIcon'}
         size={commons.sizeIcon14}
         color={commons.colorIcon}
       />

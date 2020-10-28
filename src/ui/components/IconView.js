@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import {
+  createIconSetFromFontello,
+  createIconSetFromIcoMoon,
+} from 'react-native-vector-icons';
 import PropTypes from 'prop-types';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -37,8 +40,10 @@ export const IconViewType = Object.freeze({
   Zocial: 'Zocial',
 });
 
-import fontelloConfig from '../../../assets/selection.json';
-const LocalIcon = createIconSetFromIcoMoon(fontelloConfig);
+import icoMoonConfig from '../../../assets/selection.json';
+import fontelloConfig from '../../../assets/config.json';
+// const LocalIcon = createIconSetFromFontello(fontelloConfig);
+const LocalIcon = createIconSetFromIcoMoon(icoMoonConfig);
 
 const IconView = ({onPress, ...props}) => {
   let Icons = Icon(props.type);
@@ -64,6 +69,7 @@ const IconView = ({onPress, ...props}) => {
           name={props.name}
           // style={props.styleImage}
           type={props.type || IconViewType.LocalIcon}
+          // type={props.type || IconViewType.FontAwesome}
           size={props.size || commons.sizeIcon}
           color={props.color || commons.colorMain}
         />

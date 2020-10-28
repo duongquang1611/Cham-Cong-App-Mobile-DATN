@@ -11,7 +11,7 @@ import {useNavigation, useNavigationBuilder} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {appNavigate} from '../../../navigations';
 import actions from '../../../redux/actions';
-import {HeaderView, IconView, TextView} from '../../components';
+import {HeaderView, IconView, InputView, TextView} from '../../components';
 import commons from '../../commons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -55,10 +55,12 @@ const HomeScreen = (props) => {
           abc
         </TextView>
         <IconView name="calendar" size={30} />
-        <IconView name="back" size={30} />
+        <IconView name="icon-pacman" size={30} />
         <IconView name="ios-checkmark-circle-outline" type="Ionicons" />
         <IconView name="arrow-back-ios" type="MaterialIcons" />
         <Icon name="user" size={20} color={commons.colorMain} />
+        <InputView />
+        <InputView secureTextEntry={true} />
       </View>
     </>
   );
