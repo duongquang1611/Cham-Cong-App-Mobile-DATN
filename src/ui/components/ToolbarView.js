@@ -18,8 +18,8 @@ function getBackElement(props) {
       <IconView
         onPress={isPressBack && naviGoback}
         style={[styles.styleIcon, props.styleIconBack]}
-        name={props.nameIconBack || 'back'}
-        type={props.typeIconBack || 'LocalIcon'}
+        name={props.nameIconBack || 'arrow-back-ios'}
+        type={props.typeIconBack || 'MaterialIcons'}
         size={props.sizeIconBack || commons.sizeIconToolbar}
         color={props.colorIconBack || commons.colorIconBack}
       />

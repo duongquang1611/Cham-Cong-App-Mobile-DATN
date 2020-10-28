@@ -1,5 +1,5 @@
 import Realm from 'realm';
-import commons from '../../commons';
+import commons from '../../ui/commons';
 import {schemaArray} from '../entity';
 
 var instanceDB = new Realm({

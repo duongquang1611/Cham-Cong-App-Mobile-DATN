@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import actions from '../../../redux/actions';
+import {HeaderView} from '../../components';
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
@@ -12,12 +13,20 @@ const AccountScreen = () => {
     dispatch(actions.isShowLoading(!isShowLoading));
   };
   return (
-    <View style={styles.container}>
-      <Text>Index Account</Text>
-      <TouchableOpacity onPress={onShowLoading} style={styles.button}>
-        <Text>Loading: {isShowLoading ? 'true' : 'false'}</Text>
-      </TouchableOpacity>
-    </View>
+    <>
+      <HeaderView
+        isToolbar={true}
+        isStatusBar={true}
+        titleScreen={'Account'}
+        colorIconBack="white"
+      />
+      <View style={styles.container}>
+        <Text>Index Account</Text>
+        <TouchableOpacity onPress={onShowLoading} style={styles.button}>
+          <Text>Loading: {isShowLoading ? 'true' : 'false'}</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 

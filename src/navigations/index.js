@@ -16,11 +16,9 @@ const RootNavigation = () => {
     <NavigationContainer>
       <RootStack.Navigator
         initialRouteName="HomeScreen"
-        screenOptions={
-          {
-            //   headerShown: false,
-          }
-        }>
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
