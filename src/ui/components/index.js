@@ -10,7 +10,7 @@ import ToolbarView from './ToolbarView';
 // import AppStatusBar from './AppStatusBar';
 // import ScrollableTabBarView from './ScrollableTabBarView';
 import TextView from './TextView';
-// import ButtonView from './ButtonView';
+import ButtonView from './ButtonView';
 // import CardView from './CardView';
 // import Checkbox from './Checkbox';
 // import ImageView from './ImageView';
@@ -60,7 +60,7 @@ export {
   // HeaderScrollView,
   // ScrollableTabBarView,
   TextView,
-  // ButtonView,
+  ButtonView,
   // CardView,
   // Checkbox,
   // ImageView,
