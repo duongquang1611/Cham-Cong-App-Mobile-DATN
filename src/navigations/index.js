@@ -16,6 +16,7 @@ const RootNavigation = () => {
     <NavigationContainer>
       <RootStack.Navigator
         initialRouteName="HomeScreen"
+        // initialRouteName="SplashScreen"
         screenOptions={{
           headerShown: false,
         }}>

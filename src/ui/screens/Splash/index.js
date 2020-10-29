@@ -1,12 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import {LoadingView} from '../../components';
 
 const SplashScreen = () => {
-  return (
-    <View>
-      <Text>SplashScreen</Text>
-    </View>
+  const isLoginSuccess = useSelector(
+    (state) => state.authReducer.isLoginSuccess,
   );
+  console.log('SplashScreen -> isLoginSuccess', isLoginSuccess);
+  return <LoadingView />;
 };
 
 export default SplashScreen;

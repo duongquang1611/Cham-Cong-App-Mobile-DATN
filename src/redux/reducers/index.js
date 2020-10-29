@@ -9,7 +9,7 @@ import commonReducer from './commonReducer';
 const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [''],
+  blacklist: [''],
 };
 
 const rootReducer = combineReducers({

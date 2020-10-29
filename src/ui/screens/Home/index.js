@@ -24,6 +24,10 @@ const HomeScreen = (props) => {
   const isShowLoading = useSelector(
     (state) => state.commonReducer.isShowLoading,
   );
+  const isLoginSuccess = useSelector(
+    (state) => state.authReducer.isLoginSuccess,
+  );
+  const authReducer = useSelector((state) => state.authReducer);
 
   const onPress = () => {
     appNavigate.navToAccountScreen(navigation.dispatch, {});
@@ -36,12 +40,18 @@ const HomeScreen = (props) => {
   };
 
   useEffect(() => {
-    getUser();
+    // getUser();
   }, []);
   useEffect(() => {
-    alert(models.getTokenSignIn());
-  }, [models.getTokenSignIn()]);
+    console.log('HomeScreen -> authReducer', authReducer);
 
+    // isLoginSuccess && alert(models.getTokenSignIn());
+    isLoginSuccess && alert(isLoginSuccess);
+  }, [isLoginSuccess]);
+  const logout = () => {
+    console.log('logout -> logout');
+    dispatch(actions.requestLogout());
+  };
   const getUser = async () => {
     // let res = await GET(urlAPI.allUsers);
     let body = {
@@ -56,17 +66,21 @@ const HomeScreen = (props) => {
       username: 'admin',
       password: '123456',
     };
-    let res = await POST(urlAPI.signin, admin);
-    if (isSuccess(res)) {
-      let data = {
-        userId: res.data.user._id,
-        token: res.data.token,
-        roleId: res.data.user.roleId._id,
-      };
-      console.log(isSuccess(res), res.data);
-      models.handleLogin(data);
-    } else {
-      console.log(isSuccess(res), res.response.data);
+    console.log('getUser -> models.getTokenSignIn()', models.getTokenSignIn());
+    if (!models.getTokenSignIn()) {
+      console.log('login');
+      let res = await POST(urlAPI.signin, admin);
+      console.log('getUser -> res', res.status);
+      if (isSuccess(res)) {
+        let data = {
+          userId: res.data.user._id,
+          token: res.data.token,
+          roleId: res.data.user.roleId._id,
+        };
+        dispatch(actions.responseLoginSuccess(data));
+      } else {
+        console.log(isSuccess(res), res.response.data);
+      }
     }
   };
   return (
@@ -88,9 +102,22 @@ const HomeScreen = (props) => {
           <Text>Loading: {isShowLoading ? 'true' : 'false'}</Text>
         </TouchableOpacity>
         {isShowLoading && <ActivityIndicator size="small" color="green" />}
-
-        <TextView id="test" onPress={onPressAbc}>
-          abc
+        {isLoginSuccess ? (
+          <TextView id="testc" style={styles.button} onPress={logout}>
+            Logout
+          </TextView>
+        ) : (
+          <TextView
+            id="testc"
+            style={styles.button}
+            onPress={() => {
+              getUser();
+            }}>
+            Login
+          </TextView>
+        )}
+        <TextView id="testc" style={styles.button} onPress={logout}>
+          Logout
         </TextView>
         <IconView name="calendar" size={30} />
         <IconView name="back" size={30} />

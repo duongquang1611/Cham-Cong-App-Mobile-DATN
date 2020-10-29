@@ -3,6 +3,11 @@ const LOGIN = {
   SUCCESS: 'LOGIN_SUCCESS',
   FAILURE: 'LOGIN_FAILURE',
 };
+const LOGOUT = {
+  REQUEST: 'LOGOUT_REQUEST',
+  SUCCESS: 'LOGOUT_SUCCESS',
+  FAILURE: 'LOGOUT_FAILURE',
+};
 
 const LOADING = {
   LOADING: 'LOADING',
@@ -10,4 +15,4 @@ const LOADING = {
   HIDE: 'LOADING_HIDE',
 };
 
-export default {LOGIN, LOADING};
+export default {LOGIN, LOADING, LOGOUT};

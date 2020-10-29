@@ -38,6 +38,7 @@ import InputView from './InputView';
 // import RadioButton, {RadioGroup} from './RadioButton';
 // import ListImageView from './ListImageView';
 // import {SwipeRating, TapRating} from './RatingView';
+import LoadingView from './LoadingView';
 export {
   // BaseScreen,
   // ScreenBase,
@@ -81,4 +82,5 @@ export {
   // ListImageView,
   // SwipeRating,
   // TapRating,
+  LoadingView,
 };

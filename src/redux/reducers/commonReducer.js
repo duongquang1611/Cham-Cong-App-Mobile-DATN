@@ -1,11 +1,11 @@
 import {types} from '../actions';
 
 const initialState = {
-  isLoginSuccess: null,
   isShowLoading: false,
 };
 
 export default function commonsReducer(state = initialState, action) {
+  console.log('commonsReducer -> action.type', action.type);
   switch (action.type) {
     case types.LOADING.LOADING: {
       return Object.assign({}, state, {
@@ -24,14 +24,6 @@ export default function commonsReducer(state = initialState, action) {
         isShowLoading: false,
       });
     }
-
-    case types.LOGIN.SUCCESS: {
-      models.handleLogin(action.data);
-      return Object.assign({}, state, {
-        isLoginSuccess: true,
-      });
-    }
-
     default:
       return state;
   }

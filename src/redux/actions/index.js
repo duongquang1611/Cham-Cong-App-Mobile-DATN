@@ -1,10 +1,12 @@
 import {appNavigate} from '../../navigations';
 import types from './actionTypes';
-import commonsActions from './commonActions';
+import commonActions from './commonActions';
+import authActions from './authActions';
 
 const actions = {
   ...appNavigate,
-  ...commonsActions,
+  ...commonActions,
+  ...authActions,
 };
 
 export {types};

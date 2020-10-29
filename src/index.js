@@ -9,13 +9,14 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import {myStore, persistor} from './redux/store';
+import {LoadingView} from './ui/components';
 
 export default class App extends React.PureComponent {
   render() {
     return (
       <Provider store={myStore}>
         <MenuProvider>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate loading={<LoadingView />} persistor={persistor}>
             <RootNavigation />
           </PersistGate>
         </MenuProvider>

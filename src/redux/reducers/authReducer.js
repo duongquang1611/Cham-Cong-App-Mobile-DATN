@@ -1,22 +1,35 @@
-import moment from 'moment';
+import {REHYDRATE} from 'redux-persist';
+import models from '../../models';
 import {types} from '../actions';
 
-const initialState = {};
-const REHYDRATE = 'persist/REHYDRATE';
+const initialState = {
+  isLoginSuccess: null,
+  isLogoutSuccess: null,
+};
 
 export default function authReducer(state = initialState, action) {
-  // if (
-  //   action.type === REHYDRATE &&
-  //   action.payload &&
-  //   action.payload.authReducer &&
-  //   action.payload.authReducer.token
-  // ) {
-  //   console.log('persisted: ', action.payload);
-  //   carHeroAPI.defaults.headers.common.Authorization = `Bearer ${
-  //     action.payload.authReducer.token
-  //   }`;
-  // }
   switch (action.type) {
+    // case REHYDRATE: {
+    //   console.log(state);
+    //   return {
+    //     ...state,
+    //   };
+    // }
+    case types.LOGIN.SUCCESS: {
+      models.handleLogin(action.data);
+      return Object.assign({}, state, {
+        isLoginSuccess: true,
+        isLogoutSuccess: false,
+      });
+    }
+    case types.LOGOUT.SUCCESS: {
+      models.handleSignOut();
+      return Object.assign({}, state, {
+        isLoginSuccess: false,
+        isLogoutSuccess: true,
+      });
+    }
+
     default:
       return state;
   }
