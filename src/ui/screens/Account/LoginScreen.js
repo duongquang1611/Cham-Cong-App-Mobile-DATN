@@ -11,12 +11,11 @@ import styles from './styles';
 
 var paramsLogin = {};
 
-const LoginView = (props) => {
+const LoginScreen = (props) => {
   let autoFocus = props.autoFocus == undefined ? false : props.autoFocus;
   const [isVerified, setIsVerified] = useState();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.commonReducer.isLoading);
-  console.log('LoginView -> isLoading', isLoading);
 
   const setParamsLogin = ({id, data}) => {
     paramsLogin[id] = data;
@@ -145,4 +144,4 @@ const LoginView = (props) => {
   );
 };
 
-export default LoginView;
+export default LoginScreen;

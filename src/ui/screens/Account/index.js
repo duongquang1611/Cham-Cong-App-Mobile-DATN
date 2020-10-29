@@ -3,7 +3,6 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import actions from '../../../redux/actions';
 import {HeaderView} from '../../components';
-import LoginView from './LoginView';
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
@@ -18,11 +17,10 @@ const AccountScreen = () => {
       <HeaderView
         isToolbar={isLoginSuccess}
         isStatusBar={isLoginSuccess}
-        titleScreen={isLoginSuccess ? 'Thông tin tài khoản' : 'Đăng nhập'}
+        titleScreen={'Thông tin tài khoản'}
         colorIconBack="white"
         nonShowBack={!isLoginSuccess}
       />
-      {isLoginSuccess ? <></> : <LoginView />}
     </>
   );
 };

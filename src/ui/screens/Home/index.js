@@ -1,22 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useNavigation, useNavigationBuilder} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {appNavigate} from '../../../navigations';
-import actions from '../../../redux/actions';
-import {HeaderView, IconView, InputView, TextView} from '../../components';
-import commons from '../../commons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {GET, isSuccess, POST} from '../../../networking';
-import urlAPI from '../../../networking/urlAPI';
 import models from '../../../models';
+import {appNavigate} from '../../../navigations';
+import {isSuccess, POST} from '../../../networking';
+import urlAPI from '../../../networking/urlAPI';
+import actions from '../../../redux/actions';
+import {HeaderView, TextView} from '../../components';
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
@@ -30,6 +27,9 @@ const HomeScreen = (props) => {
   const onPress = () => {
     appNavigate.navToAccountScreen(navigation.dispatch, {});
   };
+  const onPressLogin = () => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'LoginScreen');
+  };
   const onShowLoading = () => {
     dispatch(actions.isShowLoading(!isLoading));
   };
@@ -37,25 +37,14 @@ const HomeScreen = (props) => {
     console.log('onPressAbc -> data', data);
   };
 
-  // useEffect(() => {
-  //   getUserInModel();
-  // }, []);
-  // const getUserInModel = async () => {
-  //   let user = await models.getUserInfo();
-  //   setUserInfo(user);
-  // };
   useEffect(() => {
     console.log('HomeScreen -> authReducer', authReducer);
-
-    // isLoginSuccess && alert(models.getTokenSignIn());
-    // isLoginSuccess && alert(isLoginSuccess);
   }, [isLoginSuccess]);
   const logout = () => {
     console.log('logout -> logout');
     dispatch(actions.requestLogout());
   };
   const getUser = async () => {
-    // let res = await GET(urlAPI.allUsers);
     let body = {
       username: 'quang_077',
       password: 123456,
@@ -99,6 +88,9 @@ const HomeScreen = (props) => {
         <Text>Home</Text>
         <TouchableOpacity onPress={onPress} style={styles.button}>
           <Text>Navigate to account</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressLogin} style={styles.button}>
+          <Text>Navigate to login</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onShowLoading} style={styles.button}>
           <Text>Loading: {isLoading ? 'true' : 'false'}</Text>

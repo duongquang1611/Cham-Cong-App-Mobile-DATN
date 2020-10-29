@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -13,11 +13,14 @@ const SplashScreen = () => {
   console.log('SplashScreen -> isLoginSuccess', isLoginSuccess);
 
   useEffect(() => {
-    if (isLoginSuccess) {
-      appNavigate.navToOtherScreen(navigation.dispatch, {}, 'HomeScreen');
-    } else {
-      appNavigate.navToAccountScreen(navigation.dispatch);
-    }
+    let nameRouter = isLoginSuccess ? 'HomeScreen' : 'LoginScreen';
+    appNavigate.navToOtherScreen(navigation.dispatch, nameRouter);
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: nameRouter}],
+      }),
+    );
   }, [isLoginSuccess]);
   return <View style={{flex: 1, backgroundColor: 'white'}}></View>;
 };

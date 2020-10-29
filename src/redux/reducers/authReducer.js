@@ -3,8 +3,8 @@ import models from '../../models';
 import {types} from '../actions';
 
 const initialState = {
-  isLoginSuccess: null,
-  isLogoutSuccess: null,
+  isLoginSuccess: false,
+  isLogoutSuccess: true,
 };
 
 export default function authReducer(state = initialState, action) {
