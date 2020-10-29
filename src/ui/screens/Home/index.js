@@ -13,6 +13,7 @@ import {appNavigate} from '../../../navigations';
 import {isSuccess, POST} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
+import commons from '../../commons';
 import {HeaderView, TextView} from '../../components';
 
 const HomeScreen = (props) => {
@@ -27,9 +28,7 @@ const HomeScreen = (props) => {
   const onPress = () => {
     appNavigate.navToAccountScreen(navigation.dispatch, {});
   };
-  const onPressLogin = () => {
-    appNavigate.navToOtherScreen(navigation.dispatch, 'LoginScreen');
-  };
+
   const onShowLoading = () => {
     dispatch(actions.isShowLoading(!isLoading));
   };
@@ -79,8 +78,15 @@ const HomeScreen = (props) => {
       <HeaderView
         isToolbar={true}
         isStatusBar={true}
-        nonShowBack
+        // nonShowBack
         titleScreen={'Home'}
+        nameIconBack="menu"
+        typeIconBack={'MaterialCommunityIcons'}
+        colorIconBack="white"
+        sizeIconBack={commons.sizeIcon24}
+        onPressBack={() => {
+          navigation.toggleDrawer();
+        }}
       />
       <View style={styles.container}>
         <Text>Home</Text>
@@ -89,9 +95,7 @@ const HomeScreen = (props) => {
         <TouchableOpacity onPress={onPress} style={styles.button}>
           <Text>Navigate to account</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPressLogin} style={styles.button}>
-          <Text>Navigate to login</Text>
-        </TouchableOpacity>
+
         <TouchableOpacity onPress={onShowLoading} style={styles.button}>
           <Text>Loading: {isLoading ? 'true' : 'false'}</Text>
         </TouchableOpacity>

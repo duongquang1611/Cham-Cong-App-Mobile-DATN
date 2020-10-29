@@ -13,16 +13,11 @@ const SplashScreen = () => {
   console.log('SplashScreen -> isLoginSuccess', isLoginSuccess);
 
   useEffect(() => {
-    let nameRouter = isLoginSuccess ? 'HomeScreen' : 'LoginScreen';
-    appNavigate.navToOtherScreen(navigation.dispatch, nameRouter);
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: nameRouter}],
-      }),
-    );
+    let nameRouter = isLoginSuccess ? 'DrawerStack' : 'LoginScreen';
+    // let nameRouter = isLoginSuccess ? 'HomeScreen' : 'LoginScreen';
+    appNavigate.navWhenChangeStatusLogin(navigation.dispatch, nameRouter);
   }, [isLoginSuccess]);
-  return <View style={{flex: 1, backgroundColor: 'white'}}></View>;
+  return <></>;
 };
 
 export default SplashScreen;

@@ -14,6 +14,7 @@ function getBackElement(props) {
     const naviGoback = () => {
       props.onPressBack ? props.onPressBack() : navigation.goBack();
     };
+
     return (
       <IconView
         onPress={isPressBack && naviGoback}

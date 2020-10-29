@@ -1,5 +1,5 @@
 // import BaseScreen from './BaseScreen';
-// import ScreenBase from './ScreenBase';
+import ScreenBase from './ScreenBase';
 // // import ScreenContainer from './ScreenContainer'
 import HeaderView from './HeaderView';
 // import LoadingView from './LoadingView';
@@ -41,7 +41,7 @@ import InputView from './InputView';
 import LoadingView from './LoadingView';
 export {
   // BaseScreen,
-  // ScreenBase,
+  ScreenBase,
   // AppStatusBar,
   HeaderView,
   // LoadingView,

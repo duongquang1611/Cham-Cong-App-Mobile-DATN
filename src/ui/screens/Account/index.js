@@ -1,15 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import models from '../../../models';
 import actions from '../../../redux/actions';
 import {HeaderView} from '../../components';
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
   const authReducer = useSelector((state) => state.authReducer);
-  const isShowLoading = useSelector(
-    (state) => state.commonReducer.isShowLoading,
-  );
+  const isLoading = useSelector((state) => state.commonReducer.isLoading);
   const {isLoginSuccess} = authReducer;
 
   return (
@@ -21,6 +20,7 @@ const AccountScreen = () => {
         colorIconBack="white"
         nonShowBack={!isLoginSuccess}
       />
+      <Text>{JSON.stringify(models.getUserInfo())}</Text>
     </>
   );
 };
