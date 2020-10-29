@@ -4,6 +4,7 @@ import models from '../models';
 import urlAPI from './urlAPI';
 
 const isSuccess = (res) => {
+  console.log('isSuccess -> res.request.status', res.request.status);
   let errorCodeString = JSON.stringify(res.request.status);
   console.log('error code:', errorCodeString);
   if (errorCodeString.charAt(0) === '2') {
@@ -21,6 +22,7 @@ instanceAPI.interceptors.response.use(
     return response;
   },
   function (error) {
+    // console.log('error', error.response.data.msg);
     return Promise.reject(error);
   },
 );

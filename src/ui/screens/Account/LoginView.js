@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {Keyboard, StyleSheet, Text, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {isSuccess, POST} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
-import {ButtonView, InputView, TextView} from '../../components';
+import {ButtonView, InputView, LoadingView, TextView} from '../../components';
 import styles from './styles';
 
 var paramsLogin = {};
@@ -14,6 +14,8 @@ const LoginView = (props) => {
   let autoFocus = props.autoFocus == undefined ? false : props.autoFocus;
   const [isVerified, setIsVerified] = useState();
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.commonReducer.isLoading);
+  console.log('LoginView -> isLoading', isLoading);
 
   const setParamsLogin = ({id, data}) => {
     paramsLogin[id] = data;
@@ -28,9 +30,8 @@ const LoginView = (props) => {
   };
   const handleRequetsLogin = async () => {
     Keyboard.dismiss();
-    console.log('handleRequetsLogin -> paramsLogin', paramsLogin);
+    dispatch(actions.isShowLoading(true));
     let res = await POST(urlAPI.signin, paramsLogin);
-    console.log('getUser -> res', res.status);
     if (isSuccess(res)) {
       let data = {
         userId: res.data.user._id,
@@ -39,9 +40,9 @@ const LoginView = (props) => {
       };
       dispatch(actions.responseLoginSuccess(data));
     } else {
-      console.log(isSuccess(res), res.response.data);
       alert(res.response.data.msg);
     }
+    dispatch(actions.isShowLoading(false));
   };
 
   const navigateToForgotPassword = () => {
@@ -60,6 +61,7 @@ const LoginView = (props) => {
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      {isLoading && <LoadingView />}
       <View style={styles.containerFormInput}>
         <Text
           style={{

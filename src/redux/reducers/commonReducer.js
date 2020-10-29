@@ -1,27 +1,26 @@
 import {types} from '../actions';
 
 const initialState = {
-  isShowLoading: false,
+  isLoading: false,
 };
 
-export default function commonsReducer(state = initialState, action) {
-  console.log('commonsReducer -> action.type', action.type);
+export default function commonReducer(state = initialState, action) {
   switch (action.type) {
     case types.LOADING.LOADING: {
       return Object.assign({}, state, {
-        isShowLoading: action.isShow,
+        isLoading: action.isShow,
       });
     }
 
     case types.LOADING.SHOW: {
       return Object.assign({}, state, {
-        isShowLoading: true,
+        isLoading: true,
       });
     }
 
     case types.LOADING.HIDE: {
       return Object.assign({}, state, {
-        isShowLoading: false,
+        isLoading: false,
       });
     }
     default:

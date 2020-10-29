@@ -70,7 +70,7 @@ const HomeScreen = (props) => {
     if (!models.getTokenSignIn()) {
       console.log('login');
       let res = await POST(urlAPI.signin, admin);
-      console.log('getUser -> res', res.status);
+      console.log('getUser -> res', res);
       if (isSuccess(res)) {
         let data = {
           userId: res.data.user._id,

@@ -38,8 +38,10 @@ export default StyleSheet.create({
     // marginTop: commons.margin,
     paddingVertical: 25,
     paddingHorizontal: commons.margin10,
-    elevation: 2,
+    // elevation: 2,
     borderRadius: commons.borderRadius4,
+    borderWidth: 1,
+    borderColor: 'lightgray',
     width: '95%',
   },
 
