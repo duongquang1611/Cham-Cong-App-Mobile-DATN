@@ -47,11 +47,15 @@ export function clearUserInfo() {
   return new UserBO().clearAllUserInfo();
 }
 
-export async function getUserInfo() {
-  let userInfo = await new UserBO().getUserInfo();
-  console.log('userInfo in BO', userInfo);
+export function getUserInfo() {
+  let userInfo = new UserBO().getUserInfo();
   return userInfo;
 }
+// export async function getUserInfo() {
+//   let userInfo = await new UserBO().getUserInfo();
+//   console.log('userInfo in BO', userInfo);
+//   return userInfo;
+// }
 
 // export function isBrocker(userInfo) {
 //   return AgentType.Broker_Acount.type === userInfo?.agentType;

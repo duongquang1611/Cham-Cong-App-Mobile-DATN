@@ -2,7 +2,7 @@ import * as SchemaTable from './Schema';
 // import AppConfigEntity from './AppConfigEntity';
 import LoginEntity from './LoginEntity';
 import UserInfoEntity from './UserInfoEntity';
-// import CategoriesEntity from './CategoriesEntity';
+import RoleEntity from './RoleEntity';
 // import MenuAppEntity from './MenuAppEntity';
 // import ProvincialCitiesEntity from './ProvincialCitiesEntity';
 // import DefinedFilterEntity from './DefinedFilterEntity';
@@ -12,6 +12,7 @@ const schemaArray = [
   // AppConfigEntity,
   LoginEntity,
   UserInfoEntity,
+  RoleEntity,
   // CategoriesEntity,
   // ProvincialCitiesEntity,
   // MenuAppEntity,
@@ -24,6 +25,7 @@ export {
   //   AppConfigEntity,
   LoginEntity,
   UserInfoEntity,
+  RoleEntity,
   //   CategoriesEntity,
   //   ProvincialCitiesEntity,
   //   DefinedFilterEntity,

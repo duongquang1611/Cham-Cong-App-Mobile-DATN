@@ -1,5 +1,5 @@
-export const LOGIN_TABLE = 'LOGIN_TABLE'; // Thong tin dang nhap
-// export const APP_CONFIG_TABLE = 'APP_CONFIG'//Config app
+export const LOGIN_TABLE = 'LOGIN'; // Thong tin dang nhap
+export const ROLE_TABLE = 'ROLE'; //Config app
 export const USER_INFO_TABLE = 'USER_INFO'; // Thong tin nguoi dung
 // export const MENU_APP_TABLE = 'MENU_APP'// Loai BDS
 // export const CATEGORIES_TABLE = 'CATEGORIES'// Loai BDS

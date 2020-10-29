@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -21,32 +21,34 @@ import models from '../../../models';
 const HomeScreen = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const isShowLoading = useSelector(
-    (state) => state.commonReducer.isShowLoading,
-  );
+  const isLoading = useSelector((state) => state.commonReducer.isLoading);
   const isLoginSuccess = useSelector(
     (state) => state.authReducer.isLoginSuccess,
   );
   const authReducer = useSelector((state) => state.authReducer);
-
+  const [userInfo, setUserInfo] = useState({});
   const onPress = () => {
     appNavigate.navToAccountScreen(navigation.dispatch, {});
   };
   const onShowLoading = () => {
-    dispatch(actions.isShowLoading(!isShowLoading));
+    dispatch(actions.isShowLoading(!isLoading));
   };
   const onPressAbc = (data) => {
     console.log('onPressAbc -> data', data);
   };
 
-  useEffect(() => {
-    // getUser();
-  }, []);
+  // useEffect(() => {
+  //   getUserInModel();
+  // }, []);
+  // const getUserInModel = async () => {
+  //   let user = await models.getUserInfo();
+  //   setUserInfo(user);
+  // };
   useEffect(() => {
     console.log('HomeScreen -> authReducer', authReducer);
 
     // isLoginSuccess && alert(models.getTokenSignIn());
-    isLoginSuccess && alert(isLoginSuccess);
+    // isLoginSuccess && alert(isLoginSuccess);
   }, [isLoginSuccess]);
   const logout = () => {
     console.log('logout -> logout');
@@ -99,9 +101,9 @@ const HomeScreen = (props) => {
           <Text>Navigate to account</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onShowLoading} style={styles.button}>
-          <Text>Loading: {isShowLoading ? 'true' : 'false'}</Text>
+          <Text>Loading: {isLoading ? 'true' : 'false'}</Text>
         </TouchableOpacity>
-        {isShowLoading && <ActivityIndicator size="small" color="green" />}
+        {isLoading && <ActivityIndicator size="small" color="green" />}
         {isLoginSuccess ? (
           <TextView id="testc" style={styles.button} onPress={logout}>
             Logout
@@ -116,16 +118,9 @@ const HomeScreen = (props) => {
             Login
           </TextView>
         )}
-        <TextView id="testc" style={styles.button} onPress={logout}>
-          Logout
-        </TextView>
-        <IconView name="calendar" size={30} />
-        <IconView name="back" size={30} />
-        <IconView name="ios-checkmark-circle-outline" type="Ionicons" />
-        <IconView name="arrow-back-ios" type="MaterialIcons" />
-        <Icon name="user" size={20} color={commons.colorMain} />
-        <InputView />
-        <InputView secureTextEntry={true} />
+
+        <Text>{JSON.stringify(models.getUserInfo())}</Text>
+        <Text>{JSON.stringify(models.getTokenSignIn())}</Text>
       </View>
     </>
   );

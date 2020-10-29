@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import models from '../../../models';
 import {isSuccess, POST} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
@@ -31,18 +32,26 @@ const LoginView = (props) => {
   const handleRequetsLogin = async () => {
     Keyboard.dismiss();
     dispatch(actions.isShowLoading(true));
-    let res = await POST(urlAPI.signin, paramsLogin);
-    if (isSuccess(res)) {
-      let data = {
-        userId: res.data.user._id,
-        token: res.data.token,
-        roleId: res.data.user.roleId._id,
-      };
-      dispatch(actions.responseLoginSuccess(data));
-    } else {
-      alert(res.response.data.msg);
+    try {
+      let res = await POST(urlAPI.signin, paramsLogin);
+      if (isSuccess(res)) {
+        // console.log('handleRequetsLogin -> res', res.data);
+        let data = {
+          userId: res.data.user._id,
+          token: res.data.token,
+          roleId: res.data.user.roleId._id,
+        };
+        // save user info to realm
+        models.saveUserInfoData(res.data.user);
+        // save login token to redux
+        dispatch(actions.responseLoginSuccess(data));
+      } else {
+        alert(res.response.data.msg);
+      }
+      dispatch(actions.isShowLoading(false));
+    } catch (error) {
+      dispatch(actions.isShowLoading(false));
     }
-    dispatch(actions.isShowLoading(false));
   };
 
   const navigateToForgotPassword = () => {
