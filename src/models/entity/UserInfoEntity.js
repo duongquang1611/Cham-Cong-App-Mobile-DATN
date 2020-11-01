@@ -8,7 +8,7 @@ const UserInfoEntity = {
     username: {type: 'string?'},
     name: {type: 'string?'},
     roleId: {type: 'ROLE?', default: {}},
-    companyId: {type: 'string?'},
+    companyId: {type: 'COMPANY?'},
     parentId: {type: 'string?'},
     phoneNumber: {type: 'string?'},
     address: {type: 'string?'},

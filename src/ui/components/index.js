@@ -2,6 +2,7 @@
 import ScreenBase from './ScreenBase';
 // // import ScreenContainer from './ScreenContainer'
 import HeaderView from './HeaderView';
+import HeaderMenuDrawer from './HeaderMenuDrawer';
 // import LoadingView from './LoadingView';
 // import AlertView, {AlertButton} from './AlertView';
 // import FooterView from './FooterView';
@@ -44,6 +45,7 @@ export {
   ScreenBase,
   // AppStatusBar,
   HeaderView,
+  HeaderMenuDrawer,
   // LoadingView,
   // AlertView,
   // AlertButton,

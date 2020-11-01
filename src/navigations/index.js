@@ -1,21 +1,27 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import appNavigate from './appNavigate';
 
 const RootStack = createStackNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-
-import HomeScreen from '../ui/screens/Home';
-import AccountScreen from '../ui/screens/Account';
-import LoginScreen from '../ui/screens/Account/LoginScreen';
-import SplashScreen from '../ui/screens/Splash';
 import {useSelector} from 'react-redux';
 import commons from '../ui/commons';
 import DrawerContent from '../ui/screens/DrawerContent';
+import {IconView} from '../ui/components';
+
+import HomeScreen from '../ui/screens/Home';
+import AccountScreen from '../ui/screens/Account';
+import AskComeLateLeaveEarly from '../ui/screens/AskComeLateLeaveEarly';
+import AskDayOff from '../ui/screens/AskDayOff';
+import ReportIndividual from '../ui/screens/Report/Individual';
+import Report from '../ui/screens/Report';
+import Notification from '../ui/screens/Notification';
+import LoginScreen from '../ui/screens/Account/LoginScreen';
+import SplashScreen from '../ui/screens/Splash';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -26,6 +32,10 @@ const RootNavigation = () => {
   const DrawerStack = () => {
     return (
       <Drawer.Navigator
+        drawerContentOptions={{
+          activeBackgroundColor: commons.colorMain70,
+          activeTintColor: 'white',
+        }}
         drawerContent={(props) => <DrawerContent {...props} />}
         initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
@@ -33,11 +43,108 @@ const RootNavigation = () => {
         <Drawer.Screen
           name="HomeScreen"
           component={HomeScreen}
-          // options={{
-          //   swipeEnabled: false,
-          // }}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="home-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Trang chủ',
+          }}
         />
-        <Drawer.Screen name="AccountScreen" component={AccountScreen} />
+        <Drawer.Screen
+          name="AccountScreen"
+          component={AccountScreen}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="account-check-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Thông tin người dùng',
+          }}
+        />
+        <Drawer.Screen
+          name="AskComeLateLeaveEarly"
+          component={AskComeLateLeaveEarly}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="account-check-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Xin đi muộn, về sớm',
+          }}
+        />
+        <Drawer.Screen
+          name="AskDayOff"
+          component={AskDayOff}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="account-check-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Xin nghỉ phép',
+          }}
+        />
+        <Drawer.Screen
+          name="ReportIndividual"
+          component={ReportIndividual}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="account-check-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Báo cáo',
+          }}
+        />
+        <Drawer.Screen
+          name="Report"
+          component={Report}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="account-check-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Tổng hợp báo cáo',
+          }}
+        />
+        <Drawer.Screen
+          name="Notification"
+          component={Notification}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <IconView
+                name="account-check-outline"
+                size={size}
+                color={color}
+                type={'MaterialCommunityIcons'}
+              />
+            ),
+            drawerLabel: 'Thông báo',
+          }}
+        />
       </Drawer.Navigator>
     );
   };

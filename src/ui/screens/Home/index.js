@@ -14,7 +14,7 @@ import {isSuccess, POST} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
-import {HeaderView, TextView} from '../../components';
+import {HeaderMenuDrawer, HeaderView, TextView} from '../../components';
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
@@ -75,19 +75,7 @@ const HomeScreen = (props) => {
   };
   return (
     <>
-      <HeaderView
-        isToolbar={true}
-        isStatusBar={true}
-        // nonShowBack
-        titleScreen={'Home'}
-        nameIconBack="menu"
-        typeIconBack={'MaterialCommunityIcons'}
-        colorIconBack="white"
-        sizeIconBack={commons.sizeIcon24}
-        onPressBack={() => {
-          navigation.toggleDrawer();
-        }}
-      />
+      <HeaderMenuDrawer titleScreen={'Home'} />
       <View style={styles.container}>
         <Text>Home</Text>
         <Text>Home</Text>
