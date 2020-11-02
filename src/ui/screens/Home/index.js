@@ -14,7 +14,12 @@ import {isSuccess, POST} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
-import {HeaderMenuDrawer, HeaderView, TextView} from '../../components';
+import {
+  HeaderMenuDrawer,
+  HeaderView,
+  InputView,
+  TextView,
+} from '../../components';
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();

@@ -1,6 +1,11 @@
 const Colors = {
   colorMain: 'rgba(23,120,242,1)',
   colorMain70: 'rgba(23,120,242,0.7)',
+  colorsLinearGradientSameColor: [
+    'rgba(23,120,242,1)',
+    'rgba(23,120,242,1)',
+    'rgba(23,120,242,1)',
+  ],
   colorsLinearGradient: [
     'rgba(23,120,242,1)',
     'rgba(23,120,242,1)',

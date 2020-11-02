@@ -33,7 +33,8 @@ export default function HeaderView(props) {
 
   return (
     <LinearGradient
-      locations={[0, 0.5, 0.8]}
+      locations={[1, 1, 1]}
+      // locations={[0, 0.5, 0.8]}
       colors={props.colorsLinearGradient}
       style={styleHeader}>
       {isStatusBar && (

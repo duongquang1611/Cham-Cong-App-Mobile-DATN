@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/drawer';
 import React from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
-import {IconView} from '../components';
+import {IconView, TextView} from '../components';
 import {
   useTheme,
   Avatar,
@@ -24,7 +24,6 @@ import actions from '../../redux/actions';
 
 const DrawerContent = (props) => {
   const userInfo = models.getUserInfo();
-  console.log('DrawerContent -> userInfo', userInfo);
   const dispatch = useDispatch();
 
   const onPressLogout = () => {
@@ -35,17 +34,49 @@ const DrawerContent = (props) => {
       <View style={styles.drawerContent}>
         <Drawer.Section>
           <View style={styles.userInfoSection}>
-            <Avatar.Image
-              source={{
-                uri:
-                  'https://pbs.twimg.com/profile_images/952545910990495744/b59hSXUd_400x400.jpg',
-              }}
-              size={50}
-            />
-            <Title style={styles.title}>{userInfo?.name}</Title>
-            <Text style={styles.caption}>
-              Chức vụ: <Text>{userInfo?.roleId?.name}</Text>
-            </Text>
+            <View style={styles.avatar}>
+              {userInfo.avatar ? (
+                <Avatar.Image
+                  source={{
+                    uri: userInfo.avatar,
+                  }}
+                  size={40}
+                />
+              ) : (
+                <IconView
+                  name={
+                    userInfo.gender || userInfo.gender === 0 ? 'female' : 'male'
+                  }
+                  type="Fontisto"
+                  size={40}
+                />
+              )}
+            </View>
+            <View style={{marginLeft: commons.margin10}}>
+              <Title style={styles.title}>{userInfo?.name}</Title>
+              <Text style={styles.caption}>
+                Chức vụ: <Text>{userInfo?.roleId?.name}</Text>
+              </Text>
+              {/* <View
+                style={{
+                  flexDirection: 'row',
+                  paddingVertical: 5,
+                }}>
+                <IconView
+                  type="MaterialCommunityIcons"
+                  name="office-building"
+                  color="grey"
+                  size={commons.sizeIcon18}
+                  style={{marginLeft: -3}}
+                />
+                <Text
+                  style={{
+                    flexWrap: 'wrap',
+                  }}>
+                  {userInfo?.companyId?.name}
+                </Text>
+              </View> */}
+            </View>
           </View>
         </Drawer.Section>
         <Drawer.Section style={styles.drawerSection}>
@@ -103,9 +134,13 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     paddingLeft: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: commons.padding15,
+    flexWrap: 'wrap',
   },
   title: {
-    marginTop: 20,
+    // marginTop: 20,
     fontWeight: 'bold',
   },
   caption: {
@@ -133,5 +168,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
+  },
+  avatar: {
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: commons.colorMain,
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

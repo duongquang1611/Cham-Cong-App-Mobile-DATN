@@ -4,6 +4,7 @@ import LoginEntity from './LoginEntity';
 import UserInfoEntity from './UserInfoEntity';
 import RoleEntity from './RoleEntity';
 import CompanyEntity from './CompanyEntity';
+import ParentEntity from './ParentEntity';
 // import ProvincialCitiesEntity from './ProvincialCitiesEntity';
 // import DefinedFilterEntity from './DefinedFilterEntity';
 // import PackagesEntity from './PackagesEntity';
@@ -14,6 +15,7 @@ const schemaArray = [
   UserInfoEntity,
   RoleEntity,
   CompanyEntity,
+  ParentEntity,
   // ProvincialCitiesEntity,
   // MenuAppEntity,
   // PackagesEntity,
@@ -27,6 +29,7 @@ export {
   UserInfoEntity,
   RoleEntity,
   CompanyEntity,
+  ParentEntity,
   //   ProvincialCitiesEntity,
   //   DefinedFilterEntity,
   //   MenuAppEntity,

@@ -52,7 +52,7 @@ const RootNavigation = () => {
                 type={'MaterialCommunityIcons'}
               />
             ),
-            drawerLabel: 'Trang chủ',
+            drawerLabel: 'Chấm công',
           }}
         />
         <Drawer.Screen

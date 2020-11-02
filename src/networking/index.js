@@ -58,9 +58,9 @@ const POST = async (url, body, option) => {
     return error;
   }
 };
-const GET = async (url, params, config) => {
+const GET = async (url, config) => {
   try {
-    const result = await instanceAPI.get(url, {params: params}, config);
+    const result = await instanceAPI.get(url, config);
     return result;
   } catch (error) {
     return error;

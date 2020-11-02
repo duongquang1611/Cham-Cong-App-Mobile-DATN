@@ -1,15 +1,15 @@
-import {USER_INFO_TABLE} from './Schema';
+import {PARENT_TABLE} from './Schema';
 
-const UserInfoEntity = {
-  name: USER_INFO_TABLE,
+const ParentEntity = {
+  name: PARENT_TABLE,
   primaryKey: '_id',
   properties: {
     _id: {type: 'string?'},
     username: {type: 'string?'},
     name: {type: 'string?'},
-    roleId: {type: 'ROLE?', default: {}},
-    companyId: {type: 'COMPANY?'},
-    parentId: {type: 'PARENT?'},
+    roleId: {type: 'string?'},
+    companyId: {type: 'string?'},
+    parentId: {type: 'string?'},
     phoneNumber: {type: 'string?'},
     address: {type: 'string?'},
     email: {type: 'string?'},
@@ -21,4 +21,4 @@ const UserInfoEntity = {
   },
 };
 
-export default UserInfoEntity;
+export default ParentEntity;

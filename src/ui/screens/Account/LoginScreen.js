@@ -41,6 +41,8 @@ const LoginScreen = (props) => {
           roleId: res.data.user.roleId._id,
         };
         // save user info to realm
+        // if (res.data.user.parentId)
+        //   res.data.user.parentId = JSON.stringify(res.data.user.parentId);
         models.saveUserInfoData(res.data.user);
         // save login token to redux
         dispatch(actions.responseLoginSuccess(data));
@@ -49,6 +51,7 @@ const LoginScreen = (props) => {
       }
       dispatch(actions.isShowLoading(false));
     } catch (error) {
+      console.log('handleRequetsLogin -> error', error);
       dispatch(actions.isShowLoading(false));
     }
   };

@@ -12,6 +12,7 @@ const config = {
     allUsers: 'users',
     signup: 'auth/signup',
     signin: 'auth/signin',
+    detailUser: (id) => `users/${id}`,
   },
 };
 
