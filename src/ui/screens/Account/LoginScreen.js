@@ -30,25 +30,20 @@ const LoginScreen = (props) => {
   };
   const handleRequetsLogin = async () => {
     Keyboard.dismiss();
+    console.log('paramsLogin', paramsLogin);
     dispatch(actions.isShowLoading(true));
     try {
       let res = await POST(urlAPI.signin, paramsLogin);
-      if (isSuccess(res)) {
-        // console.log('handleRequetsLogin -> res', res.data);
-        let data = {
-          userId: res.data.user._id,
-          token: res.data.token,
-          roleId: res.data.user.roleId._id,
-        };
-        // save user info to realm
-        // if (res.data.user.parentId)
-        //   res.data.user.parentId = JSON.stringify(res.data.user.parentId);
-        models.saveUserInfoData(res.data.user);
-        // save login token to redux
-        dispatch(actions.responseLoginSuccess(data));
-      } else {
-        alert(res.response.data.msg);
-      }
+      let data = {
+        userId: res.user._id,
+        token: res.token,
+        roleId: res.user.roleId._id,
+      };
+      // save user info to realm
+      models.saveUserInfoData(res.user);
+      // save login token to redux
+      dispatch(actions.responseLoginSuccess(data));
+      // }
       dispatch(actions.isShowLoading(false));
     } catch (error) {
       console.log('handleRequetsLogin -> error', error);

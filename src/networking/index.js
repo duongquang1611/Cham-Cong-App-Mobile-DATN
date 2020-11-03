@@ -1,10 +1,10 @@
 import axios from 'axios';
 import models from '../models';
+import {showAlert} from '../ui/components';
 
 import urlAPI from './urlAPI';
 
 const isSuccess = (res) => {
-  console.log('isSuccess -> res.request.status', res.request.status);
   let errorCodeString = JSON.stringify(res.request.status);
   console.log('error code:', errorCodeString);
   if (errorCodeString.charAt(0) === '2') {
@@ -19,11 +19,21 @@ const instanceAPI = axios.create({
 
 instanceAPI.interceptors.response.use(
   async (response) => {
-    return response;
+    return response.data;
   },
   function (error) {
-    // console.log('error', error.response.data.msg);
-    return Promise.reject(error);
+    let messageError = 'Lỗi không xác định.';
+    console.log('Error code:', error.response.status);
+    if (error.response.status === 401) {
+      models.handleSignOut();
+      messageError =
+        'Phiên đăng nhập đã hết hạn. Vui lòng khởi động lại ứng dụng và đăng nhập lại';
+    } else if (error.response.data.msg) {
+      messageError = error.response.data.msg;
+    }
+    return showAlert({msg: messageError});
+    // return alert(messageError);
+    // return Promise.reject(error);
   },
 );
 

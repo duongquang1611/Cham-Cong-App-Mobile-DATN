@@ -1,21 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
-import {GET, isSuccess} from '../../../networking';
+import {GET} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
-import actions from '../../../redux/actions';
 import commons from '../../commons';
-import {HeaderMenuDrawer, HeaderView, InputView} from '../../components';
+import {HeaderMenuDrawer, InputView} from '../../components';
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
@@ -42,12 +34,9 @@ const AccountScreen = () => {
   const getDetailUser = async (id) => {
     try {
       let res = await GET(urlAPI.detailUser(id));
-      if (isSuccess(res)) {
-        setUserInfo(res.data);
-      }
+      setUserInfo(res);
     } catch (error) {
       console.log('getDetailUser -> error', error);
-      alert('Xảy ra lỗi');
     }
   };
   return (

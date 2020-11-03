@@ -125,7 +125,6 @@ const DrawerContent = (props) => {
     </DrawerContentScrollView>
   );
 };
-
 export default DrawerContent;
 
 const styles = StyleSheet.create({

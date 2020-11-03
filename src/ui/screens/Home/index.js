@@ -10,16 +10,10 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
 import {appNavigate} from '../../../navigations';
-import {isSuccess, POST} from '../../../networking';
+import {POST} from '../../../networking';
 import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
-import commons from '../../commons';
-import {
-  HeaderMenuDrawer,
-  HeaderView,
-  InputView,
-  TextView,
-} from '../../components';
+import {HeaderMenuDrawer, showAlert, TextView} from '../../components';
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
@@ -31,7 +25,9 @@ const HomeScreen = (props) => {
   const authReducer = useSelector((state) => state.authReducer);
   const [userInfo, setUserInfo] = useState({});
   const onPress = () => {
-    appNavigate.navToAccountScreen(navigation.dispatch, {});
+    console.log('onPress -> onPress');
+    // appNavigate.navToAccountScreen(navigation.dispatch, {});
+    // return <AlertView />;
   };
 
   const onShowLoading = () => {
@@ -39,6 +35,12 @@ const HomeScreen = (props) => {
   };
   const onPressAbc = (data) => {
     console.log('onPressAbc -> data', data);
+  };
+
+  const setParamsAlert = () => {
+    showAlert({
+      showCancel: false,
+    });
   };
 
   useEffect(() => {
@@ -66,16 +68,12 @@ const HomeScreen = (props) => {
       console.log('login');
       let res = await POST(urlAPI.signin, admin);
       console.log('getUser -> res', res);
-      if (isSuccess(res)) {
-        let data = {
-          userId: res.data.user._id,
-          token: res.data.token,
-          roleId: res.data.user.roleId._id,
-        };
-        dispatch(actions.responseLoginSuccess(data));
-      } else {
-        console.log(isSuccess(res), res.response.data);
-      }
+      let data = {
+        userId: res.user._id,
+        token: res.token,
+        roleId: res.user.roleId._id,
+      };
+      dispatch(actions.responseLoginSuccess(data));
     }
   };
   return (
@@ -85,7 +83,7 @@ const HomeScreen = (props) => {
         <Text>Home</Text>
         <Text>Home</Text>
         <Text>Home</Text>
-        <TouchableOpacity onPress={onPress} style={styles.button}>
+        <TouchableOpacity onPress={setParamsAlert} style={styles.button}>
           <Text>Navigate to account</Text>
         </TouchableOpacity>
 

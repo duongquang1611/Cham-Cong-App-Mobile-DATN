@@ -40,6 +40,7 @@ import InputView from './InputView';
 // import ListImageView from './ListImageView';
 // import {SwipeRating, TapRating} from './RatingView';
 import LoadingView from './LoadingView';
+import showAlert from './showAlert';
 export {
   // BaseScreen,
   ScreenBase,
@@ -85,4 +86,5 @@ export {
   // SwipeRating,
   // TapRating,
   LoadingView,
+  showAlert,
 };
