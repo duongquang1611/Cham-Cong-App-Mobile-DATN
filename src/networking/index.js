@@ -32,7 +32,6 @@ instanceAPI.interceptors.response.use(
       messageError = error.response.data.msg;
     }
     return showAlert({msg: messageError});
-    // return alert(messageError);
     // return Promise.reject(error);
   },
 );
