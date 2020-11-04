@@ -1,12 +1,70 @@
-import React, {useEffect, useState} from 'react';
+import moment from 'moment/min/moment-with-locales';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {HeaderMenuDrawer} from '../../../components';
-import moment from 'moment';
 import commons from '../../../commons';
+import {HeaderMenuDrawer, IconView} from '../../../components';
+import SubInfoCheckinView from './SubInfoCheckinView';
+import styles from './styles';
+moment.locale(commons.getDeviceLanguage(false));
+
+const HEIGHT_MORE_INFO = 120;
+const BlockView = (props) => {
+  const {style, children} = props;
+  return <View style={[styles.containerBlock, style]}>{children}</View>;
+};
+
+const ColumnBaseView = (props) => {
+  const {title, msg, colorMsg = 'black', end = false} = props;
+  return (
+    <View
+      style={{
+        ...styles.center,
+        flex: 1,
+        borderRightWidth: end ? 0 : 1,
+        borderRightColor: 'lightgray',
+      }}>
+      <Text
+        style={{
+          color: colorMsg,
+          fontWeight: 'bold',
+          fontSize: commons.fontSizeHeader,
+        }}>
+        {msg}
+      </Text>
+      <Text>{title}</Text>
+    </View>
+  );
+};
+const RowBaseView = (props) => {
+  const {title, msg, colorMsg = 'black', end = false} = props;
+  return (
+    <View
+      style={{
+        ...styles.center,
+        ...styles.containerSubRowBaseInfo,
+        borderBottomWidth: end ? 0 : 0.5,
+      }}>
+      <Text>{title}</Text>
+      <Text
+        style={{
+          color: colorMsg,
+          fontWeight: 'bold',
+          fontSize: commons.fontSizeHeader,
+        }}>
+        {msg}
+      </Text>
+    </View>
+  );
+};
 const ReportIndividual = () => {
   const [state, setState] = useState({
-    monthChange: moment().format('YYYY-MM-DD'),
+    markedDates: {
+      dateString: moment().format('YYYY-MM-DD'),
+      day: moment().format('D'),
+      month: moment().format('M'),
+      year: moment().format('YYYY'),
+    },
   });
 
   const onMonthChange = (month) => {
@@ -14,83 +72,166 @@ const ReportIndividual = () => {
   };
 
   const renderHeader = (date) => {
-    return <Text>Tháng {moment(new Date(date)).format('MM - YYYY')}</Text>;
+    return (
+      <Text style={styles.textHeader}>
+        Tháng {moment(new Date(date)).format('MM - YYYY')}
+      </Text>
+    );
+  };
+  const onDayPress = (day) => {
+    console.log('onDayPress -> day', day);
+    if (state.markedDates !== day.dateString)
+      setState({
+        ...state,
+        markedDates: day,
+      });
+  };
+
+  const BaseInfoCheckinView = (props) => {
+    return (
+      <View>
+        <View style={styles.containerRowBaseInfo}>
+          <ColumnBaseView title="Ngày Công" msg="10/24" colorMsg="green" />
+          <ColumnBaseView title="Đi muộn, Về sớm" msg="4" colorMsg="orange" />
+          <ColumnBaseView title="Nghỉ làm" msg="1" colorMsg="blue" end={true} />
+        </View>
+        <View
+          style={{
+            ...styles.containerRowBaseInfo,
+            flexDirection: 'column',
+          }}>
+          <RowBaseView title="Số ngày phép còn trong năm" msg={0} />
+          <RowBaseView title="Tổng số phút đi muộn trong tháng" msg={0} />
+          <RowBaseView
+            title="Tổng số phút về sớm trong tháng"
+            end={true}
+            msg={0}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  const MoreInfoCheckinView = (props) => {
+    let {day, month, year} = state.markedDates;
+    let dayName = moment(state.markedDates.dateString).format('dddd');
+    dayName = commons.uppercaseFirstLetter(dayName, true);
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          height: HEIGHT_MORE_INFO,
+          ...styles.bottomBlock,
+        }}>
+        <View style={{flex: 2, ...styles.center}}>
+          <View style={styles.containerDate}>
+            <Text style={{fontSize: commons.fontSize16, fontWeight: 'bold'}}>
+              {dayName}
+            </Text>
+            <Text style={{fontSize: commons.fontSize12, color: 'red'}}>
+              {day} Tháng {month}
+            </Text>
+            <Text style={{fontSize: commons.fontSize16}}>{year}</Text>
+          </View>
+        </View>
+        <View style={{flex: 3}}>
+          <SubInfoCheckinView title="Giờ Checkin" msg={' ' + '-- : --'} />
+          <SubInfoCheckinView title="Số phút đi muộn" msg={'' + '0 ph'} />
+        </View>
+        <View style={{flex: 3}}>
+          <SubInfoCheckinView title="Giờ Checkout" msg={' ' + '-- : --'} />
+          <SubInfoCheckinView title="Số phút về sớm" msg={'' + '0 ph'} />
+        </View>
+      </View>
+    );
   };
   return (
     <>
       <HeaderMenuDrawer titleScreen={'Báo cáo'} />
-      <ScrollView>
-        <Calendar
-          // Initially visible month. Default = Date()
-          // current={'2012-03-01'}
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate={'2012-01-01'}
-          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-          maxDate={'2100-12-31'}
-          // Handler which gets executed on day press. Default = undefined
-          onDayPress={(day) => {
-            console.log('selected day', day);
-          }}
-          // Handler which gets executed on day long press. Default = undefined
-          onDayLongPress={(day) => {
-            console.log('selected day', day);
-          }}
-          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat={'yyyy MM'}
-          // Handler which gets executed when visible month changes in calendar. Default = undefined
-          onMonthChange={onMonthChange}
-          // dayComponent={({date, state}) => {
-          //   return (
-          //     <View>
-          //       <Text
-          //         style={{
-          //           textAlign: 'center',
-          //           color: state === 'disabled' ? 'gray' : 'black',
-          //         }}>
-          //         {date.day}
-          //       </Text>
-          //     </View>
-          //   );
-          // }}
-          // Hide month navigation arrows. Default = false
-          // hideArrows={true}
-          // Replace default arrows with custom ones (direction can be 'left' or 'right')
-          // renderArrow={(direction) => <Arrow />}
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <BaseInfoCheckinView />
+        <BlockView style={styles.customBlockCheckin}>
+          <Text style={styles.titleCheckin}>Lịch Chấm Công</Text>
+          <Text style={{color: commons.subtitle, fontSize: commons.fontSize16}}>
+            Chọn ngày để xem chi tiết chấm công
+          </Text>
+          <Calendar
+            style={{
+              width: commons.widthPercent(100),
+              alignSelf: 'center',
+              ...styles.bottomBlock,
+            }}
+            markingType={'custom'}
+            markedDates={{
+              // '2020-11-04': {
+              //   customStyles: {
+              //     container: {
+              //       backgroundColor: 'green',
+              //     },
+              //     text: {
+              //       color: 'white',
+              //       fontWeight: 'bold',
+              //     },
+              //   },
+              // },
 
-          // Do not show days of other months in month page. Default = false
-          // hideExtraDays={true}
-          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-
-          // day from another month that is visible in calendar page. Default = false
-          disableMonthChange={true}
-          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-          firstDay={1}
-          // Hide day names. Default = false, day name in the top calendars
-          // hideDayNames={true}
-          // Show week numbers to the left. Default = false
-          // showWeekNumbers={true}
-          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-          onPressArrowLeft={(subtractMonth) => subtractMonth()}
-          // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-          onPressArrowRight={(addMonth) => addMonth()}
-          // Disable left arrow. Default = false
-          // disableArrowLeft={true}
-
-          // Disable right arrow. Default = false
-          // disableArrowRight={true}
-
-          // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-          disableAllTouchEventsForDisabledDays={true}
-          // Replace default month and year title with custom one. the function receive a date as parameter.
-          renderHeader={renderHeader}
-          // Enable the option to swipe between months. Default = false
-          // enableSwipeMonths={true}
-        />
+              [state.markedDates.dateString]: {
+                selected: true,
+                // marked: true,
+                selectedColor: commons.colorMain70,
+                customStyles: {
+                  container: {
+                    elevation: 2,
+                  },
+                  text: {
+                    color: 'white',
+                    fontWeight: 'bold',
+                  },
+                },
+              },
+            }}
+            // current={'2012-01-01'}
+            minDate={'2012-01-01'}
+            maxDate={'2100-12-31'}
+            onDayPress={onDayPress}
+            onDayLongPress={(day) => {
+              console.log('selected day', day);
+            }}
+            monthFormat={'yyyy MM'}
+            onMonthChange={onMonthChange}
+            // dayComponent={({date, state}) => {
+            //   return (
+            //     <View>
+            //       <Text
+            //         style={{
+            //           textAlign: 'center',
+            //           color: state === 'disabled' ? 'gray' : 'black',
+            //         }}>
+            //         {date.day}
+            //       </Text>
+            //     </View>
+            //   );
+            // }}
+            // hideArrows={true}
+            // renderArrow={(direction) => <Arrow />}
+            // hideExtraDays={true}
+            // disableMonthChange={true}
+            firstDay={1}
+            // hideDayNames={true}
+            // showWeekNumbers={true}
+            onPressArrowLeft={(subtractMonth) => subtractMonth()}
+            onPressArrowRight={(addMonth) => addMonth()}
+            // disableArrowLeft={true}
+            // disableArrowRight={true}
+            // disableAllTouchEventsForDisabledDays={true}
+            renderHeader={renderHeader}
+            // enableSwipeMonths={true}
+          />
+        </BlockView>
+        <MoreInfoCheckinView />
       </ScrollView>
     </>
   );
 };
 
 export default ReportIndividual;
-
-const styles = StyleSheet.create({});

@@ -1,14 +1,8 @@
 const AppImages = {
-  logo: require('./LogoVLands.png'),
-  LogoVLands: require('./LogoVLands.png'),
-  IconApp: require('./IconApp.png'),
   bg_app: require('./bg-app.jpg'),
-  bg_header: require('./bg-header.jpg'),
   bg_promotional: require('./Villa.png'),
   background: require('./background.png'),
-  hot_girl: require('./hotgirl.jpg'),
   bds_image: require('./default-image.jpg'),
-  send_img: require('./send.png'),
   image_background: require('./Backgroundfull.png'),
   image_bg: require('./image_bg.png'),
   home_rent: require('./home_rent.png'),
@@ -31,14 +25,10 @@ const AppImages = {
   support_person: require('./support_person.png'),
   bg_information: require('./backgroud-app.jpg'),
   image_information: require('./backgroud-information.jpg'),
-  image_goverment: require('./Chinh_Chu.png'),
-  image_agency: require('./Moi_Gioi.png'),
-  pending: require('./pending.svg'),
-  violate: require('./violate.svg'),
-  refuse: require('./refuse.svg'),
-  expired: require('./expired.svg'),
-  draft: require('./draft.svg'),
-  posted: require('./posted.svg'),
+  report: require('./report.png'),
+  reports: require('./reports.png'),
+  profile: require('./profile.png'),
+  home: require('./home.png'),
 };
 
 export default AppImages;

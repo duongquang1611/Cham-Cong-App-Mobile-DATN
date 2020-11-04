@@ -7,8 +7,8 @@ const config = {
     // BASE_URL: 'http://localhost:5000/',
 
     // ngrok
-    BASE_API_URL: 'http://ec4bc64ffa1c.ngrok.io/api/',
-    BASE_URL: 'http://ec4bc64ffa1c.ngrok.io/',
+    BASE_API_URL: 'http://7296373c6ba3.ngrok.io/api/',
+    BASE_URL: 'http://7296373c6ba3.ngrok.io/',
 
     // heroku
     // BASE_API_URL: 'https://cham-cong.herokuapp.com/api/',

@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {View, Text, TouchableOpacity, Platform} from 'react-native';
+import {View, Text, TouchableOpacity, Platform, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import appNavigate from './appNavigate';
 
@@ -22,6 +22,7 @@ import Report from '../ui/screens/Report';
 import Notification from '../ui/screens/Notification';
 import LoginScreen from '../ui/screens/Account/LoginScreen';
 import SplashScreen from '../ui/screens/Splash';
+import AppImages from '../../assets/images';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -46,11 +47,16 @@ const RootNavigation = () => {
           component={HomeScreen}
           options={{
             drawerIcon: ({color, size}) => (
-              <IconView
-                name="home-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
+              // <IconView
+              //   name="home-outline"
+              //   size={size}
+              //   color={color}
+              //   type={'MaterialCommunityIcons'}
+              // />
+              <Image
+                source={AppImages.home}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
               />
             ),
             drawerLabel: 'Chấm công',
@@ -60,14 +66,15 @@ const RootNavigation = () => {
           name="AccountScreen"
           component={AccountScreen}
           options={{
-            drawerIcon: ({color, size}) => (
-              <IconView
-                name="account-check-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
-              />
-            ),
+            drawerIcon: ({color, size}) => {
+              return (
+                <Image
+                  source={AppImages.profile}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              );
+            },
             drawerLabel: 'Thông tin người dùng',
           }}
         />
@@ -106,11 +113,10 @@ const RootNavigation = () => {
           component={ReportIndividual}
           options={{
             drawerIcon: ({color, size}) => (
-              <IconView
-                name="account-check-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
+              <Image
+                source={AppImages.report}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
               />
             ),
             drawerLabel: 'Báo cáo',
@@ -121,11 +127,10 @@ const RootNavigation = () => {
           component={Report}
           options={{
             drawerIcon: ({color, size}) => (
-              <IconView
-                name="account-check-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
+              <Image
+                source={AppImages.reports}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
               />
             ),
             drawerLabel: 'Tổng hợp báo cáo',

@@ -4,6 +4,7 @@ import * as ValidateUtils from './Validate';
 import * as ConvertMoney from './ConvertMoney';
 // import Networking from './../../networking';
 import commons from '..';
+import {NativeModules, Platform} from 'react-native';
 
 // const validateImageUri = (url, isAvatar = false) => {
 //   if (url) {
@@ -216,6 +217,26 @@ function replaceMultiSpaceToSingle(text) {
   return text.replace(/  +/g, ' ');
 }
 
+function getDeviceLanguage(full = true) {
+  const deviceLanguage =
+    Platform.OS === 'ios'
+      ? NativeModules.SettingsManager.settings.AppleLocale ||
+        NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
+      : NativeModules.I18nManager.localeIdentifier;
+  return full ? deviceLanguage : deviceLanguage.substring(0, 2);
+}
+
+function uppercaseFirstLetter(text, eachWord = false) {
+  if (eachWord) {
+    let splitText = text.toLowerCase().split(' ');
+    for (let i = 0; i < splitText.length; i++) {
+      splitText[i] =
+        splitText[i].charAt(0).toUpperCase() + splitText[i].substring(1);
+    }
+    return splitText.join(' ');
+  } else return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 const utils = {
   ...ValidateUtils,
   ...DateUtils,
@@ -236,6 +257,8 @@ const utils = {
   changePositionItemInArray,
   convertObjToArrWithoutKey,
   replaceMultiSpaceToSingle,
+  getDeviceLanguage,
+  uppercaseFirstLetter,
 };
 
 export default utils;
