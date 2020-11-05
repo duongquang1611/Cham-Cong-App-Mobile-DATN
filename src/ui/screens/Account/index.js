@@ -258,7 +258,11 @@ const AccountScreen = () => {
             editable={isEditing}
           />
           <LabelView title={'Giới tính'} />
-          {isEditing ? <NewPicker></NewPicker> : <Text></Text>}
+          {isEditing ? (
+            <NewPicker data={GENDER} onV></NewPicker>
+          ) : (
+            <Text></Text>
+          )}
           <InputView
             id="gender"
             ref={(input) => (refInput['gender'] = input)}

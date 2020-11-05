@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {Picker} from '@react-native-community/picker';
 
 const NewPicker = (props) => {
   const {mode, selectedValue, onValueChange, data} = props;
