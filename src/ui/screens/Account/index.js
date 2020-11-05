@@ -31,7 +31,7 @@ const LabelView = (props) => {
       style={{
         fontStyle: 'normal',
         fontSize: commons.fontSize16,
-        // fontWeight: 'bold',
+        fontWeight: 'bold',
       }}>
       {title}
     </Text>
@@ -188,7 +188,7 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             label={<LabelView title={'Tên người dùng'} />}
             placeholder="Nhập tên ..."
             value={userInfo?.name || noData}
@@ -196,8 +196,7 @@ const AccountScreen = () => {
             isShowClean={isEditing}
             returnKeyType="next"
             editable={isEditing}
-            colorBorderFocus={commons.colorMain}
-            colorBorderError="red"
+            colorBorderDisable={commons.colorMain}
             onSubmitEditing={() => focusTheField('phoneNumber')}
           />
           <InputView
@@ -206,12 +205,13 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             label={<LabelView title={'Số điện thoại'} />}
             placeholder="Nhập số điện thoại ..."
             value={userInfo?.phoneNumber || noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
+            colorBorderDisable={commons.colorMain}
             returnKeyType="next"
             editable={isEditing}
           />
@@ -220,7 +220,7 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             value={userInfo?.parentId?.name || noData}
             label={<LabelView title={'Quản lý trực tiếp'} />}
             isShowClean={false}
@@ -233,12 +233,13 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             label={<LabelView title={'Email'} />}
             placeholder="Nhập email ..."
             value={userInfo?.email || noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
+            colorBorderDisable={commons.colorMain}
             returnKeyType="next"
             editable={isEditing}
           />
@@ -248,42 +249,42 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             label={<LabelView title={'Ngày sinh'} />}
             placeholder="Nhập ngày sinh ..."
             value={userInfo?.dateOfBirth || noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
+            colorBorderDisable={commons.colorMain}
             returnKeyType="next"
             editable={isEditing}
           />
           <LabelView title={'Giới tính'} />
-          {isEditing ? (
-            <NewPicker data={GENDER} onV></NewPicker>
-          ) : (
-            <Text></Text>
-          )}
-          <InputView
-            id="gender"
-            ref={(input) => (refInput['gender'] = input)}
+          {/* {isEditing ? ( */}
+          <View
             style={{
-              ...styles.containerInput,
-            }}
-            colorTextDisable={'gray'}
-            label={<LabelView title={'Giới tính'} />}
-            placeholder="Nhập giới tính ..."
-            value={userInfo?.gender == 1 ? 'Nam' : 'Nữ' || noData}
-            styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
-            isShowClean={isEditing}
-            returnKeyType="next"
-            editable={isEditing}
-          />
+              ...styles.containerPickerGender,
+              borderWidth: isEditing ? 0.65 : 0,
+            }}>
+            <NewPicker
+              data={GENDER}
+              style={{
+                width: '100%',
+              }}
+              enabled={isEditing}
+              selectedValue={GENDER.find((item) => item.id == userInfo.gender)}
+              onValueChange={(itemValue, itemIndex) => {
+                setUserInfo({...userInfo, gender: itemValue.id});
+              }}
+            />
+          </View>
+
           <InputView
             id="createdAt"
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             value={moment(userInfo?.createdAt).format('DD-MM-YYYY') || noData}
             label={<LabelView title={'Ngày tạo'} />}
             isShowClean={false}
@@ -295,7 +296,7 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
-            colorTextDisable={'gray'}
+            colorTextDisable={'black'}
             value={moment(userInfo?.updatedAt).format('DD-MM-YYYY') || noData}
             label={<LabelView title={'Cập nhật lần cuối'} />}
             isShowClean={false}
@@ -336,6 +337,14 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerPickerGender: {
+    borderColor: commons.colorMain,
+    marginBottom: 15,
+    borderRadius: commons.borderRadius4,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
