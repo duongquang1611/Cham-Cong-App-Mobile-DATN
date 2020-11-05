@@ -29,6 +29,8 @@ const AppImages = {
   reports: require('./reports.png'),
   profile: require('./profile.png'),
   home: require('./home.png'),
+  position_person: require('./position_person.png'),
+  role: require('./role.png'),
 };
 
 export default AppImages;

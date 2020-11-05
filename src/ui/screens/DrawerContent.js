@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/drawer';
 import React from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
-import {IconView, TextView} from '../components';
+import {IconView, TextView} from 'cc-components';
 import {
   useTheme,
   Avatar,

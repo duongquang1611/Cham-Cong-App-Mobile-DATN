@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import baseStyles from '../../../../baseStyles';
 import commons from '../../../commons';
 
 const styles = StyleSheet.create({
@@ -9,14 +10,10 @@ const styles = StyleSheet.create({
   containerBlock: {
     paddingHorizontal: commons.padding15,
   },
-  bottomBlock: {
-    borderBottomWidth: 1,
-    borderColor: 'lightgray',
-  },
+  ...baseStyles,
   textSubInfo: {
     fontSize: commons.fontSize12,
   },
-  center: {justifyContent: 'center', alignItems: 'center'},
   containerDate: {
     borderWidth: 0.5,
     borderRadius: 5,
@@ -44,6 +41,7 @@ const styles = StyleSheet.create({
     marginTop: commons.margin,
     paddingVertical: commons.padding5,
   },
+
   customBlockCheckin: {
     borderTopWidth: 0.5,
     borderColor: 'lightgray',

@@ -1,19 +1,17 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {Picker} from '@react-native-community/picker';
+
 import models from '../../../models';
-import {appNavigate} from '../../../navigations';
-import {POST} from '../../../networking';
-import urlAPI from '../../../networking/urlAPI';
 import actions from '../../../redux/actions';
-import {HeaderMenuDrawer, showAlert, TextView} from '../../components';
+import {HeaderMenuDrawer, showAlert, TextView} from 'cc-components';
+import styles from './styles';
+import SubTimeCheckin from './SubTimeCheckin';
+import {GET} from '../../../networking';
+import urlAPI from '../../../networking/urlAPI';
+import commons from '../../commons';
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
@@ -22,21 +20,12 @@ const HomeScreen = (props) => {
   const isLoginSuccess = useSelector(
     (state) => state.authReducer.isLoginSuccess,
   );
+  let userInfo = models.getUserInfo();
   const authReducer = useSelector((state) => state.authReducer);
-  const [userInfo, setUserInfo] = useState({});
-  const onPress = () => {
-    console.log('onPress -> onPress');
-    // appNavigate.navToAccountScreen(navigation.dispatch, {});
-    // return <AlertView />;
-  };
-
-  const onShowLoading = () => {
-    dispatch(actions.isShowLoading(!isLoading));
-  };
-  const onPressAbc = (data) => {
-    console.log('onPressAbc -> data', data);
-  };
-
+  const [state, setState] = useState({
+    userCompany: [userInfo],
+    selectedUser: {...userInfo},
+  });
   const setParamsAlert = () => {
     showAlert({
       showCancel: false,
@@ -44,90 +33,99 @@ const HomeScreen = (props) => {
   };
 
   useEffect(() => {
-    console.log('HomeScreen -> authReducer', authReducer);
-  }, [isLoginSuccess]);
+    if (userInfo?.companyId?._id) {
+      console.log('HomeScreen -> companyId._id', userInfo.companyId._id);
+      getUserCompany(userInfo?.companyId?._id);
+    }
+  }, [userInfo?._id]);
+  useEffect(() => {
+    console.log(state.selectedUser.name);
+  }, [state]);
   const logout = () => {
-    console.log('logout -> logout');
     dispatch(actions.requestLogout());
   };
-  const getUser = async () => {
-    let body = {
-      username: 'quang_077',
-      password: 123456,
-      name: 'Duong Quang',
-      phoneNumber: '0123456755',
-      roleId: '5f905b70d20a752c708d6632',
-      companyId: '5f9060db047bf739f070688e',
-    };
-    let admin = {
-      username: 'admin',
-      password: '123456',
-    };
-    console.log('getUser -> models.getTokenSignIn()', models.getTokenSignIn());
-    if (!models.getTokenSignIn()) {
-      console.log('login');
-      let res = await POST(urlAPI.signin, admin);
-      console.log('getUser -> res', res);
-      let data = {
-        userId: res.user._id,
-        token: res.token,
-        roleId: res.user.roleId._id,
-      };
-      dispatch(actions.responseLoginSuccess(data));
+  const getUserCompany = async (id) => {
+    try {
+      let users = await GET(urlAPI.searchUsers, {companyId: id});
+      setState({
+        ...state,
+        userCompany: users,
+      });
+    } catch (error) {
+      console.log('HomeScreen -> error', error);
     }
+  };
+  const SyntheticInfo = (props) => {
+    return (
+      <View style={{...styles.center}}>
+        <TextView
+          nameIconLeft="address-location"
+          colorIconLeft={'red'}
+          styleText={{color: 'red', ...styles.lineHeightText}}>
+          {'Địa điểm không hợp lệ'}
+        </TextView>
+        <Text style={{...styles.lineHeightText}}>
+          Tổng số phút đi muộn trong tháng:{' '}
+          <Text style={{fontWeight: 'bold'}}>0 ph</Text>
+        </Text>
+        <Text style={{...styles.lineHeightText}}>
+          Tình trạng: <Text style={{fontWeight: 'bold'}}>Đã Check in</Text>
+        </Text>
+        <View style={styles.viewBottomBlock} />
+      </View>
+    );
+  };
+
+  const TimeCheckin = (props) => {
+    return (
+      <View style={{...styles.rowCenterSpaceBetween}}>
+        <SubTimeCheckin type="checkin" />
+        <SubTimeCheckin type="checkout" />
+      </View>
+    );
+  };
+  const SelectUserCheckin = () => {
+    return (
+      <View style={{...styles.rowCenterSpaceBetween}}>
+        <Text style={{fontSize: commons.fontSize16}}>Chấm công</Text>
+        {/* <TextView value={state.selectedUser?.name}></TextView> */}
+        <Picker
+          mode="dropdown"
+          enabled={
+            userInfo?.roleId?.code !== 'staff' &&
+            userInfo?.roleId?.code !== 'manager'
+          }
+          selectedValue={
+            state.userCompany.find(
+              (item) => item._id === state.selectedUser._id,
+            ) || state.userCompany[0]
+          }
+          style={{minWidth: 250}}
+          onValueChange={(itemValue, itemIndex) => {
+            setState({...state, selectedUser: itemValue});
+          }}>
+          {state.userCompany.map((item, index) => (
+            <Picker.Item label={item.name} value={item} key={index} />
+          ))}
+        </Picker>
+      </View>
+    );
   };
   return (
     <>
-      <HeaderMenuDrawer titleScreen={'Home'} />
-      <View style={styles.container}>
-        <Text>Home</Text>
-        <Text>Home</Text>
-        <Text>Home</Text>
-        <TouchableOpacity onPress={setParamsAlert} style={styles.button}>
-          <Text>Navigate to account</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={onShowLoading} style={styles.button}>
-          <Text>Loading: {isLoading ? 'true' : 'false'}</Text>
-        </TouchableOpacity>
-        {isLoading && <ActivityIndicator size="small" color="green" />}
-        {isLoginSuccess ? (
-          <TextView id="testc" style={styles.button} onPress={logout}>
-            Logout
-          </TextView>
-        ) : (
-          <TextView
-            id="testc"
-            style={styles.button}
-            onPress={() => {
-              getUser();
-            }}>
-            Login
-          </TextView>
-        )}
-
-        <Text>{JSON.stringify(models.getUserInfo())}</Text>
-        <Text>{JSON.stringify(models.getTokenSignIn())}</Text>
-      </View>
+      <HeaderMenuDrawer titleScreen={'Chấm công'} />
+      <ScrollView
+        style={styles.containerScrollView}
+        showsVerticalScrollIndicator={false}>
+        <SelectUserCheckin />
+        <View style={styles.viewBottomBlock} />
+        <Text>calendar</Text>
+        <View style={styles.viewBottomBlock} />
+        <SyntheticInfo />
+        <TimeCheckin />
+      </ScrollView>
     </>
   );
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginVertical: 5,
-    marginHorizontal: 10,
-  },
-  button: {
-    width: '100%',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 10,
-    marginVertical: 10,
-    borderRadius: 10,
-  },
-});

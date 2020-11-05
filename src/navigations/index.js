@@ -38,7 +38,7 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="ReportIndividual"
+        initialRouteName="AccountScreen"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -66,15 +66,13 @@ const RootNavigation = () => {
           name="AccountScreen"
           component={AccountScreen}
           options={{
-            drawerIcon: ({color, size}) => {
-              return (
-                <Image
-                  source={AppImages.profile}
-                  style={{width: size - 4, height: size}}
-                  resizeMode="contain"
-                />
-              );
-            },
+            drawerIcon: ({color, size}) => (
+              <Image
+                source={AppImages.profile}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
             drawerLabel: 'Thông tin người dùng',
           }}
         />
