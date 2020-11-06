@@ -31,6 +31,11 @@ const AppImages = {
   home: require('./home.png'),
   position_person: require('./position_person.png'),
   role: require('./role.png'),
+  bell: require('./bell.png'),
+  ask1: require('./ask1.png'),
+  ask2: require('./ask2.png'),
+  male: {uri: 'https://i.imgur.com/1mBGvt3.jpg'},
+  female: {uri: 'https://i.imgur.com/xCplblE.jpg'},
 };
 
 export default AppImages;

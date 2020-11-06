@@ -87,7 +87,13 @@ const AccountScreen = () => {
             overflow: 'hidden',
           }}>
           <Image
-            source={AppImages.bg_app}
+            source={
+              userInfo.avatar
+                ? {uri: userInfo.avatar}
+                : userInfo.gender == 0
+                ? AppImages.female
+                : AppImages.male
+            }
             style={{
               height: 100,
               width: 100,

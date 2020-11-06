@@ -54,5 +54,9 @@ const baseStyles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
+  title: {
+    fontSize: commons.fontSize16,
+    fontWeight: 'bold',
+  },
 });
 export default baseStyles;

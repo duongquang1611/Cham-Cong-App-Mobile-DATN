@@ -21,6 +21,7 @@ import models from '../../models';
 import commons from '../commons';
 import {useDispatch} from 'react-redux';
 import actions from '../../redux/actions';
+import AppImages from '../../../assets/images';
 
 const DrawerContent = (props) => {
   const userInfo = models.getUserInfo();
@@ -35,24 +36,22 @@ const DrawerContent = (props) => {
         <Drawer.Section>
           <View style={styles.userInfoSection}>
             <View style={styles.avatar}>
-              {userInfo.avatar ? (
-                <Avatar.Image
-                  source={{
-                    uri: userInfo.avatar,
-                  }}
-                  size={40}
-                />
-              ) : (
-                <IconView
-                  name={
-                    userInfo.gender || userInfo.gender === 0 ? 'female' : 'male'
-                  }
-                  type="Fontisto"
-                  size={40}
-                />
-              )}
+              <Avatar.Image
+                source={
+                  userInfo?.avatar
+                    ? {uri: userInfo?.avatar}
+                    : userInfo?.gender == 0
+                    ? AppImages.female
+                    : AppImages.male
+                }
+              />
             </View>
-            <View style={{marginLeft: commons.margin10}}>
+            <View
+              style={{
+                marginLeft: commons.margin10,
+                flexShrink: 1,
+                // alignSelf: 'flex-start',
+              }}>
               <Title style={styles.title}>{userInfo?.name}</Title>
               <Text style={styles.caption}>
                 Chức vụ: <Text>{userInfo?.roleId?.name}</Text>
@@ -135,8 +134,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: commons.padding15,
-    flexWrap: 'wrap',
+    paddingBottom: commons.padding15,
+    // flexWrap: 'wrap',
   },
   title: {
     // marginTop: 20,
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     borderRadius: 100,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: commons.colorMain,
     width: 70,
     height: 70,

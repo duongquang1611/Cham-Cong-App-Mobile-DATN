@@ -1,4 +1,3 @@
-import moment from 'moment/min/moment-with-locales';
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
@@ -6,6 +5,8 @@ import commons from '../../../commons';
 import {HeaderMenuDrawer, IconView} from '../../../components';
 import SubInfoCheckinView from './SubInfoCheckinView';
 import styles from './styles';
+import moment from 'moment/min/moment-with-locales';
+import ColumnBaseView from './ColumnBaseView';
 moment.locale(commons.getDeviceLanguage(false));
 
 const HEIGHT_MORE_INFO = 120;
@@ -14,28 +15,6 @@ const BlockView = (props) => {
   return <View style={[styles.containerBlock, style]}>{children}</View>;
 };
 
-const ColumnBaseView = (props) => {
-  const {title, msg, colorMsg = 'black', end = false} = props;
-  return (
-    <View
-      style={{
-        ...styles.center,
-        flex: 1,
-        borderRightWidth: end ? 0 : 1,
-        borderRightColor: 'lightgray',
-      }}>
-      <Text
-        style={{
-          color: colorMsg,
-          fontWeight: 'bold',
-          fontSize: commons.fontSizeHeader,
-        }}>
-        {msg}
-      </Text>
-      <Text>{title}</Text>
-    </View>
-  );
-};
 const RowBaseView = (props) => {
   const {title, msg, colorMsg = 'black', end = false} = props;
   return (

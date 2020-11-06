@@ -38,8 +38,8 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="AccountScreen"
-        // initialRouteName="HomeScreen"
+        // initialRouteName="AccountScreen"
+        initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
         <Drawer.Screen
@@ -81,11 +81,10 @@ const RootNavigation = () => {
           component={AskComeLateLeaveEarly}
           options={{
             drawerIcon: ({color, size}) => (
-              <IconView
-                name="account-check-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
+              <Image
+                source={AppImages.ask1}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
               />
             ),
             drawerLabel: 'Xin đi muộn, về sớm',
@@ -96,11 +95,10 @@ const RootNavigation = () => {
           component={AskDayOff}
           options={{
             drawerIcon: ({color, size}) => (
-              <IconView
-                name="account-check-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
+              <Image
+                source={AppImages.ask2}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
               />
             ),
             drawerLabel: 'Xin nghỉ phép',
@@ -139,11 +137,16 @@ const RootNavigation = () => {
           component={Notification}
           options={{
             drawerIcon: ({color, size}) => (
-              <IconView
-                name="account-check-outline"
-                size={size}
-                color={color}
-                type={'MaterialCommunityIcons'}
+              // <IconView
+              //   name="account-check-outline"
+              //   size={size}
+              //   color={color}
+              //   type={'MaterialCommunityIcons'}
+              // />
+              <Image
+                source={AppImages.bell}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
               />
             ),
             drawerLabel: 'Thông báo',
