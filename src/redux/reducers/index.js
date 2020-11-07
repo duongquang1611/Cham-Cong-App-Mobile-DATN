@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import authReducer from './authReducer';
 import commonReducer from './commonReducer';
-// import AccountReducer from '../../ui/screens/Account/reducer';
+import dayWorkReducer from './dayWorkReducer';
+import companyReducer from './companyReducer';
 
 const rootPersistConfig = {
   key: 'root',
@@ -15,6 +16,8 @@ const rootPersistConfig = {
 const rootReducer = combineReducers({
   authReducer,
   commonReducer,
+  dayWorkReducer,
+  companyReducer,
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

@@ -3,6 +3,8 @@ import models from '../models';
 import {showAlert} from '../ui/components';
 
 import urlAPI from './urlAPI';
+import dayWorkAPI from './dayWorkAPI';
+import companyAPI from './companyAPI';
 
 const isSuccess = (res) => {
   let errorCodeString = JSON.stringify(res.request.status);
@@ -93,4 +95,15 @@ const DELETE = async (url, body) => {
   }
 };
 
-export {GET, POST, PUT, DELETE, instanceAPI, isSuccess};
+const API = {
+  GET,
+  POST,
+  PUT,
+  DELETE,
+  instanceAPI,
+  isSuccess,
+  ...urlAPI,
+  ...dayWorkAPI,
+  ...companyAPI,
+};
+export default API;

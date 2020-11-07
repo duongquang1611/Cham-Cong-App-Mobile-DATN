@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {Modal, ScrollView, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-community/picker';
 
@@ -14,13 +14,14 @@ import {
 } from 'cc-components';
 import styles from './styles';
 import SubTimeCheckin from './SubTimeCheckin';
-import {GET} from '../../../networking';
-import urlAPI from '../../../networking/urlAPI';
+import API from '../../../networking';
 import commons from '../../commons';
 import moment from 'moment/min/moment-with-locales';
 import ColumnBaseView from '../Report/Individual/ColumnBaseView';
+import TimerIntervalView from './TimerIntervalView';
 moment.locale(commons.getDeviceLanguage(false));
 const DEFAULT_TIME = '--h : --p : --s';
+
 const HomeScreen = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -29,22 +30,22 @@ const HomeScreen = (props) => {
     (state) => state.authReducer.isLoginSuccess,
   );
   let userInfo = models.getUserInfo();
+
   const authReducer = useSelector((state) => state.authReducer);
+  const detailDayWork = useSelector(
+    (state) => state.dayWorkReducer.detailDayWork,
+  );
+  const detailCompany = useSelector(
+    (state) => state.companyReducer.detailCompany,
+  );
 
   const [state, setState] = useState({
     userCompany: [userInfo],
     selectedUser: {...userInfo},
-    detailCompany: {},
-    checkinTime: null,
-    checkoutTime: null,
     timer: null,
     isLoading: true,
+    visible: false,
   });
-  const setParamsAlert = () => {
-    showAlert({
-      showCancel: false,
-    });
-  };
 
   useEffect(() => {
     if (userInfo?.companyId?._id) {
@@ -54,17 +55,10 @@ const HomeScreen = (props) => {
   }, [userInfo?._id]);
 
   useEffect(() => {
-    let diff = moment
-      .utc(
-        moment(new Date(), 'HH:mm:ss').diff(
-          // moment(new Date(state.checkinTime), 'HH:mm:ss'),
-          state.checkinTime,
-        ),
-      )
-      .format('HH:mm:ss');
-    console.log('HomeScreen -> diff', diff, state.checkinTime);
+    let diff = commons.getDiffTime(detailDayWork?.checkin);
+
     const interval = setInterval(() => {
-      if (state.checkinTime && !state.checkoutTime) {
+      if (detailDayWork?.checkin && !detailDayWork?.checkout) {
         setState({
           ...state,
           timer: diff,
@@ -73,38 +67,83 @@ const HomeScreen = (props) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [state]);
+  }, [detailDayWork, state.timer]);
 
   const logout = () => {
     dispatch(actions.requestLogout());
   };
-  const getData = async (id) => {
+  const getData = async (companyId) => {
     try {
       let data = await Promise.all([
-        GET(urlAPI.searchUsers, {companyId: id}),
-        GET(urlAPI.detailCompany(id)),
+        API.GET(API.searchUsers, {companyId: companyId}),
+        API.getDetailCompany(companyId, dispatch),
+        API.getDetailDayWork(dispatch),
       ]);
+      if (data[0]) {
+        setState({
+          ...state,
+          userCompany: data[0],
+          isLoading: false,
+        });
+      }
+    } catch (error) {
       setState({
         ...state,
-        userCompany: data[0],
-        detailCompany: data[1],
         isLoading: false,
       });
-    } catch (error) {
       console.log('HomeScreen -> error', error);
     }
   };
 
+  const getStatusCheckTime = () => {
+    let checkout = detailDayWork?.checkout;
+    let checkin = detailDayWork?.checkin;
+    // 0: Chưa checkin
+    // 1: Đã checkin
+    // 2: Đã checkout
+    // 3: Quá hạn cham cong
+
+    let status = 0;
+    if (checkin) {
+      if (checkout) status = 2;
+      else status = 1;
+    } else status = 0;
+    return status;
+  };
+
   const getTextStatus = () => {
     let msg = 'Chưa Checkin';
-    if (state.checkoutTime) {
-      msg = 'Đã Checkout';
-    } else if (state.checkinTime) {
-      msg = 'Đã Checkin';
-    }
+    let msgButton = 'Checkin';
+    // 0: Chưa checkin
+    // 1: Đã checkin
+    // 2: Đã checkout
+    // 3: Quá hạn chấm công
 
-    return msg;
+    switch (getStatusCheckTime()) {
+      case 0:
+        break;
+      case 1:
+        msg = 'Đã Checkin';
+        msgButton = 'Checkout';
+        break;
+      case 2:
+        msg = 'Đã Checkout';
+        msgButton = msg;
+        break;
+      case 3:
+        msg = 'Quá hạn chấm công';
+        msgButton = msg;
+        break;
+      default:
+        break;
+    }
+    return {msg, msgButton};
   };
+  const isDisableButtonCheckTime = () => {
+    let status = getStatusCheckTime();
+    return status === 2 || status === 3;
+  };
+
   const SyntheticInfo = (props) => {
     return (
       <View style={{...styles.center}}>
@@ -120,7 +159,7 @@ const HomeScreen = (props) => {
         </Text>
         <Text style={{...styles.lineHeightText}}>
           Tình trạng:{' '}
-          <Text style={{fontWeight: 'bold'}}>{getTextStatus()}</Text>
+          <Text style={{fontWeight: 'bold'}}>{getTextStatus().msg}</Text>
         </Text>
         <View style={styles.viewBottomBlock} />
       </View>
@@ -133,18 +172,24 @@ const HomeScreen = (props) => {
         <SubTimeCheckin
           type="checkin"
           time={
-            state.checkinTime
-              ? moment(state.checkinTime).format('HH : mm : ss')
+            detailDayWork?.checkin
+              ? moment(detailDayWork?.checkin).format(commons.FORMAT_TIME_DIFF)
               : DEFAULT_TIME
           }
+          subTime={commons.convertSecondToHHmmss(
+            detailDayWork?.minutesComeLate * 60 || 0,
+          )}
         />
         <SubTimeCheckin
           type="checkout"
           time={
-            state.checkoutTime
-              ? moment(state.checkoutTime).format('HH : mm : ss')
+            detailDayWork?.checkout
+              ? moment(detailDayWork?.checkout).format(commons.FORMAT_TIME_DIFF)
               : DEFAULT_TIME
           }
+          subTime={commons.convertSecondToHHmmss(
+            detailDayWork?.minutesLeaveEarly * 60 || 0,
+          )}
         />
       </View>
     );
@@ -161,19 +206,20 @@ const HomeScreen = (props) => {
             userInfo?.roleId?.code !== 'manager'
           }
           selectedValue={
-            state.userCompany.length > 0
+            state?.userCompany?.length > 0
               ? state?.userCompany.find(
-                  (item) => item._id === state.selectedUser._id,
+                  (item) => item._id === state?.selectedUser._id,
                 )
-              : state.userCompany[0]
+              : state?.userCompany[0]
           }
           style={{minWidth: 250}}
           onValueChange={(itemValue, itemIndex) => {
             setState({...state, selectedUser: itemValue});
           }}>
-          {state.userCompany.map((item, index) => (
-            <Picker.Item label={item.name} value={item} key={index} />
-          ))}
+          {state?.userCompany?.length > 0 &&
+            state?.userCompany.map((item, index) => (
+              <Picker.Item label={item.name} value={item} key={index} />
+            ))}
         </Picker>
       </View>
     );
@@ -185,12 +231,12 @@ const HomeScreen = (props) => {
         <View style={styles.containerTimeAllow}>
           <ColumnBaseView
             title={'Checkin'}
-            msg={state?.detailCompany?.config?.allowCheckin || DEFAULT_TIME}
+            msg={detailCompany?.config?.allowCheckin || DEFAULT_TIME}
             colorMsg={commons.colorMain}
           />
           <ColumnBaseView
             title="Checkout"
-            msg={state?.detailCompany?.config?.allowCheckout || DEFAULT_TIME}
+            msg={detailCompany?.config?.allowCheckout || DEFAULT_TIME}
             colorMsg="red"
             end={true}
           />
@@ -199,16 +245,42 @@ const HomeScreen = (props) => {
     );
   };
   const onPressCheckTime = () => {
-    if (!state?.checkinTime) {
-      setState({...state, checkinTime: moment()});
+    if (!detailDayWork?.checkin) {
+      API.createOrUpdateDayWork(dispatch);
+      // setState({...state, visible: true});
+      // chua checkin
     } else {
-      setState({...state, checkoutTime: moment()});
+      // da checkin, press checkout -> disable button
+      API.createOrUpdateDayWork(dispatch, {isCheckout: true});
     }
+  };
+  const closeModal = () => {
+    console.log('abc');
+    setState({...state, visible: false});
   };
   return (
     <>
       <HeaderMenuDrawer titleScreen={'Chấm công'} />
       {state.isLoading && <LoadingView />}
+      <Modal
+        transparent={true}
+        visible={state.visible}
+        onRequestClose={closeModal}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              width: 300,
+              height: 300,
+              backgroundColor: 'blue',
+            }}></View>
+        </View>
+      </Modal>
       <ScrollView
         style={{...styles.containerScrollView}}
         contentContainerStyle={{justifyContent: 'space-between', flex: 1}}
@@ -226,7 +298,7 @@ const HomeScreen = (props) => {
               Ngày: {moment().format('DD-MM-YYYY')}
             </Text>
             <Text style={styles.title}>
-              Tổng thời gian làm: {state.timer || DEFAULT_TIME}
+              Tổng thời gian làm: <TimerIntervalView {...{detailDayWork}} />
             </Text>
             <TextView
               style={{
@@ -245,7 +317,7 @@ const HomeScreen = (props) => {
                 textAlign: 'center',
               }}
               onPress={
-                state?.checkinTime && state?.checkoutTime
+                detailDayWork?.checkin && detailDayWork?.checkout
                   ? null
                   : onPressCheckTime
               }
@@ -253,14 +325,8 @@ const HomeScreen = (props) => {
                 backgroundColor: 'gray',
                 ...styles.buttonCheckTime,
               }}
-              disabled={
-                state?.checkinTime && state?.checkoutTime ? true : false
-              }>
-              {state?.checkinTime && state?.checkoutTime
-                ? 'Không phải thời điểm chấm công'
-                : state?.checkinTime
-                ? 'Checkout'
-                : 'Checkin'}
+              disabled={isDisableButtonCheckTime()}>
+              {getTextStatus().msgButton}
             </TextView>
           </View>
         </View>

@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Keyboard, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
-import {isSuccess, POST} from '../../../networking';
-import urlAPI from '../../../networking/urlAPI';
+import API from '../../../networking';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
 import {ButtonView, InputView, LoadingView, TextView} from '../../components';
@@ -33,7 +32,7 @@ const LoginScreen = (props) => {
     console.log('paramsLogin', paramsLogin);
     dispatch(actions.isShowLoading(true));
     try {
-      let res = await POST(urlAPI.signin, paramsLogin);
+      let res = await API.POST(API.signin, paramsLogin);
       let data = {
         userId: res.user._id,
         token: res.token,
