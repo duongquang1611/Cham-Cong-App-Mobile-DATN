@@ -74,12 +74,17 @@ const HomeScreen = (props) => {
   const logout = () => {
     dispatch(actions.requestLogout());
   };
+  const setParamsDayWork = () => {
+    return {
+      dayWork: moment().format(commons.FORMAT_DATE),
+    };
+  };
   const getData = async (companyId) => {
     try {
       let data = await Promise.all([
         API.GET(API.searchUsers, {companyId: companyId}),
         API.getDetailCompany(companyId, dispatch),
-        API.getDetailDayWork(dispatch),
+        API.getDetailDayWork(dispatch, setParamsDayWork()),
       ]);
       if (data[0]) {
         setState({
@@ -154,6 +159,22 @@ const HomeScreen = (props) => {
           colorIconLeft={'red'}
           styleText={{color: 'red', ...styles.lineHeightText}}>
           {'Địa điểm không hợp lệ'}
+        </TextView>
+        <TextView
+          nameIconLeft={
+            isValidIpToCheckin() ? 'checkbox-marked-circle' : 'close-circle'
+          }
+          sizreIconLeft={commons.sizeIcon28}
+          typeIconLeft="MaterialCommunityIcons"
+          colorIconLeft={isValidIpToCheckin() ? 'green' : 'red'}
+          nameIconRight="info-alt"
+          colorIconRight={commons.colorMain70}
+          onPressIconRight={onPressShowMoreInfoIp}
+          styleText={{
+            color: isValidIpToCheckin() ? 'black' : 'red',
+            ...styles.lineHeightText,
+          }}>
+          {`Địa chỉ IP ${isValidIpToCheckin() ? '' : 'không '}hợp lệ`}
         </TextView>
         <Text style={{...styles.lineHeightText}}>
           Tổng số phút đi muộn trong tháng:{' '}
@@ -246,16 +267,31 @@ const HomeScreen = (props) => {
       </View>
     );
   };
+  const isValidIpToCheckin = () => {
+    return commons.compareIpAddress(
+      detailCompany?.config?.ipAddress,
+      netInfo?.details?.ipAddress,
+    );
+  };
+  const onPressShowMoreInfoIp = () => {
+    showAlert({
+      msg:
+        'Bạn cần kết nối tới kết nối mạng hợp lệ tại công ty để có thể Chấm công. Nếu bạn có bất cứ thắc mắc nào vui lòng liên hệ quản trị viên để biết thêm chi tiết.',
+    });
+    return;
+  };
   const onPressCheckTime = () => {
-    console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
-    // if (!detailDayWork?.checkin) {
-    //   API.createOrUpdateDayWork(dispatch);
-    //   // setState({...state, visible: true});
-    //   // chua checkin
-    // } else {
-    //   // da checkin, press checkout -> disable button
-    //   API.createOrUpdateDayWork(dispatch, {isCheckout: true});
-    // }
+    // console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
+    // Check địa chỉ IP khi checkin
+
+    if (!detailDayWork?.checkin) {
+      API.createOrUpdateDayWork(dispatch);
+      // setState({...state, visible: true});
+      // chua checkin
+    } else {
+      // da checkin, press checkout -> disable button
+      API.createOrUpdateDayWork(dispatch, {isCheckout: true});
+    }
   };
   const closeModal = () => {
     console.log('abc');

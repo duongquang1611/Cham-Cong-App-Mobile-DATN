@@ -237,6 +237,14 @@ function uppercaseFirstLetter(text, eachWord = false) {
   } else return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+const compareIpAddress = (ip1 = '', ip2 = '') => {
+  let indexLastDot1 = ip1.lastIndexOf('.');
+  let indexLastDot2 = ip2.lastIndexOf('.');
+  let subIp1 = ip1.slice(0, indexLastDot1);
+  let subIp2 = ip2.slice(0, indexLastDot2);
+  return subIp1 === subIp2;
+};
+
 const utils = {
   ...ValidateUtils,
   ...DateUtils,
@@ -259,6 +267,7 @@ const utils = {
   replaceMultiSpaceToSingle,
   getDeviceLanguage,
   uppercaseFirstLetter,
+  compareIpAddress,
 };
 
 export default utils;

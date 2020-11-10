@@ -10,6 +10,15 @@ const getDetailDayWork = async (dispatch, params) => {
     console.log('Day Work API error', error);
   }
 };
+const getListDayWork = async (dispatch, params) => {
+  try {
+    let res = await API.GET(API.workDay, params);
+    if (res.length > 0) dispatch(actions.saveListDayWork(res));
+    else dispatch(actions.saveListDayWork([]));
+  } catch (error) {
+    console.log('Day Work API error', error);
+  }
+};
 const createOrUpdateDayWork = async (dispatch, params) => {
   try {
     let res = await API.PUT(API.workDay, params);
@@ -19,4 +28,4 @@ const createOrUpdateDayWork = async (dispatch, params) => {
   }
 };
 
-export default {getDetailDayWork, createOrUpdateDayWork};
+export default {getDetailDayWork, createOrUpdateDayWork, getListDayWork};

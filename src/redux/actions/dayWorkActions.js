@@ -6,4 +6,10 @@ const saveDetailDayWork = (data) => {
     data: data,
   };
 };
-export default {saveDetailDayWork};
+const saveListDayWork = (data) => {
+  return {
+    type: types.SAVE_LIST_DAY_WORK,
+    data: data,
+  };
+};
+export default {saveDetailDayWork, saveListDayWork};

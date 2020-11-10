@@ -9,6 +9,7 @@ export const FORMAT_DD_MM_YYY_HH_MM_SS = 'DD/MM/YYYY HH:mm:ss';
 export const FORMAT_TIME_DIFF = 'HH:mm:ss';
 export const FORMAT_TIME_DIFF_SPACE = 'HH : mm : ss';
 export const DEFAULT_TIME = '--h : --p : --s';
+export const FORMAT_NONE_TIME_HHMMSS = '-- : -- : --';
 ////////////////////////////////////////////////////////////
 
 export const convertTimeDate = (valueDate, format) => {

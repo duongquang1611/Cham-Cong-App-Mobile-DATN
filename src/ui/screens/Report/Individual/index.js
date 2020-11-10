@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import commons from '../../../commons';
@@ -7,6 +7,8 @@ import SubInfoCheckinView from './SubInfoCheckinView';
 import styles from './styles';
 import moment from 'moment/min/moment-with-locales';
 import ColumnBaseView from './ColumnBaseView';
+import {useDispatch, useSelector} from 'react-redux';
+import API from '../../../../networking';
 moment.locale(commons.getDeviceLanguage(false));
 
 const HEIGHT_MORE_INFO = 120;
@@ -37,6 +39,12 @@ const RowBaseView = (props) => {
   );
 };
 const ReportIndividual = () => {
+  const dispatch = useDispatch();
+  const listDayWork = useSelector((state) => state.dayWorkReducer.listDayWork);
+  const detailDayWork = useSelector(
+    (state) => state.dayWorkReducer.detailDayWork,
+  );
+  // console.log('ReportIndividual -> listDayWork', listDayWork);
   const [state, setState] = useState({
     markedDates: {
       dateString: moment().format('YYYY-MM-DD'),
@@ -45,7 +53,28 @@ const ReportIndividual = () => {
       year: moment().format('YYYY'),
     },
   });
+  useEffect(() => {
+    getData();
+  }, [detailDayWork]);
 
+  const getData = async () => {
+    API.getListDayWork(dispatch);
+  };
+
+  const filterListDayWork = (key, value, type) => {
+    switch (type) {
+      case 'COME_LEAVE':
+        return listDayWork.filter(
+          (item) =>
+            item['minutesComeLate'] > 0 || item['minutesLeaveEarly'] > 0,
+        ).length;
+        break;
+
+      default:
+        return listDayWork.filter((item) => item[key] === value);
+        break;
+    }
+  };
   const onMonthChange = (month) => {
     // console.log('onMonthChange -> month', month);
   };
@@ -70,9 +99,22 @@ const ReportIndividual = () => {
     return (
       <View>
         <View style={styles.containerRowBaseInfo}>
-          <ColumnBaseView title="Ngày Công" msg="10/24" colorMsg="green" />
-          <ColumnBaseView title="Đi muộn, Về sớm" msg="4" colorMsg="orange" />
-          <ColumnBaseView title="Nghỉ làm" msg="1" colorMsg="blue" end={true} />
+          <ColumnBaseView
+            title="Ngày Công"
+            msg={`${filterListDayWork('isSuccessDay', true).length}/24`}
+            colorMsg="green"
+          />
+          <ColumnBaseView
+            title="Đi muộn"
+            msg={filterListDayWork(undefined, undefined, 'COME_LEAVE')}
+            colorMsg="orange"
+          />
+          <ColumnBaseView
+            title="Nghỉ làm"
+            msg={filterListDayWork('isDayOff', true).length}
+            colorMsg="blue"
+            end={true}
+          />
         </View>
         <View
           style={{
@@ -90,11 +132,17 @@ const ReportIndividual = () => {
       </View>
     );
   };
+  const formatTimeCheck = (time) => {
+    return moment(time).format(commons.FORMAT_TIME_DIFF);
+  };
 
   const MoreInfoCheckinView = (props) => {
     let {day, month, year} = state.markedDates;
     let dayName = moment(state.markedDates.dateString).format('dddd');
     dayName = commons.uppercaseFirstLetter(dayName, true);
+    let dataSelected = listDayWork.filter(
+      (data) => data.dayWork === state.markedDates.dateString,
+    );
     return (
       <View
         style={{
@@ -114,12 +162,32 @@ const ReportIndividual = () => {
           </View>
         </View>
         <View style={{flex: 3}}>
-          <SubInfoCheckinView title="Giờ Checkin" msg={' ' + '-- : --'} />
-          <SubInfoCheckinView title="Số phút đi muộn" msg={'' + '0 ph'} />
+          <SubInfoCheckinView
+            title="Giờ Checkin"
+            msg={
+              dataSelected[0]?.checkin
+                ? formatTimeCheck(dataSelected[0]?.checkin)
+                : commons.FORMAT_NONE_TIME_HHMMSS
+            }
+          />
+          <SubInfoCheckinView
+            title="Số phút đi muộn"
+            msg={(dataSelected[0]?.minutesComeLate || 0) + 'ph'}
+          />
         </View>
         <View style={{flex: 3}}>
-          <SubInfoCheckinView title="Giờ Checkout" msg={' ' + '-- : --'} />
-          <SubInfoCheckinView title="Số phút về sớm" msg={'' + '0 ph'} />
+          <SubInfoCheckinView
+            title="Giờ Checkout"
+            msg={
+              dataSelected[0]?.checkout
+                ? formatTimeCheck(dataSelected[0]?.checkout)
+                : commons.FORMAT_NONE_TIME_HHMMSS
+            }
+          />
+          <SubInfoCheckinView
+            title="Số phút về sớm"
+            msg={(dataSelected[0]?.minutesLeaveEarly || 0) + ' ph'}
+          />
         </View>
       </View>
     );
