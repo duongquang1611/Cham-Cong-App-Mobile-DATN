@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Modal, ScrollView, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-community/picker';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 
 import models from '../../../models';
 import actions from '../../../redux/actions';
@@ -30,7 +31,7 @@ const HomeScreen = (props) => {
     (state) => state.authReducer.isLoginSuccess,
   );
   let userInfo = models.getUserInfo();
-
+  let netInfo = useNetInfo();
   const authReducer = useSelector((state) => state.authReducer);
   const detailDayWork = useSelector(
     (state) => state.dayWorkReducer.detailDayWork,
@@ -45,11 +46,12 @@ const HomeScreen = (props) => {
     timer: null,
     isLoading: true,
     visible: false,
+    netDetails: {},
   });
 
   useEffect(() => {
     if (userInfo?.companyId?._id) {
-      console.log('HomeScreen -> companyId._id', userInfo.companyId._id);
+      // console.log('HomeScreen -> companyId._id', userInfo.companyId._id);
       getData(userInfo?.companyId?._id);
     }
   }, [userInfo?._id]);
@@ -245,14 +247,15 @@ const HomeScreen = (props) => {
     );
   };
   const onPressCheckTime = () => {
-    if (!detailDayWork?.checkin) {
-      API.createOrUpdateDayWork(dispatch);
-      // setState({...state, visible: true});
-      // chua checkin
-    } else {
-      // da checkin, press checkout -> disable button
-      API.createOrUpdateDayWork(dispatch, {isCheckout: true});
-    }
+    console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
+    // if (!detailDayWork?.checkin) {
+    //   API.createOrUpdateDayWork(dispatch);
+    //   // setState({...state, visible: true});
+    //   // chua checkin
+    // } else {
+    //   // da checkin, press checkout -> disable button
+    //   API.createOrUpdateDayWork(dispatch, {isCheckout: true});
+    // }
   };
   const closeModal = () => {
     console.log('abc');
