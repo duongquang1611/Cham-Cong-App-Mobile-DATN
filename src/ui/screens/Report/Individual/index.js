@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import commons from '../../../commons';
 import {HeaderMenuDrawer, IconView} from '../../../components';
@@ -52,13 +52,21 @@ const ReportIndividual = () => {
       month: moment().format('M'),
       year: moment().format('YYYY'),
     },
+    refreshing: false,
   });
+
   useEffect(() => {
     getData();
   }, [detailDayWork]);
 
+  useEffect(() => {
+    state.refreshing && getData();
+  }, [state.refreshing]);
+
   const getData = async () => {
-    API.getListDayWork(dispatch);
+    try {
+      API.getListDayWork(dispatch);
+    } catch (error) {}
   };
 
   const filterListDayWork = (key, value, type) => {
@@ -94,6 +102,10 @@ const ReportIndividual = () => {
         markedDates: day,
       });
   };
+  const onRefresh = React.useCallback(() => {
+    setState({...state, refreshing: true});
+    commons.wait(2000).then(() => setState({...state, refreshing: false}));
+  }, []);
 
   const BaseInfoCheckinView = (props) => {
     return (
@@ -172,7 +184,7 @@ const ReportIndividual = () => {
           />
           <SubInfoCheckinView
             title="Số phút đi muộn"
-            msg={(dataSelected[0]?.minutesComeLate || 0) + 'ph'}
+            msg={(dataSelected[0]?.minutesComeLate || 0) + ' ph'}
           />
         </View>
         <View style={{flex: 3}}>
@@ -192,10 +204,16 @@ const ReportIndividual = () => {
       </View>
     );
   };
+
   return (
     <>
       <HeaderMenuDrawer titleScreen={'Báo cáo'} />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
+        }>
         <BaseInfoCheckinView />
         <BlockView style={styles.customBlockCheckin}>
           <Text style={styles.titleCheckin}>Lịch Chấm Công</Text>

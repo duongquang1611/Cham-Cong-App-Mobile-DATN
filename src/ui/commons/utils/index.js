@@ -245,6 +245,12 @@ const compareIpAddress = (ip1 = '', ip2 = '') => {
   return subIp1 === subIp2;
 };
 
+const wait = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const utils = {
   ...ValidateUtils,
   ...DateUtils,
@@ -268,6 +274,7 @@ const utils = {
   getDeviceLanguage,
   uppercaseFirstLetter,
   compareIpAddress,
+  wait,
 };
 
 export default utils;

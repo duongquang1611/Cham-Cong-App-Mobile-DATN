@@ -38,8 +38,8 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        // initialRouteName="AccountScreen"
-        initialRouteName="HomeScreen"
+        initialRouteName="AskComeLateLeaveEarly"
+        // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
         <Drawer.Screen

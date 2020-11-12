@@ -9,6 +9,8 @@ import InputView from './InputView';
 import LoadingView from './LoadingView';
 import showAlert from './showAlert';
 import NewPicker from './NewPicker';
+import BlockView from './BlockView';
+import RadioButton, {RadioGroup} from './RadioButton';
 
 export {
   ScreenBase,
@@ -23,4 +25,7 @@ export {
   LoadingView,
   showAlert,
   NewPicker,
+  RadioButton,
+  RadioGroup,
+  BlockView,
 };
