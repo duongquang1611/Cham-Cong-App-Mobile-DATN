@@ -15,8 +15,10 @@ import {IconView} from '../ui/components';
 
 import HomeScreen from '../ui/screens/Home';
 import AccountScreen from '../ui/screens/Account';
-import AskComeLateLeaveEarly from '../ui/screens/AskComeLateLeaveEarly';
+import TabAskComeLateLeaveEarly from '../ui/screens/AskComeLateLeaveEarly';
+import TabConfirmComeLateLeaveEarly from '../ui/screens/ConfirmComeLateLeaveEarly';
 import AskDayOff from '../ui/screens/AskDayOff';
+import TabConfirmDayOff from '../ui/screens/ConfirmDayOff';
 import ReportIndividual from '../ui/screens/Report/Individual';
 import Report from '../ui/screens/Report';
 import Notification from '../ui/screens/Notification';
@@ -38,7 +40,7 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="AskComeLateLeaveEarly"
+        initialRouteName="TabAskComeLateLeaveEarly"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -77,8 +79,8 @@ const RootNavigation = () => {
           }}
         />
         <Drawer.Screen
-          name="AskComeLateLeaveEarly"
-          component={AskComeLateLeaveEarly}
+          name="TabAskComeLateLeaveEarly"
+          component={TabAskComeLateLeaveEarly}
           options={{
             drawerIcon: ({color, size}) => (
               <Image
@@ -88,6 +90,20 @@ const RootNavigation = () => {
               />
             ),
             drawerLabel: 'Xin đi muộn, về sớm',
+          }}
+        />
+        <Drawer.Screen
+          name="TabConfirmComeLateLeaveEarly"
+          component={TabConfirmComeLateLeaveEarly}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <Image
+                source={AppImages.confirm}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
+            drawerLabel: 'Duyệt đi muộn, về sớm',
           }}
         />
         <Drawer.Screen
@@ -102,6 +118,20 @@ const RootNavigation = () => {
               />
             ),
             drawerLabel: 'Xin nghỉ phép',
+          }}
+        />
+        <Drawer.Screen
+          name="TabConfirmDayOff"
+          component={TabConfirmDayOff}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <Image
+                source={AppImages.confirm}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
+            drawerLabel: 'Duyệt nghỉ phép',
           }}
         />
         <Drawer.Screen

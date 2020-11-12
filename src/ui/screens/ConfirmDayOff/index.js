@@ -2,16 +2,16 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {HeaderMenuDrawer} from 'cc-components';
 import React from 'react';
 import commons from '../../commons';
-import AskDayOff from './AskDayOff';
-import HistoryAskDayOff from './HistoryAskDayOff';
+import ConfirmDayOff from './ConfirmDayOff';
+import HistoryConfirmDayOff from './HistoryConfirmDayOff';
 
-const TabAskDayOff = () => {
+const TabConfirmDayOff = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
     <>
-      <HeaderMenuDrawer titleScreen={'Xin nghỉ'} />
+      <HeaderMenuDrawer titleScreen={'Duyệt xin nghỉ'} />
       <Tab.Navigator
-        initialRouteName={'AskDayOff'}
+        initialRouteName={'ConfirmDayOff'}
         // initialRouteName={'Đánh giá'}
         backBehavior="none"
         style={{backgroundColor: 'white'}}
@@ -24,14 +24,14 @@ const TabAskDayOff = () => {
           },
         }}>
         <Tab.Screen
-          name={'AskDayOff'}
-          component={AskDayOff}
-          options={{tabBarLabel: 'Xin nghỉ'}}
+          name={'ConfirmDayOff'}
+          component={ConfirmDayOff}
+          options={{tabBarLabel: 'Duyệt xin nghỉ'}}
           // initialParams={{demandCode: demandCode[0]}}
         />
         <Tab.Screen
-          name={'HistoryAskDayOff'}
-          component={HistoryAskDayOff}
+          name={'HistoryConfirmDayOff'}
+          component={HistoryConfirmDayOff}
           // initialParams={{demandCode: demandCode[0]}}
           options={{tabBarLabel: 'Lịch sử'}}
         />
@@ -40,4 +40,4 @@ const TabAskDayOff = () => {
   );
 };
 
-export default TabAskDayOff;
+export default TabConfirmDayOff;

@@ -2,16 +2,16 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {HeaderMenuDrawer} from 'cc-components';
 import React from 'react';
 import commons from '../../commons';
-import AskDayOff from './AskDayOff';
-import HistoryAskDayOff from './HistoryAskDayOff';
+import ConfirmComeLeave from './ConfirmComeLeave';
+import HistoryConfirmComeLeave from './HistoryConfirmComeLeave';
 
-const TabAskDayOff = () => {
+const TabConfirmComeLateLeaveEarly = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
     <>
-      <HeaderMenuDrawer titleScreen={'Xin nghỉ'} />
+      <HeaderMenuDrawer titleScreen={'Duyệt đi muộn, về sớm'} />
       <Tab.Navigator
-        initialRouteName={'AskDayOff'}
+        initialRouteName={'ConfirmComeLeave'}
         // initialRouteName={'Đánh giá'}
         backBehavior="none"
         style={{backgroundColor: 'white'}}
@@ -24,14 +24,14 @@ const TabAskDayOff = () => {
           },
         }}>
         <Tab.Screen
-          name={'AskDayOff'}
-          component={AskDayOff}
-          options={{tabBarLabel: 'Xin nghỉ'}}
+          name={'ConfirmComeLeave'}
+          component={ConfirmComeLeave}
+          options={{tabBarLabel: 'Duyệt đi muộn, về sớm'}}
           // initialParams={{demandCode: demandCode[0]}}
         />
         <Tab.Screen
-          name={'HistoryAskDayOff'}
-          component={HistoryAskDayOff}
+          name={'HistoryConfirmComeLeave'}
+          component={HistoryConfirmComeLeave}
           // initialParams={{demandCode: demandCode[0]}}
           options={{tabBarLabel: 'Lịch sử'}}
         />
@@ -40,4 +40,4 @@ const TabAskDayOff = () => {
   );
 };
 
-export default TabAskDayOff;
+export default TabConfirmComeLateLeaveEarly;
