@@ -19,5 +19,23 @@ const styles = StyleSheet.create({
   containerInput: {
     marginVertical: commons.margin15,
   },
+  styleButtonFocus: {
+    ...baseStyles.buttonFilledFocus,
+    // marginTop: commons.margin20,
+    // marginBottom: commons.margin8,
+    height: commons.heightHeader,
+  },
+
+  styleDisabled: {
+    ...baseStyles.buttonFilledDisable,
+    height: commons.heightHeader,
+  },
+
+  styleTextButton: {
+    fontSize: commons.fontSizeHeader,
+    margin: 3,
+    color: 'white',
+    fontWeight: '700',
+  },
 });
 export default styles;

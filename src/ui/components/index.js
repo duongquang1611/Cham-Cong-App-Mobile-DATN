@@ -6,11 +6,13 @@ import TextView from './TextView';
 import ButtonView from './ButtonView';
 import IconView, {IconViewType} from './IconView';
 import InputView from './InputView';
+import RadioButton, {RadioGroup} from './RadioButton';
+
 import LoadingView from './LoadingView';
 import showAlert from './showAlert';
 import NewPicker from './NewPicker';
 import BlockView from './BlockView';
-import RadioButton, {RadioGroup} from './RadioButton';
+import TextWarning from './TextWarning';
 
 export {
   ScreenBase,
@@ -28,4 +30,5 @@ export {
   RadioButton,
   RadioGroup,
   BlockView,
+  TextWarning,
 };

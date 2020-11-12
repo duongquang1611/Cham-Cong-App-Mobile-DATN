@@ -22,6 +22,7 @@ const config = {
     detailCompany: (id) => `companies/${id}`,
     workDay: 'work-day', // list work day: get, update workDay: put, checkout thi them isCheckout: true
     workDayCompany: (companyId) => `work-day/company/${companyId}`,
+    askComeLeave: 'work-day/ask-come-leave', // put, chua co thi tao moi
   },
 };
 

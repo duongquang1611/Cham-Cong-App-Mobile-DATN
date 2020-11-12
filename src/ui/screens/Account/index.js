@@ -6,9 +6,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import AppImages from '../../../../assets/images';
 import baseStyles from '../../../baseStyles';
 import models from '../../../models';
-import {GET} from '../../../networking';
-import urlAPI from '../../../networking/urlAPI';
+import API from '../../../networking';
 import commons from '../../commons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker} from '@react-native-community/picker';
 import {
   HeaderMenuDrawer,
@@ -66,7 +66,7 @@ const AccountScreen = () => {
 
   const getDetailUser = async (id) => {
     try {
-      let res = await GET(urlAPI.detailUser(id));
+      let res = await API.GET(API.detailUser(id));
       setUserInfo(res);
     } catch (error) {
       console.log('getDetailUser -> error', error);
@@ -153,9 +153,24 @@ const AccountScreen = () => {
       </View>
     );
   };
+  const onPressDateOfBirth = () => {
+    console.log('abc');
+  };
 
+  const handleConfirm = (date) => {};
+  const hidePicker = () => {};
   return (
     <>
+      <DateTimePickerModal
+        mode={'date'}
+        isVisible={false}
+        date={new Date()}
+        locale="vi"
+        confirmTextIOS="Thay Đổi"
+        cancelTextIOS="Hủy"
+        onConfirm={handleConfirm}
+        onCancel={hidePicker}
+      />
       <HeaderMenuDrawer
         titleScreen={'Thông tin người dùng'}
         nameMenuRight={isEditing ? 'content-save' : 'account-edit'}
@@ -249,21 +264,24 @@ const AccountScreen = () => {
             returnKeyType="next"
             editable={isEditing}
           />
+          <LabelView title={'Ngày sinh'} />
           <InputView
             id="dateOfBirth"
             ref={(input) => (refInput['dateOfBirth'] = input)}
             style={{
-              ...styles.containerInput,
+              // ...styles.containerInput,
+              marginBottom: 15,
             }}
             colorTextDisable={'black'}
-            label={<LabelView title={'Ngày sinh'} />}
+            // label={<LabelView title={'Ngày sinh'} />}
+            onPressText={isEditing && onPressDateOfBirth}
             placeholder="Nhập ngày sinh ..."
             value={userInfo?.dateOfBirth || noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
             colorBorderDisable={commons.colorMain}
             returnKeyType="next"
-            editable={isEditing}
+            editable={isEditing && false}
           />
           <LabelView title={'Giới tính'} />
           {/* {isEditing ? ( */}
