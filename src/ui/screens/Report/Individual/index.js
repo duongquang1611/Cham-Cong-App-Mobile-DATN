@@ -5,10 +5,10 @@ import commons from '../../../commons';
 import {HeaderMenuDrawer, IconView} from '../../../components';
 import SubInfoCheckinView from './SubInfoCheckinView';
 import styles from './styles';
-import moment from 'moment/min/moment-with-locales';
 import ColumnBaseView from './ColumnBaseView';
 import {useDispatch, useSelector} from 'react-redux';
 import API from '../../../../networking';
+import moment from 'moment/min/moment-with-locales';
 moment.locale(commons.getDeviceLanguage(false));
 
 const HEIGHT_MORE_INFO = 120;

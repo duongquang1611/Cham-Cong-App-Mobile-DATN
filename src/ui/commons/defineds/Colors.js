@@ -1,6 +1,7 @@
 const Colors = {
   colorMain: 'rgba(23,120,242,1)',
   colorMain70: 'rgba(23,120,242,0.7)',
+  colorMainCustom: (percent) => `rgba(23,120,242,${percent})`,
   colorsLinearGradientSameColor: [
     'rgba(23,120,242,1)',
     'rgba(23,120,242,1)',

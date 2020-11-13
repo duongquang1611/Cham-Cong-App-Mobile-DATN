@@ -15,7 +15,7 @@ const EDimensions = {
   NAV_BAR_HEIGHT: 50,
   // STATUS_BAR_HEIGHT: getStatusBarHeight(),
 
-  NUMBER_ITEM_PAGE_DEFAULT: 30,
+  NUMBER_ITEM_PAGE_DEFAULT: 20,
 
   margin3: 3,
   margin5: 5,

@@ -11,8 +11,8 @@ const TabAskComeLateLeaveEarly = () => {
     <>
       <HeaderMenuDrawer titleScreen={'Đi muộn, về sớm'} />
       <Tab.Navigator
-        initialRouteName={'AskComeLeave'}
-        // initialRouteName={'Đánh giá'}
+        // initialRouteName={'AskComeLeave'}
+        initialRouteName={'HistoryAskComeLeave'}
         backBehavior="none"
         style={{backgroundColor: 'white'}}
         sceneContainerStyle={{backgroundColor: 'white'}}

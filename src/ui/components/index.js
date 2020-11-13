@@ -14,6 +14,8 @@ import NewPicker from './NewPicker';
 import BlockView from './BlockView';
 import TextWarning from './TextWarning';
 
+import CustomFlatList from './CustomFlatList';
+
 export {
   ScreenBase,
   HeaderView,
@@ -31,4 +33,5 @@ export {
   RadioGroup,
   BlockView,
   TextWarning,
+  CustomFlatList,
 };

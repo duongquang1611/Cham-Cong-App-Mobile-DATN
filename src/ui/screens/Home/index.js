@@ -77,6 +77,7 @@ const HomeScreen = (props) => {
   const setParamsDayWork = () => {
     return {
       dayWork: moment().format(commons.FORMAT_DATE),
+      userId: userInfo?._id,
     };
   };
   const getData = async (companyId) => {
