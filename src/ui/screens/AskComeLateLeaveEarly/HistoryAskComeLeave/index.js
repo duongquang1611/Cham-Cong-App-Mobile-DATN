@@ -54,13 +54,13 @@ const TabHistoryAskComeLeave = () => {
         options={{tabBarLabel: 'Đi muộn'}}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name={'HistoryAskLeaveEarly'}
         component={HistoryAskLeaveEarly}
         // component={<Text>Về sớm</Text>}
         initialParams={{type: 'leaveEarly'}}
         options={{tabBarLabel: 'Về sớm'}}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

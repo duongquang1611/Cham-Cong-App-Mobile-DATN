@@ -14,8 +14,8 @@ const renderFooter = (onEndReachedCalledDuringMomentum) => {
           marginTop: commons.margin,
         }}>
         Đang tải thêm
-      </Text>
-      <ActivityIndicator color={commons.colorMain} /> */}
+      </Text> */}
+      <ActivityIndicator color={commons.colorMain} />
     </>
   );
 };

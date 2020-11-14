@@ -54,6 +54,25 @@ const getListAskComeLeave = async (
     console.log('getListAskComeLeaveAPI error', error);
   }
 };
+
+const getDataListAskComeLeave = async (dispatch, params, page = 0) => {
+  let res = await API.GET(
+    API.workDay,
+    getParamsRequest(
+      page,
+      commons.NUMBER_ITEM_PAGE_DEFAULT,
+      params,
+      // SORT,
+    ),
+  );
+  // if (Array.isArray(res) && res.length === 0) {
+  //   console.log('invalid');
+  //   return;
+  // } else {
+  // }
+  return res;
+};
+
 const createOrUpdateDayWork = async (dispatch, params) => {
   try {
     let res = await API.PUT(API.workDay, params);
@@ -68,4 +87,5 @@ export default {
   createOrUpdateDayWork,
   getListDayWork,
   getListAskComeLeave,
+  getDataListAskComeLeave,
 };
