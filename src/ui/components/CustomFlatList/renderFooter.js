@@ -15,7 +15,7 @@ const renderFooter = (onEndReachedCalledDuringMomentum) => {
         }}>
         Đang tải thêm
       </Text> */}
-      <ActivityIndicator color={commons.colorMain} />
+      {/* <ActivityIndicator color={commons.colorMain} /> */}
     </>
   );
 };

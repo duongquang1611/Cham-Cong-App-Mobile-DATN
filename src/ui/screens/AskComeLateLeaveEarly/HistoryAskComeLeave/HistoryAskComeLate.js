@@ -1,15 +1,12 @@
-import {HeaderMenuDrawer, CustomFlatList} from 'cc-components';
+import {useNavigation} from '@react-navigation/native';
+import {CustomFlatList, LoadingView} from 'cc-components';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import commons from '../../../commons';
 import models from '../../../../models';
 import API from '../../../../networking';
-import {getParamsRequest} from '../../../components/CustomFlatList/getParamsRequest';
-import ItemHistoryAskComeLeave from './Item';
 import actions from '../../../../redux/actions';
+import commons from '../../../commons';
+import ItemHistoryAskComeLeave from './Item';
 
 let onEndReachedCalledDuringMomentum = true;
 
@@ -32,6 +29,7 @@ const HistoryAskComeLate = (props) => {
     userId: userInfo?._id,
     comeLeave: true,
   };
+  const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
 
   useEffect(() => {
     console.log(
@@ -42,6 +40,10 @@ const HistoryAskComeLate = (props) => {
     );
     state.refreshing && getData();
   }, [state]);
+
+  useEffect(() => {
+    dayWorkReducer?.changeListAskComeLeave && onRefresh();
+  }, [dayWorkReducer?.changeListAskComeLeave]);
 
   const setOnEndReachedCalledDuringMomentum = (value) => {
     onEndReachedCalledDuringMomentum = value;
@@ -61,6 +63,7 @@ const HistoryAskComeLate = (props) => {
   };
 
   const getData = async (filter = filterAsk) => {
+    dispatch(actions.changeListAskComeLeave(false));
     try {
       let res = await API.getDataListAskComeLeave(
         dispatch,
@@ -108,6 +111,7 @@ const HistoryAskComeLate = (props) => {
   };
   return (
     <>
+      {state.refreshing && <LoadingView />}
       <CustomFlatList
         data={
           state.data.length > 0

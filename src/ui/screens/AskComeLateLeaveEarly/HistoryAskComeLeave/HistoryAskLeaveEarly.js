@@ -1,85 +1,102 @@
-import {HeaderMenuDrawer, CustomFlatList} from 'cc-components';
+import {useNavigation} from '@react-navigation/native';
+import {CustomFlatList, LoadingView} from 'cc-components';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import styles from './styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import commons from '../../../commons';
 import models from '../../../../models';
 import API from '../../../../networking';
-import {getParamsRequest} from '../../../components/CustomFlatList/getParamsRequest';
-import ItemHistoryAskComeLeave from './Item';
 import actions from '../../../../redux/actions';
+import commons from '../../../commons';
+import ItemHistoryAskComeLeave from './Item';
 
+let onEndReachedCalledDuringMomentum = true;
 const HistoryAskLeaveEarly = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const router = useRoute();
+
   let type = 'leaveEarlyAsk';
-  const [
-    onEndReachedCalledDuringMomentum,
-    setOnEndReachedCalledDuringMomentum,
-  ] = useState(true);
+
   let userInfo = models.getUserInfo();
+
   const [state, setState] = useState({
     page: 0,
-    refreshing: false,
+    refreshing: true,
     data: [],
+    hasNext: true,
   });
 
-  const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
-
-  let {listAskComeLeave = []} = dayWorkReducer;
-  console.log(
-    'HistoryAskLeaveEarly -> listAskComeLeave',
-    listAskComeLeave.length,
-  );
-
-  let filterAskComeLate = {
+  let filterAsk = {
     userId: userInfo?._id,
     comeLeave: true,
   };
+  const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
+
   useEffect(() => {
+    console.log(
+      'page hasNext refreshing',
+      state.page,
+      state.hasNext,
+      state.refreshing,
+    );
     state.refreshing && getData();
   }, [state]);
+
   useEffect(() => {
-    getData(filterAskComeLate, state.page);
-  }, [state.page]);
+    dayWorkReducer?.changeListAskComeLeave && onRefresh();
+  }, [dayWorkReducer?.changeListAskComeLeave]);
+
+  const setOnEndReachedCalledDuringMomentum = (value) => {
+    onEndReachedCalledDuringMomentum = value;
+  };
 
   const onRefresh = (newParam) => {
-    // if (newParam) {
-    //   filterGlobal = {...filterGlobal, ...newParam};
-    // }
-    // console.log('onRefresh -> filterGlobal', filterGlobal);
+    filterAsk = {
+      userId: userInfo?._id,
+      comeLeave: true,
+    };
     setState({
       ...state,
       page: 0,
       refreshing: true,
+      hasNext: true,
     });
   };
 
-  const getData = async (filter = filterAskComeLate, page) => {
+  const getData = async (filter = filterAsk) => {
     dispatch(actions.changeListAskComeLeave(false));
-    commons.wait(2000).then(() => setState({...state, refreshing: false}));
-    API.getListAskComeLeave(
-      dispatch,
-      filterAskComeLate,
-      listAskComeLeave,
-      page,
-    );
+    try {
+      let res = await API.getDataListAskComeLeave(
+        dispatch,
+        filterAsk,
+        state.page,
+      );
+
+      setState({
+        ...state,
+        data: state.page == 0 ? res : state.data.concat(res),
+        hasNext: res.length == commons.NUMBER_ITEM_PAGE_DEFAULT,
+        refreshing: false,
+      });
+    } catch (error) {
+      setState({
+        ...state,
+        refreshing: false,
+        hasNext: false,
+      });
+    }
   };
   const handleLoadMore = async () => {
-    console.log('handleLoadMore', state.page);
-    if (!onEndReachedCalledDuringMomentum || state.page === 0) {
-      setOnEndReachedCalledDuringMomentum(true);
-      try {
-        setState({
-          ...state,
-          page: state.page + 1,
-        });
-      } catch (error) {
-        console.log('loadmore -> error', error);
-      }
+    console.log(
+      'Load more: CallingDuring hasNext',
+      onEndReachedCalledDuringMomentum,
+      state.hasNext,
+    );
+    if (!onEndReachedCalledDuringMomentum && state.hasNext) {
+      setState({
+        ...state,
+        refreshing: true,
+        page: state.page + 1,
+      });
+      onEndReachedCalledDuringMomentum = true;
     }
   };
   const renderItem = ({item, index}) => {
@@ -93,11 +110,11 @@ const HistoryAskLeaveEarly = (props) => {
   };
   return (
     <>
-      {/* {state.data.length > 0 ? ( */}
+      {state.refreshing && <LoadingView />}
       <CustomFlatList
         data={
-          listAskComeLeave.length > 0
-            ? listAskComeLeave.filter((item) => {
+          state.data.length > 0
+            ? state.data.filter((item) => {
                 return item[type].time != null;
               })
             : []
@@ -119,11 +136,6 @@ const HistoryAskLeaveEarly = (props) => {
           onEndReachedCalledDuringMomentum,
         }}
       />
-      {/* ) : (
-        <Text style={{textAlign: 'center', marginTop: 10}}>
-          Chưa có dữ liệu
-        </Text>
-      )} */}
     </>
   );
 };
