@@ -5,37 +5,33 @@ import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
 import API from '../../../../networking';
 import commons from '../../../commons';
-import HistoryAskComeLate from './HistoryAskComeLate';
-import HistoryAskLeaveEarly from './HistoryAskLeaveEarly';
+import HistoryConfirmComeLate from './HistoryConfirmComeLate';
+import HistoryConfirmLeaveEarly from './HistoryConfirmLeaveEarly';
 
-const TabHistoryAskComeLeave = () => {
+const TabHistoryConfirmComeLeave = () => {
   const Tab = createMaterialTopTabNavigator();
   // const Tab = createBottomTabNavigator();
   const dispatch = useDispatch();
   let userInfo = models.getUserInfo();
-  let filterAskComeLeave = {
+  let filterConfirmComeLeave = {
     userId: userInfo?._id,
     comeLeave: true,
   };
-  const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
 
   useEffect(() => {
     getData();
   }, []);
-  useEffect(() => {
-    dayWorkReducer.changeListAskComeLeave && getData();
-  }, [dayWorkReducer.changeListAskComeLeave]);
 
   const getData = async () => {
-    API.getListAskComeLeave(dispatch, filterAskComeLeave);
+    // API.getListConfirmComeLeave(dispatch, filterConfirmComeLeave);
   };
 
   return (
     <Tab.Navigator
-      // initialRouteName={'AskComeLeave'}
+      // initialRouteName={'ConfirmComeLeave'}
       swipeEnabled={false}
       tabBarPosition="bottom"
-      initialRouteName={'HistoryAskComeLate'}
+      initialRouteName={'HistoryConfirmComeLate'}
       backBehavior="none"
       style={{backgroundColor: 'white'}}
       sceneContainerStyle={{backgroundColor: 'white'}}
@@ -48,16 +44,16 @@ const TabHistoryAskComeLeave = () => {
         },
       }}>
       <Tab.Screen
-        name={'HistoryAskComeLate'}
-        component={HistoryAskComeLate}
-        initialParams={{type: 'comeLateAsk'}}
+        name={'HistoryConfirmComeLate'}
+        component={HistoryConfirmComeLate}
+        initialParams={{type: 'comeLateConfirm'}}
         // component={<Text>Đi muộn</Text>}
         options={{tabBarLabel: 'Đi muộn'}}
       />
 
       <Tab.Screen
-        name={'HistoryAskLeaveEarly'}
-        component={HistoryAskLeaveEarly}
+        name={'HistoryConfirmLeaveEarly'}
+        component={HistoryConfirmLeaveEarly}
         // component={<Text>Về sớm</Text>}
         initialParams={{type: 'leaveEarly'}}
         options={{tabBarLabel: 'Về sớm'}}
@@ -66,6 +62,6 @@ const TabHistoryAskComeLeave = () => {
   );
 };
 
-export default TabHistoryAskComeLeave;
+export default TabHistoryConfirmComeLeave;
 
 const styles = StyleSheet.create({});

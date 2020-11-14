@@ -49,10 +49,11 @@ const HistoryAskComeLate = (props) => {
     onEndReachedCalledDuringMomentum = value;
   };
 
-  const onRefresh = (newParam) => {
+  const onRefresh = (newFilter = {}) => {
     filterAsk = {
       userId: userInfo?._id,
       comeLeave: true,
+      ...newFilter,
     };
     setState({
       ...state,

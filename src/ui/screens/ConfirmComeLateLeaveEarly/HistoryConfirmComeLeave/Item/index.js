@@ -21,9 +21,9 @@ let TYPE = {
   },
 };
 
-const ItemHistoryAskComeLeave = (props) => {
+const ItemHistoryConfirmComeLeave = (props) => {
   const {item, index, style, type} = props;
-  // console.log('ItemHistoryAskComeLeave -> item', item);
+  // console.log('ItemHistoryConfirmComeLeave -> item', item);
   let {day, month, year} = item;
   let dayName = moment(item?.dayWork).format('dddd');
   dayName = commons.uppercaseFirstLetter(dayName, true);
@@ -108,7 +108,7 @@ const ItemHistoryAskComeLeave = (props) => {
   );
 };
 
-export default ItemHistoryAskComeLeave;
+export default ItemHistoryConfirmComeLeave;
 
 const styles = StyleSheet.create({
   ...baseStyles,

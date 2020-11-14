@@ -9,11 +9,12 @@ import commons from '../../../commons';
 import ItemHistoryAskComeLeave from './Item';
 
 let onEndReachedCalledDuringMomentum = true;
-const HistoryAskLeaveEarly = (props) => {
+
+const HistoryConfirmComeLate = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  let type = 'leaveEarlyAsk';
+  let type = 'comeLateAsk';
 
   let userInfo = models.getUserInfo();
 
@@ -141,4 +142,4 @@ const HistoryAskLeaveEarly = (props) => {
   );
 };
 
-export default HistoryAskLeaveEarly;
+export default HistoryConfirmComeLate;

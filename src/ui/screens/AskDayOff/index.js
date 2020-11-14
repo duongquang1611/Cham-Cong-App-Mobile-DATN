@@ -1,6 +1,7 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {HeaderMenuDrawer} from 'cc-components';
 import React from 'react';
+import {Dimensions} from 'react-native';
 import commons from '../../commons';
 import AskDayOff from './AskDayOff';
 import HistoryAskDayOff from './HistoryAskDayOff';
@@ -22,7 +23,8 @@ const TabAskDayOff = () => {
             fontWeight: 'bold',
             fontSize: commons.fontSize14,
           },
-        }}>
+        }}
+        initialLayout={{width: Dimensions.get('window').width}}>
         <Tab.Screen
           name={'AskDayOff'}
           component={AskDayOff}

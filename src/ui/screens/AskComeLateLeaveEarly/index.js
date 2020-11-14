@@ -1,6 +1,7 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {HeaderMenuDrawer} from 'cc-components';
 import React, {useEffect} from 'react';
+import {Dimensions} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
 import API from '../../../networking';
@@ -46,7 +47,8 @@ const TabAskComeLateLeaveEarly = () => {
             fontWeight: 'bold',
             fontSize: commons.fontSize14,
           },
-        }}>
+        }}
+        initialLayout={{width: Dimensions.get('window').width}}>
         <Tab.Screen
           name={'AskComeLeave'}
           component={AskComeLeave}
