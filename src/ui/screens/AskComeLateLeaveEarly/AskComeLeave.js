@@ -16,6 +16,9 @@ import commons from '../../commons';
 import moment from 'moment';
 import {COME_LEAVE_DATA} from './COME_LEAVE_DATA';
 import API from '../../../networking';
+import actions from '../../../redux/actions';
+import {useDispatch} from 'react-redux';
+import {useRoute} from '@react-navigation/native';
 
 let dataAsk = {
   typeAsk: COME_LEAVE_DATA[0].code,
@@ -38,14 +41,16 @@ const LabelView = (props) => {
   );
 };
 
-const AskComeLeave = () => {
+const AskComeLeave = (props) => {
   const [state, setState] = useState({
     isDatePickerVisible: false,
     isTimePickerVisible: false,
     isVerified: false,
     isSending: false,
   });
+  const route = useRoute();
 
+  const dispatch = useDispatch();
   let refInput = {};
   const focusTheField = (id) => {
     refInput[id].focus();
@@ -113,6 +118,7 @@ const AskComeLeave = () => {
             dataAsk.typeAsk === 'comeLate' ? 'đến muộn' : 'về sớm'
           } thành công.`,
         });
+        dispatch(actions.changeListAskComeLeave(true));
       }
     } catch (error) {
       console.log('AskComeLeave -> error', error);

@@ -1,10 +1,15 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import moment from 'moment/min/moment-with-locales';
-import commons from '../../../commons';
-import baseStyles from '../../../../baseStyles';
-moment.locale(commons.getDeviceLanguage(false));
+import commons from '../../../../commons';
+import baseStyles from '../../../../../baseStyles';
 
+moment.locale(commons.getDeviceLanguage(false));
+const STATUS = [
+  {id: -1, name: 'Từ chối', color: 'red'},
+  {id: 0, name: 'Chờ duyệt', color: 'orange'},
+  {id: 1, name: 'Chấp nhận', color: commons.PersianGreen},
+];
 const HEIGHT_MORE_INFO = 100;
 let TYPE = {
   comeLateAsk: 'Đi muộn',
@@ -16,18 +21,14 @@ let TYPE = {
   },
 };
 
-const ItemHistoryAskComeLate = (props) => {
-  const {item, style} = props;
-  console.log('ItemHistoryAskComeLate -> item', item);
+const ItemHistoryAskComeLeave = (props) => {
+  const {item, index, style, type} = props;
+  // console.log('ItemHistoryAskComeLeave -> item', item);
   let {day, month, year} = item;
   let dayName = moment(item?.dayWork).format('dddd');
   dayName = commons.uppercaseFirstLetter(dayName, true);
-  let type = ['comeLateAsk'];
-  if (item?.leaveEarlyAsk?.time && item?.comeLateAsk?.time) {
-    type = ['comeLateAsk', 'leaveEarlyAsk'];
-  } else if (item?.leaveEarlyAsk?.time) {
-    type = ['leaveEarlyAsk'];
-  }
+
+  let statusData = STATUS.find((itemData) => itemData.id == item[type]?.status);
 
   const DateBlock = (props) => {
     return (
@@ -54,15 +55,15 @@ const ItemHistoryAskComeLate = (props) => {
   return (
     <View
       style={{
+        minHeight: HEIGHT_MORE_INFO,
         flexDirection: 'row',
-        // minHeight: '20%',
-        // borderWidth: 1,
-        // borderColor: 'lightgrey',
+        // alignSelf: 'baseline',
+        width: '100%',
         backgroundColor: 'white',
         elevation: 2,
         borderRadius: 5,
         overflow: 'hidden',
-        // flexGrow: 0,
+        marginBottom: 10,
         ...style,
       }}>
       <DateBlock />
@@ -71,35 +72,37 @@ const ItemHistoryAskComeLate = (props) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // flexShrink: 1,
-            // flexWrap: 'wrap',
+            alignItems: 'center',
           }}>
-          <Text style={[styles.title, {flexWrap: 'wrap', flex: 1}]}>
-            {type.length > 1
-              ? [item[type[0]].title, item[type[1]].title].join(', ')
-              : item[type[0]].title}{' '}
-            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-          </Text>
-          <View style={styles.type}>
+          <View
+            style={{
+              ...styles.type,
+              backgroundColor: statusData?.color,
+              borderBottomEndRadius: 5,
+            }}>
             <Text style={{color: 'white', fontSize: 12}}>
-              {type.length > 1 ? TYPE.getType() : TYPE.getType(type[0])}
+              {statusData?.name}
+            </Text>
+          </View>
+          <View style={{...styles.type, borderBottomStartRadius: 5}}>
+            <Text style={{color: 'white', fontSize: 12}}>
+              {TYPE.getType(type)}
             </Text>
           </View>
         </View>
-        <Text>x</Text>
-        <Text>x</Text>
-        <Text>x</Text>
-        <Text>x</Text>
-        <Text>x</Text>
-        <Text>x</Text>
-        <Text>x</Text>
-        <Text>x</Text>
+
+        <View style={{padding: 10}}>
+          <Text style={[styles.title, {flexWrap: 'wrap', flex: 1}]}>
+            {item[type]?.title}
+          </Text>
+          <Text>{item[type]?.reason}</Text>
+        </View>
       </View>
     </View>
   );
 };
 
-export default ItemHistoryAskComeLate;
+export default ItemHistoryAskComeLeave;
 
 const styles = StyleSheet.create({
   ...baseStyles,
@@ -112,13 +115,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // elevation: 5,
     width: '100%',
-    height: '100%',
+    flex: 1,
   },
   type: {
     width: 70,
     maxHeight: 35,
     backgroundColor: commons.colorMainCustom(0.5),
-    borderBottomStartRadius: 5,
     padding: 3,
     alignItems: 'center',
     justifyContent: 'center',

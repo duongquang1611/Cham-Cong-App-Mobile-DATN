@@ -45,6 +45,7 @@ const AccountScreen = () => {
   const {isLoginSuccess} = authReducer;
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
+  const [isVisibleDate, setIsVisibleDate] = useState(false);
   let userLocal = models.getUserInfo();
   const [userInfo, setUserInfo] = useState(userLocal);
   console.log('AccountScreen -> userInfo', userInfo?._id);
@@ -154,17 +155,26 @@ const AccountScreen = () => {
     );
   };
   const onPressDateOfBirth = () => {
-    console.log('abc');
+    setIsVisibleDate(true);
   };
 
-  const handleConfirm = (date) => {};
-  const hidePicker = () => {};
+  const onChangeText = ({id, data}) => {};
+  const handleConfirm = (date) => {
+    hidePicker();
+    console.log('handleConfirm -> date', date);
+    // onChangeText({id: 'time', data: date.toISOString()});
+  };
+  const hidePicker = () => {
+    setIsVisibleDate(false);
+  };
   return (
     <>
       <DateTimePickerModal
         mode={'date'}
-        isVisible={false}
-        date={new Date()}
+        isVisible={isVisibleDate}
+        date={
+          userInfo?.dateOfBirth ? new Date(userInfo?.dateOfBirth) : new Date()
+        }
         locale="vi"
         confirmTextIOS="Thay Đổi"
         cancelTextIOS="Hủy"

@@ -12,4 +12,21 @@ const saveListDayWork = (data) => {
     data: data,
   };
 };
-export default {saveDetailDayWork, saveListDayWork};
+const saveListAskComeLeave = (data) => {
+  return {
+    type: types.SAVE_LIST_ASK_COME_LEAVE,
+    data: data,
+  };
+};
+const changeListAskComeLeave = (data) => {
+  return {
+    type: types.CHANGE_LIST_ASK_COME_LEAVE,
+    data: data,
+  };
+};
+export default {
+  saveDetailDayWork,
+  saveListDayWork,
+  saveListAskComeLeave,
+  changeListAskComeLeave,
+};

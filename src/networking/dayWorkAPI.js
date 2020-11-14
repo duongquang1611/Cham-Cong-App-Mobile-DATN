@@ -1,5 +1,7 @@
 import API from '.';
 import actions from '../redux/actions';
+import commons from '../ui/commons';
+import {getParamsRequest} from '../ui/components/CustomFlatList/getParamsRequest';
 
 const getDetailDayWork = async (dispatch, params) => {
   try {
@@ -19,6 +21,39 @@ const getListDayWork = async (dispatch, params) => {
     console.log('Day Work API error', error);
   }
 };
+
+const getListAskComeLeave = async (
+  dispatch,
+  params,
+  initData = [],
+  page = 0,
+) => {
+  let firstData = [];
+  if (Array.isArray(initData)) {
+    firstData = [...initData];
+  }
+  // console.log("initParams", initParams), list ask come leave pass vao
+  try {
+    let res = await API.GET(
+      API.workDay,
+      getParamsRequest(
+        page,
+        commons.NUMBER_ITEM_PAGE_DEFAULT,
+        params,
+        // SORT,
+      ),
+    );
+    if (Array.isArray(res) && res.length === 0) {
+      console.log('invalid');
+      return;
+    } else {
+      dispatch(actions.saveListAskComeLeave([...firstData, ...res]));
+    }
+    // console.log('res', res);
+  } catch (error) {
+    console.log('getListAskComeLeaveAPI error', error);
+  }
+};
 const createOrUpdateDayWork = async (dispatch, params) => {
   try {
     let res = await API.PUT(API.workDay, params);
@@ -28,4 +63,9 @@ const createOrUpdateDayWork = async (dispatch, params) => {
   }
 };
 
-export default {getDetailDayWork, createOrUpdateDayWork, getListDayWork};
+export default {
+  getDetailDayWork,
+  createOrUpdateDayWork,
+  getListDayWork,
+  getListAskComeLeave,
+};

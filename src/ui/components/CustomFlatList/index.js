@@ -17,11 +17,7 @@ const CustomFlatList = (props) => {
     onEndReachedCalledDuringMomentum,
     showSeparator = true,
   } = props;
-  console.log('CustomFlatList -> renderItem', renderItem);
-  // const renderItem = ({item, index}) => {
-  //   console.log('renderItem -> item', index);
-  //   return <Text>{index}</Text>;
-  // };
+
   const EmptyList = () => {
     return (
       <Text style={{textAlign: 'center', marginTop: 10}}>Chưa có dữ liệu</Text>
@@ -30,7 +26,7 @@ const CustomFlatList = (props) => {
   return (
     <FlatList
       ListHeaderComponent={renderHeader || null}
-      stickyHeaderIndices={[0]}
+      // stickyHeaderIndices={[0]}
       showsVerticalScrollIndicator={false}
       data={data}
       extraData={data}
@@ -39,6 +35,7 @@ const CustomFlatList = (props) => {
       keyboardShouldPersistTaps="handled"
       removeClippedSubviews={true}
       style={{backgroundColor: 'white'}}
+      initialNumToRender={10}
       contentContainerStyle={{
         flex: 1,
         // backgroundColor: 'lightgray',
@@ -54,7 +51,7 @@ const CustomFlatList = (props) => {
       renderItem={renderItem}
       ItemSeparatorComponent={showSeparator && SeparatorView}
       onEndReached={handleLoadMore}
-      onEndReachedThreshold={0.1}
+      onEndReachedThreshold={0.01}
       onMomentumScrollBegin={() => changeOnEndReached(false)}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
