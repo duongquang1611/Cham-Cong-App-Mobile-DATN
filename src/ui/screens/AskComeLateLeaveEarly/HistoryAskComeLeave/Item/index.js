@@ -1,6 +1,11 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import moment from 'moment/min/moment-with-locales';
+import {TextView} from 'cc-components';
+import {useDispatch} from 'react-redux';
+// import actions from '../../../../redux/actions';
+import actions from '../../../../../redux/actions';
+import API from '../../../../../networking';
 import commons from '../../../../commons';
 import baseStyles from '../../../../../baseStyles';
 
@@ -10,7 +15,7 @@ const STATUS = [
   {id: 0, name: 'Chờ duyệt', color: 'orange'},
   {id: 1, name: 'Chấp nhận', color: commons.PersianGreen},
 ];
-const HEIGHT_MORE_INFO = 100;
+const HEIGHT_MORE_INFO = 60;
 let TYPE = {
   comeLateAsk: 'Đi muộn',
   leaveEarlyAsk: 'Về sớm',
@@ -22,7 +27,9 @@ let TYPE = {
 };
 
 const ItemHistoryAskComeLeave = (props) => {
-  const {item, index, style, type} = props;
+  const dispatch = useDispatch();
+  const {item, index, style, typeConfirm} = props;
+  let type = item?.type?.code;
   // console.log('ItemHistoryAskComeLeave -> item', item);
   let {day, month, year} = item;
   let dayName = moment(item?.dayWork).format('dddd');
@@ -51,6 +58,24 @@ const ItemHistoryAskComeLeave = (props) => {
         </View>
       </View>
     );
+  };
+  const onPressConfirm = async ({id}) => {
+    try {
+      let params = {
+        typeAsk: type,
+        time: item[type]?.time,
+        title: item[type]?.title,
+        reason: item[type]?.reason,
+        status: id,
+        userId: item?.userId?._id,
+      };
+      // console.log('ItemHistoryAskComeLeave -> params', params);
+      await API.PUT(API.askComeLeave, params);
+      dispatch(actions.changeListConfirmComeLeave(true));
+    } catch (error) {
+      console.log('ItemHistoryAskComeLeave -> error', error);
+      // dispatch(actions.changeListConfirmComeLeave(true));
+    }
   };
   return (
     <View
@@ -88,16 +113,18 @@ const ItemHistoryAskComeLeave = (props) => {
             style={{
               ...styles.type,
               borderBottomStartRadius: 5,
-              backgroundColor:
-                type == 'comeLateAsk' ? commons.colorMain : 'purple',
+              backgroundColor: item?.type.id
+                ? 'purple'
+                : commons.colorMainCustom(1),
             }}>
             <Text style={{color: 'white', fontSize: 12}}>
-              {TYPE.getType(type)}
+              {item?.type?.name}
             </Text>
           </View>
         </View>
 
         <View style={{padding: 10}}>
+          {/* <Text style={styles.title}>{item?.userId?.name}</Text> */}
           <Text style={[styles.title, {flexWrap: 'wrap', flex: 1}]}>
             {item[type]?.title}
           </Text>
@@ -108,6 +135,25 @@ const ItemHistoryAskComeLeave = (props) => {
               {moment(item[type]?.time).format('HH:mm')}
             </Text>
           </Text>
+          {typeConfirm && (
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <TextView
+                id="1"
+                value="Chấp nhận"
+                onPress={onPressConfirm}
+                style={{...styles.buttonConfirm}}
+                styleValue={{...styles.textConfirm}}
+              />
+              <View style={{width: 10}} />
+              <TextView
+                id="-1"
+                value="Từ chối"
+                onPress={onPressConfirm}
+                styleValue={{...styles.textConfirm}}
+                style={{...styles.buttonConfirm, backgroundColor: 'red'}}
+              />
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -132,9 +178,21 @@ const styles = StyleSheet.create({
   type: {
     width: 70,
     maxHeight: 35,
-    backgroundColor: commons.colorMainCustom(1),
+    backgroundColor: commons.colorMainCustom(0.5),
     padding: 3,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonConfirm: {
+    flex: 1,
+    backgroundColor: commons.PersianGreen,
+    marginTop: 5,
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  textConfirm: {
+    color: 'white',
   },
 });

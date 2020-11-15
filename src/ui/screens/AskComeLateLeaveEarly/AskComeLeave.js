@@ -57,7 +57,6 @@ const AskComeLeave = (props) => {
   };
 
   const handleDateConfirm = useCallback((date) => {
-    console.log('handleConfirm -> date', date);
     hideDatePicker();
     onChangeText({id: 'time', data: date.toISOString()});
   }, []);
@@ -100,7 +99,6 @@ const AskComeLeave = (props) => {
       dataAsk[id] = data;
     }
     checkVerification();
-    console.log('onChangeText -> dataAsk', dataAsk);
   };
 
   const checkVerification = () => {

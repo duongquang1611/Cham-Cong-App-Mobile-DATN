@@ -37,7 +37,7 @@ const TabAskComeLateLeaveEarly = () => {
       <Tab.Navigator
         // initialRouteName={'AskComeLeave'}
         tabBarPosition="top"
-        initialRouteName={'TabHistoryAskComeLeave'}
+        initialRouteName={'AskComeLeave'}
         backBehavior="none"
         style={{backgroundColor: 'white'}}
         sceneContainerStyle={{backgroundColor: 'white'}}

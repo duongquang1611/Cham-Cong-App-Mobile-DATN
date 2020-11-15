@@ -48,10 +48,6 @@ const ConfirmComeLeaveTemplate = (props) => {
     dayWorkReducer?.changeListConfirmComeLeave && onRefresh();
   }, [dayWorkReducer?.changeListConfirmComeLeave]);
 
-  useEffect(() => {
-    dayWorkReducer?.changeListAskComeLeave && onRefresh();
-  }, [dayWorkReducer?.changeListAskComeLeave]);
-
   const setOnEndReachedCalledDuringMomentum = (value) => {
     onEndReachedCalledDuringMomentum = value;
   };

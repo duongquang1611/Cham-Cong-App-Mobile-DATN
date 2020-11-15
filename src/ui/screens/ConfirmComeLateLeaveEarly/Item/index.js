@@ -58,7 +58,7 @@ const ItemConfirmComeLeave = (props) => {
       </View>
     );
   };
-  const onPressConfirm = async ({id}) => {
+  const onPressConfirm = useCallback(async ({id}) => {
     try {
       let params = {
         typeAsk: type,
@@ -75,7 +75,25 @@ const ItemConfirmComeLeave = (props) => {
       console.log('ItemConfirmComeLeave -> error', error);
       // dispatch(actions.changeListConfirmComeLeave(true));
     }
-  };
+  }, []);
+  // const onPressConfirm = async ({id}) => {
+  //   try {
+  //     let params = {
+  //       typeAsk: type,
+  //       time: item[type]?.time,
+  //       title: item[type]?.title,
+  //       reason: item[type]?.reason,
+  //       status: id,
+  //       userId: item?.userId?._id,
+  //     };
+  //     // console.log('ItemConfirmComeLeave -> params', params);
+  //     await API.PUT(API.askComeLeave, params);
+  //     dispatch(actions.changeListConfirmComeLeave(true));
+  //   } catch (error) {
+  //     console.log('ItemConfirmComeLeave -> error', error);
+  //     // dispatch(actions.changeListConfirmComeLeave(true));
+  //   }
+  // };
   return (
     <View
       style={{
