@@ -115,8 +115,9 @@ const HistoryAskComeLate = (props) => {
       {state.refreshing && <LoadingView />}
       <CustomFlatList
         data={
-          state.data.length > 0
-            ? state.data.filter((item) => {
+          state?.data.length > 0
+            ? state?.data.filter((item) => {
+                console.log('HistoryAskComeLate -> item', item);
                 return item[type].time != null;
               })
             : []

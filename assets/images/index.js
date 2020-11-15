@@ -35,6 +35,7 @@ const AppImages = {
   ask1: require('./ask1.png'),
   ask2: require('./ask2.png'),
   confirm: require('./confirm.png'),
+  server: require('./server.png'),
   male: {uri: 'https://i.imgur.com/1mBGvt3.jpg'},
   female: {uri: 'https://i.imgur.com/xCplblE.jpg'},
 };

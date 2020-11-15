@@ -5,6 +5,7 @@ import {showAlert} from '../ui/components';
 import urlAPI from './urlAPI';
 import dayWorkAPI from './dayWorkAPI';
 import companyAPI from './companyAPI';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const isSuccess = (res) => {
   let errorCodeString = JSON.stringify(res.request.status);
@@ -15,7 +16,7 @@ const isSuccess = (res) => {
   return false;
 };
 const instanceAPI = axios.create({
-  baseURL: urlAPI.BASE_API_URL,
+  // baseURL: urlAPI.BASE_API_URL,
   timeout: 5000,
 });
 
@@ -39,6 +40,20 @@ instanceAPI.interceptors.response.use(
 );
 
 instanceAPI.interceptors.request.use(async (request) => {
+  try {
+    let baseApiUrl = await AsyncStorage.getItem(API.keyAsyncStorageBaseUrl);
+
+    if (!baseApiUrl) {
+      baseApiUrl = urlAPI.BASE_API_URL;
+    } else {
+      baseApiUrl = JSON.parse(baseApiUrl).server;
+    }
+
+    request.baseURL = baseApiUrl;
+  } catch (error) {
+    console.log('error', error);
+  }
+
   if (request.data instanceof FormData) {
     request.headers = {
       'Content-Type': 'multipart/form-data',

@@ -1,18 +1,32 @@
 const env = 'dev'; // beta/prod
-
 const config = {
   dev: {
+    keyAsyncStorageBaseUrl: '@base_url',
     // local
     // BASE_API_URL: 'http://localhost:5000/api/',
     // BASE_URL: 'http://localhost:5000/',
 
+    baseApiUrlHeroku: 'https://cham-cong.herokuapp.com/api/',
     // ngrok
     BASE_API_URL: 'http://b0982278986c.ngrok.io/api/',
     BASE_URL: 'http://b0982278986c.ngrok.io/',
 
     // heroku
-    // BASE_API_URL: 'https://cham-cong.herokuapp.com/api/',
-    // BASE_URL: 'https://cham-cong.herokuapp.com/',
+    // BASE_API_URL: `${baseUrlHeroku}/api/`,
+    // BASE_URL: baseUrlHeroku,
+
+    set setServer(baseUrl) {
+      console.log('setsetupServer -> this', baseUrl);
+      this.BASE_API_URL = baseUrl + 'api/';
+      this.BASE_URL = baseUrl;
+    },
+
+    get getServer() {
+      return {
+        BASE_URL: this.BASE_URL,
+        BASE_API_URL: this.BASE_API_URL,
+      };
+    },
 
     // users
     searchUsers: 'users',

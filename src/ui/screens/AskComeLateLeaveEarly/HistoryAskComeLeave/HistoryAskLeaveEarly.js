@@ -114,8 +114,8 @@ const HistoryAskLeaveEarly = (props) => {
       {state.refreshing && <LoadingView />}
       <CustomFlatList
         data={
-          state.data.length > 0
-            ? state.data.filter((item) => {
+          state?.data.length > 0
+            ? state?.data.filter((item) => {
                 return item[type].time != null;
               })
             : []

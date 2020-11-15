@@ -25,6 +25,7 @@ import Notification from '../ui/screens/Notification';
 import LoginScreen from '../ui/screens/Account/LoginScreen';
 import SplashScreen from '../ui/screens/Splash';
 import AppImages from '../../assets/images';
+import SetupServer from '../ui/screens/SetupServer';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -40,7 +41,8 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="TabConfirmComeLateLeaveEarly"
+        initialRouteName="SetupServer"
+        // initialRouteName="TabConfirmComeLateLeaveEarly"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -180,6 +182,20 @@ const RootNavigation = () => {
               />
             ),
             drawerLabel: 'Thông báo',
+          }}
+        />
+        <Drawer.Screen
+          name="SetupServer"
+          component={SetupServer}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <Image
+                source={AppImages.server}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
+            drawerLabel: 'Server',
           }}
         />
       </Drawer.Navigator>
