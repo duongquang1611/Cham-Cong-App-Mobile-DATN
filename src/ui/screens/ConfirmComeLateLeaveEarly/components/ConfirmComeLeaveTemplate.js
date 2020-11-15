@@ -6,15 +6,14 @@ import models from '../../../../models';
 import API from '../../../../networking';
 import actions from '../../../../redux/actions';
 import commons from '../../../commons';
-import ItemHistoryAskComeLeave from './Item';
+import ItemHistoryConfirmComeLeave from '../Item';
 
 let onEndReachedCalledDuringMomentum = true;
 
-const HistoryConfirmComeLate = (props) => {
+const ConfirmComeLeaveTemplate = (props) => {
+  const {statusComeLeaveAsk, reversed, typeConfirm} = props;
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
-  let type = 'comeLateAsk';
 
   let userInfo = models.getUserInfo();
 
@@ -25,10 +24,14 @@ const HistoryConfirmComeLate = (props) => {
     hasNext: true,
   });
 
-  let filterAsk = {
-    userId: userInfo?._id,
+  let filter = {
+    parentId: userInfo?._id,
     comeLeave: true,
+    statusComeLeaveAsk: statusComeLeaveAsk,
   };
+  if (reversed) {
+    filter.reverseStatusComeLeaveAsk = true;
+  }
   const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
 
   useEffect(() => {
@@ -42,6 +45,10 @@ const HistoryConfirmComeLate = (props) => {
   }, [state]);
 
   useEffect(() => {
+    dayWorkReducer?.changeListConfirmComeLeave && onRefresh();
+  }, [dayWorkReducer?.changeListConfirmComeLeave]);
+
+  useEffect(() => {
     dayWorkReducer?.changeListAskComeLeave && onRefresh();
   }, [dayWorkReducer?.changeListAskComeLeave]);
 
@@ -50,7 +57,8 @@ const HistoryConfirmComeLate = (props) => {
   };
 
   const onRefresh = (newFilter = {}) => {
-    filterAsk = {
+    dispatch(actions.changeListConfirmComeLeave(false));
+    filter = {
       userId: userInfo?._id,
       comeLeave: true,
       ...newFilter,
@@ -63,12 +71,11 @@ const HistoryConfirmComeLate = (props) => {
     });
   };
 
-  const getData = async (filter = filterAsk) => {
-    dispatch(actions.changeListAskComeLeave(false));
+  const getData = async (newFilter = filter) => {
     try {
-      let res = await API.getDataListAskComeLeave(
+      let res = await API.getDataListAskComeLeaveProcessed(
         dispatch,
-        filterAsk,
+        newFilter,
         state.page,
       );
 
@@ -103,10 +110,10 @@ const HistoryConfirmComeLate = (props) => {
   };
   const renderItem = ({item, index}) => {
     return (
-      <ItemHistoryAskComeLeave
+      <ItemHistoryConfirmComeLeave
         {...{item, index}}
         style={{marginBottom: 10}}
-        type={type}
+        typeConfirm={typeConfirm}
       />
     );
   };
@@ -114,13 +121,7 @@ const HistoryConfirmComeLate = (props) => {
     <>
       {state.refreshing && <LoadingView />}
       <CustomFlatList
-        data={
-          state.data.length > 0
-            ? state.data.filter((item) => {
-                return item[type].time != null;
-              })
-            : []
-        }
+        data={state.data.length > 0 ? state.data : []}
         renderItem={renderItem}
         refreshing={state.refreshing}
         changeOnEndReached={setOnEndReachedCalledDuringMomentum}
@@ -142,4 +143,4 @@ const HistoryConfirmComeLate = (props) => {
   );
 };
 
-export default HistoryConfirmComeLate;
+export default ConfirmComeLeaveTemplate;

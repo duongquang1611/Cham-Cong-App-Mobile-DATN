@@ -65,11 +65,19 @@ const getDataListAskComeLeave = async (dispatch, params, page = 0) => {
       // SORT,
     ),
   );
-  // if (Array.isArray(res) && res.length === 0) {
-  //   console.log('invalid');
-  //   return;
-  // } else {
-  // }
+  return res;
+};
+
+const getDataListAskComeLeaveProcessed = async (dispatch, params, page = 0) => {
+  let res = await API.GET(
+    API.askComeLeave,
+    getParamsRequest(
+      page,
+      commons.NUMBER_ITEM_PAGE_DEFAULT,
+      params,
+      // SORT,
+    ),
+  );
   return res;
 };
 
@@ -88,4 +96,5 @@ export default {
   getListDayWork,
   getListAskComeLeave,
   getDataListAskComeLeave,
+  getDataListAskComeLeaveProcessed,
 };

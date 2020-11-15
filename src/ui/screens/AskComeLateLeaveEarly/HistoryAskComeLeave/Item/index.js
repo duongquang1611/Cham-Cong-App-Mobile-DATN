@@ -84,7 +84,13 @@ const ItemHistoryAskComeLeave = (props) => {
               {statusData?.name}
             </Text>
           </View>
-          <View style={{...styles.type, borderBottomStartRadius: 5}}>
+          <View
+            style={{
+              ...styles.type,
+              borderBottomStartRadius: 5,
+              backgroundColor:
+                type == 'comeLateAsk' ? commons.colorMain : 'purple',
+            }}>
             <Text style={{color: 'white', fontSize: 12}}>
               {TYPE.getType(type)}
             </Text>
@@ -126,7 +132,7 @@ const styles = StyleSheet.create({
   type: {
     width: 70,
     maxHeight: 35,
-    backgroundColor: commons.colorMainCustom(0.5),
+    backgroundColor: commons.colorMainCustom(1),
     padding: 3,
     alignItems: 'center',
     justifyContent: 'center',

@@ -115,7 +115,7 @@ const AskComeLeave = (props) => {
       if (res && res._id) {
         showAlert({
           msg: `Xin ${
-            dataAsk.typeAsk === 'comeLate' ? 'đến muộn' : 'về sớm'
+            dataAsk.typeAsk === 'comeLateAsk' ? 'đến muộn' : 'về sớm'
           } thành công.`,
         });
         dispatch(actions.changeListAskComeLeave(true));

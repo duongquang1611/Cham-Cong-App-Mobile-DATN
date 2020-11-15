@@ -1,14 +1,15 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {View, Text} from 'react-native';
+import ConfirmComeLeaveTemplate from './components/ConfirmComeLeaveTemplate';
 
 const ConfirmComeLeave = () => {
   return (
-    <View>
-      <Text>ConfirmComeLeave</Text>
-    </View>
+    <ConfirmComeLeaveTemplate
+      statusComeLeaveAsk={0}
+      reversed={false}
+      typeConfirm={true}
+    />
   );
 };
 
 export default ConfirmComeLeave;
-
-const styles = StyleSheet.create({});
