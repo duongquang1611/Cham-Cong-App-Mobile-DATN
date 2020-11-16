@@ -1,25 +1,24 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 import {
-  HeaderMenuDrawer,
-  TextView,
-  RadioGroup,
   BlockView,
-  InputView,
   ButtonView,
-  TextWarning,
-  showAlert,
   IconView,
+  InputView,
+  RadioGroup,
+  showAlert,
+  TextView,
+  TextWarning,
 } from 'cc-components';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import styles from './styles';
-import commons from '../../commons';
 import moment from 'moment';
-import {DAY_OFF_DATA} from './DAY_OFF_DATA';
+import React, {useCallback, useState} from 'react';
+import {ScrollView, Text, View} from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {useDispatch} from 'react-redux';
 import API from '../../../networking';
 import actions from '../../../redux/actions';
-import {useDispatch} from 'react-redux';
-import {useRoute} from '@react-navigation/native';
+import commons from '../../commons';
+import {DAY_OFF_DATA} from './DAY_OFF_DATA';
+import styles from './styles';
 let currentPicker;
 let dataAsk = {
   typeAsk: DAY_OFF_DATA[0].code,

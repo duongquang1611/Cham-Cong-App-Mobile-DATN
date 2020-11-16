@@ -1,12 +1,10 @@
-import React, {useCallback} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {IconView} from 'cc-components';
 import moment from 'moment/min/moment-with-locales';
-import {IconView, TextView} from 'cc-components';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import actions from '../../../../redux/actions';
-import API from '../../../../networking';
-import commons from '../../../commons';
 import baseStyles from '../../../../baseStyles';
+import commons from '../../../commons';
 
 moment.locale(commons.getDeviceLanguage(false));
 const STATUS = [

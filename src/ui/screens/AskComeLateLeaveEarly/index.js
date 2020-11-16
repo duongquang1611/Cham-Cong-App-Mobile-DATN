@@ -6,7 +6,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
 import API from '../../../networking';
 import commons from '../../commons';
-import {getParamsRequest} from '../../components/CustomFlatList/getParamsRequest';
 import AskComeLeave from './AskComeLeave';
 import TabHistoryAskComeLeave from './HistoryAskComeLeave';
 

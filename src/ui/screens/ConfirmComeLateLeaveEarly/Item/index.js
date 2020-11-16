@@ -1,12 +1,12 @@
-import React, {useCallback} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
 import moment from 'moment/min/moment-with-locales';
-import commons from '../../../commons';
-import baseStyles from '../../../../baseStyles';
-import {TextView} from 'cc-components';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import actions from '../../../../redux/actions';
+import baseStyles from '../../../../baseStyles';
 import API from '../../../../networking';
+import actions from '../../../../redux/actions';
+import commons from '../../../commons';
+import ConfirmButtonView from './ConfirmButtonView';
 
 moment.locale(commons.getDeviceLanguage(false));
 const STATUS = [
@@ -76,46 +76,17 @@ const ItemConfirmComeLeave = (props) => {
       // dispatch(actions.changeListConfirmComeLeave(true));
     }
   };
-  // const onPressConfirm = async ({id}) => {
-  //   try {
-  //     let params = {
-  //       typeAsk: type,
-  //       time: item[type]?.time,
-  //       title: item[type]?.title,
-  //       reason: item[type]?.reason,
-  //       status: id,
-  //       userId: item?.userId?._id,
-  //     };
-  //     // console.log('ItemConfirmComeLeave -> params', params);
-  //     await API.PUT(API.askComeLeave, params);
-  //     dispatch(actions.changeListConfirmComeLeave(true));
-  //   } catch (error) {
-  //     console.log('ItemConfirmComeLeave -> error', error);
-  //     // dispatch(actions.changeListConfirmComeLeave(true));
-  //   }
-  // };
+
   return (
     <View
       style={{
         minHeight: HEIGHT_MORE_INFO,
-        flexDirection: 'row',
-        // alignSelf: 'baseline',
-        width: '100%',
-        backgroundColor: 'white',
-        elevation: 2,
-        borderRadius: 5,
-        overflow: 'hidden',
-        marginBottom: 10,
+        ...styles.containerItem,
         ...style,
       }}>
       <DateBlock />
       <View style={{flex: 3}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+        <View style={styles.rowCenterSpaceBetween}>
           <View
             style={{
               ...styles.type,
@@ -153,23 +124,10 @@ const ItemConfirmComeLeave = (props) => {
             </Text>
           </Text>
           {typeConfirm && (
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <TextView
-                id="1"
-                value="Chấp nhận"
-                onPress={onPressConfirm}
-                style={{...styles.buttonConfirm}}
-                styleValue={{...styles.textConfirm}}
-              />
-              <View style={{width: 10}} />
-              <TextView
-                id="-1"
-                value="Từ chối"
-                onPress={onPressConfirm}
-                styleValue={{...styles.textConfirm}}
-                style={{...styles.buttonConfirm, backgroundColor: 'red'}}
-              />
-            </View>
+            <ConfirmButtonView
+              onPressAccept={onPressConfirm}
+              onPressCancel={onPressConfirm}
+            />
           )}
         </View>
       </View>
@@ -200,16 +158,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonConfirm: {
-    flex: 1,
-    backgroundColor: commons.PersianGreen,
-    marginTop: 5,
-    padding: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+  containerItem: {
+    flexDirection: 'row',
+    // alignSelf: 'baseline',
+    width: '100%',
+    backgroundColor: 'white',
+    elevation: 2,
     borderRadius: 5,
-  },
-  textConfirm: {
-    color: 'white',
+    overflow: 'hidden',
+    marginBottom: 10,
   },
 });
