@@ -21,7 +21,7 @@ const ConfirmComeLeaveTemplate = (props) => {
     page: 0,
     refreshing: true,
     data: [],
-    hasNext: true,
+    // hasNext: true,
   });
 
   let filter = {
@@ -38,7 +38,7 @@ const ConfirmComeLeaveTemplate = (props) => {
     console.log(
       'page hasNext refreshing',
       state.page,
-      state.hasNext,
+      // state.hasNext,
       state.refreshing,
     );
     state.refreshing && getData();
@@ -63,7 +63,7 @@ const ConfirmComeLeaveTemplate = (props) => {
       ...state,
       page: 0,
       refreshing: true,
-      hasNext: true,
+      // hasNext: true,
     });
   };
 
@@ -78,14 +78,14 @@ const ConfirmComeLeaveTemplate = (props) => {
       setState({
         ...state,
         data: state.page == 0 ? res : state.data.concat(res),
-        hasNext: res.length == commons.NUMBER_ITEM_PAGE_DEFAULT,
+        // hasNext: res.length == commons.NUMBER_ITEM_PAGE_DEFAULT,
         refreshing: false,
       });
     } catch (error) {
       setState({
         ...state,
         refreshing: false,
-        hasNext: false,
+        // hasNext: false,
       });
     }
   };
@@ -93,9 +93,10 @@ const ConfirmComeLeaveTemplate = (props) => {
     console.log(
       'Load more: CallingDuring hasNext',
       onEndReachedCalledDuringMomentum,
-      state.hasNext,
+      // state.hasNext,
     );
-    if (!onEndReachedCalledDuringMomentum && state.hasNext) {
+    // if (!onEndReachedCalledDuringMomentum && state.hasNext) {
+    if (!onEndReachedCalledDuringMomentum) {
       setState({
         ...state,
         refreshing: true,
@@ -117,7 +118,7 @@ const ConfirmComeLeaveTemplate = (props) => {
     <>
       {state.refreshing && <LoadingView />}
       <CustomFlatList
-        data={state.data.length > 0 ? state.data : []}
+        data={state?.data?.length > 0 ? state?.data : []}
         renderItem={renderItem}
         refreshing={state.refreshing}
         changeOnEndReached={setOnEndReachedCalledDuringMomentum}

@@ -26,6 +26,8 @@ import LoginScreen from '../ui/screens/Account/LoginScreen';
 import SplashScreen from '../ui/screens/Splash';
 import AppImages from '../../assets/images';
 import SetupServer from '../ui/screens/SetupServer';
+import Register from '../ui/screens/Account/Register';
+import SetupCompany from '../ui/screens/SetupCompany';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -42,7 +44,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName="SetupServer"
-        initialRouteName="TabAskComeLateLeaveEarly"
+        initialRouteName="AskDayOff"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -165,6 +167,46 @@ const RootNavigation = () => {
           }}
         />
         <Drawer.Screen
+          name="Register"
+          component={Register}
+          options={{
+            drawerIcon: ({color, size}) => (
+              // <IconView
+              //   name="account-check-outline"
+              //   size={size}
+              //   color={color}
+              //   type={'MaterialCommunityIcons'}
+              // />
+              <Image
+                source={AppImages.add_user}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
+            drawerLabel: 'Tạo tài khoản',
+          }}
+        />
+        <Drawer.Screen
+          name="SetupCompany"
+          component={SetupCompany}
+          options={{
+            drawerIcon: ({color, size}) => (
+              // <IconView
+              //   name="account-check-outline"
+              //   size={size}
+              //   color={color}
+              //   type={'MaterialCommunityIcons'}
+              // />
+              <Image
+                source={AppImages.settings}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
+            drawerLabel: 'Cấu hình công ty',
+          }}
+        />
+        {/* <Drawer.Screen
           name="Notification"
           component={Notification}
           options={{
@@ -183,7 +225,7 @@ const RootNavigation = () => {
             ),
             drawerLabel: 'Thông báo',
           }}
-        />
+        /> */}
         <Drawer.Screen
           name="SetupServer"
           component={SetupServer}

@@ -6,6 +6,8 @@ const initialState = {
   listAskComeLeave: [],
   changeListAskComeLeave: false,
   changeListConfirmComeLeave: false,
+  changeListAskDayOff: false,
+  changeListConfirmDayOff: false,
 };
 
 export default function dayWorkReducer(state = initialState, action) {
@@ -33,6 +35,16 @@ export default function dayWorkReducer(state = initialState, action) {
     case types.CHANGE_LIST_CONFIRM_COME_LEAVE: {
       return Object.assign({}, state, {
         changeListConfirmComeLeave: action.data,
+      });
+    }
+    case types.CHANGE_LIST_ASK_DAY_OFF: {
+      return Object.assign({}, state, {
+        changeListAskDayOff: action.data,
+      });
+    }
+    case types.CHANGE_LIST_CONFIRM_DAY_OFF: {
+      return Object.assign({}, state, {
+        changeListConfirmDayOff: action.data,
       });
     }
     default:

@@ -30,10 +30,24 @@ const changeListConfirmComeLeave = (data) => {
     data: data,
   };
 };
+const changeListAskDayOff = (data) => {
+  return {
+    type: types.CHANGE_LIST_ASK_DAY_OFF,
+    data: data,
+  };
+};
+const changeListConfirmDayOff = (data) => {
+  return {
+    type: types.CHANGE_LIST_CONFIRM_DAY_OFF,
+    data: data,
+  };
+};
 export default {
   saveDetailDayWork,
   saveListDayWork,
   saveListAskComeLeave,
   changeListAskComeLeave,
   changeListConfirmComeLeave,
+  changeListAskDayOff,
+  changeListConfirmDayOff,
 };

@@ -58,7 +58,7 @@ const ItemConfirmComeLeave = (props) => {
       </View>
     );
   };
-  const onPressConfirm = useCallback(async ({id}) => {
+  const onPressConfirm = async ({id}) => {
     try {
       let params = {
         typeAsk: type,
@@ -75,7 +75,7 @@ const ItemConfirmComeLeave = (props) => {
       console.log('ItemConfirmComeLeave -> error', error);
       // dispatch(actions.changeListConfirmComeLeave(true));
     }
-  }, []);
+  };
   // const onPressConfirm = async ({id}) => {
   //   try {
   //     let params = {
