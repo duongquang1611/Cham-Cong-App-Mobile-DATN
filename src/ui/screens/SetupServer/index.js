@@ -7,8 +7,8 @@ import commons from '../../commons';
 import baseStyles from '../../../baseStyles';
 const SERVER = [
   {id: 0, name: 'Heroku Server', server: API.baseApiUrlHeroku},
-  //   {id: 2, name: 'Local Server', server: API.BASE_API_URL},
-  {id: 1, name: 'Tùy chỉnh', server: API.BASE_API_URL},
+  {id: 1, name: 'Local Server', server: API.BASE_API_URL},
+  {id: 2, name: 'Tùy chỉnh', server: API.BASE_API_URL},
 ];
 
 const SetupServer = () => {
@@ -65,7 +65,7 @@ const SetupServer = () => {
           //   }}
           styleLabel={{marginLeft: 10}}
         />
-        {dataServer?.id === 1 && (
+        {dataServer?.id === 2 && (
           <InputView
             id="custom"
             onChangeText={onChangeText}

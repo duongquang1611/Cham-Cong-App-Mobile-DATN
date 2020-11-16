@@ -90,6 +90,19 @@ const createOrUpdateDayWork = async (dispatch, params) => {
   }
 };
 
+const getDataListDayOff = async (dispatch, params, page = 0) => {
+  let res = await API.GET(
+    API.dayOff,
+    getParamsRequest(
+      page,
+      commons.NUMBER_ITEM_PAGE_DEFAULT,
+      params,
+      // SORT,
+    ),
+  );
+  return res;
+};
+
 export default {
   getDetailDayWork,
   createOrUpdateDayWork,
@@ -97,4 +110,5 @@ export default {
   getListAskComeLeave,
   getDataListAskComeLeave,
   getDataListAskComeLeaveProcessed,
+  getDataListDayOff,
 };

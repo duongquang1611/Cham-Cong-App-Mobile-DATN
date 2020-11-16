@@ -110,11 +110,12 @@ const AskDayOff = (props) => {
   };
   const onPressSend = async () => {
     try {
+      let newDataAsk = {...dataAsk};
       if (dataAsk.typeAsk === 'day') {
-        dataAsk.toDate = dataAsk.fromDate;
+        newDataAsk.toDate = newDataAsk.fromDate;
       }
       // console.log('AskDayOff -> dataAsk', dataAsk);
-      let res = await API.PUT(API.dayOff, dataAsk);
+      let res = await API.PUT(API.dayOff, newDataAsk);
       // console.log('AskDayOff -> res', res);
       if (res && res._id) {
         showAlert({
