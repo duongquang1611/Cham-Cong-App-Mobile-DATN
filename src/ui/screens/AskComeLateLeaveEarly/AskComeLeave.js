@@ -137,7 +137,7 @@ const AskComeLeave = (props) => {
         <DateTimePickerModal
           mode={'datetime'}
           isVisible={state.isDatePickerVisible}
-          date={new Date()}
+          date={dataAsk?.time ? new Date(dataAsk?.time) : new Date()}
           locale="vi"
           confirmTextIOS="Thay Đổi"
           cancelTextIOS="Hủy"

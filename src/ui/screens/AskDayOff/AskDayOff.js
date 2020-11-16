@@ -114,7 +114,7 @@ const AskDayOff = (props) => {
       if (dataAsk.typeAsk === 'day') {
         newDataAsk.toDate = newDataAsk.fromDate;
       }
-      // console.log('AskDayOff -> dataAsk', dataAsk);
+      // console.log('AskDayOff -> dataAsk', newDataAsk);
       let res = await API.PUT(API.dayOff, newDataAsk);
       // console.log('AskDayOff -> res', res);
       if (res && res._id) {
@@ -142,7 +142,11 @@ const AskDayOff = (props) => {
         <DateTimePickerModal
           mode={'date'}
           isVisible={state.isDatePickerVisible}
-          date={new Date()}
+          date={
+            currentPicker && dataAsk[currentPicker]
+              ? new Date(dataAsk[currentPicker])
+              : new Date()
+          }
           locale="vi"
           confirmTextIOS="Thay Đổi"
           cancelTextIOS="Hủy"
@@ -193,7 +197,7 @@ const AskDayOff = (props) => {
               }}
               value={
                 dataAsk?.fromDate
-                  ? moment(dataAsk?.fromDate).format(commons.FORMAT_DATE)
+                  ? moment(dataAsk?.fromDate).format(commons.FORMAT_DATE_VN)
                   : dataAsk.typeAsk === 'days'
                   ? 'Từ ngày'
                   : 'Thời gian xin'
@@ -219,7 +223,7 @@ const AskDayOff = (props) => {
                   }}
                   value={
                     dataAsk?.toDate
-                      ? moment(dataAsk?.toDate).format(commons.FORMAT_DATE)
+                      ? moment(dataAsk?.toDate).format(commons.FORMAT_DATE_VN)
                       : 'Đến ngày'
                   }
                   onPress={showDatePicker}

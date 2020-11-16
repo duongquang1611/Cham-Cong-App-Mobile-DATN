@@ -90,6 +90,18 @@ export const convertSecondToHHmmss = (seconds) => {
   return convert;
 };
 
+export const getDayMonthYear = (date = new Date()) => {
+  let dateFormat = moment(date);
+  let day = dateFormat.format('D');
+  let month = dateFormat.format('M');
+  let year = dateFormat.format('YYYY');
+  return {
+    day,
+    month,
+    year,
+  };
+};
+
 export const getDiffTime = (date1, date2 = new Date()) => {
   // date full
   if (!date1) return '';
