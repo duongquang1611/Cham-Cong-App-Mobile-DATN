@@ -22,7 +22,11 @@ const SetupServer = () => {
       const baseUrl = await AsyncStorage.getItem(API.keyAsyncStorageBaseUrl);
       console.log('SetupServer -> baseUrl', baseUrl);
       if (baseUrl !== null) {
-        setDataServer(JSON.parse(baseUrl));
+        let baseUrlParse = JSON.parse(baseUrl);
+        if (baseUrlParse?.id === 1) {
+          baseUrlParse = SERVER[1];
+        }
+        setDataServer(baseUrlParse);
       }
     } catch (error) {
       console.log('getServer -> error', error);
@@ -40,8 +44,8 @@ const SetupServer = () => {
   };
   const onChangeText = ({id, data}) => {
     if (id === 'custom') {
-      SERVER[1].server = data;
-      data = SERVER[1];
+      SERVER[2].server = data;
+      data = SERVER[2];
     }
     saveServer(data);
     setDataServer(data);
@@ -65,11 +69,13 @@ const SetupServer = () => {
           //   }}
           styleLabel={{marginLeft: 10}}
         />
-        {dataServer?.id === 2 && (
+        {dataServer?.id !== 0 && (
           <InputView
             id="custom"
             onChangeText={onChangeText}
             style={{marginTop: 15}}
+            editable={dataServer?.id === 2}
+            isShowClean={false}
             value={dataServer?.server}
             placeholder={`Nhập base url (VD: ${API.baseApiUrlHeroku})`}
           />

@@ -44,7 +44,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName="SetupServer"
-        initialRouteName="AskDayOff"
+        initialRouteName="TabConfirmDayOff"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>

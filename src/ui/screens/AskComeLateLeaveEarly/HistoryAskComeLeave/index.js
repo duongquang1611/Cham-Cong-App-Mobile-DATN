@@ -110,7 +110,7 @@ const HistoryAskComeLeaveTemplate = (props) => {
     <>
       {state.refreshing && <LoadingView />}
       <CustomFlatList
-        data={state.data.length > 0 ? state.data : []}
+        data={state?.data && state?.data.length > 0 ? state.data : []}
         renderItem={renderItem}
         refreshing={state.refreshing}
         changeOnEndReached={setOnEndReachedCalledDuringMomentum}

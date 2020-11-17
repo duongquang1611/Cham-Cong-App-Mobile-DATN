@@ -6,14 +6,14 @@ import models from '../../../../models';
 import API from '../../../../networking';
 import actions from '../../../../redux/actions';
 import commons from '../../../commons';
-import ItemHistoryConfirmComeLeave from '../Item';
+import ItemConfirmDayOff from '../Item';
 
 let onEndReachedCalledDuringMomentum = true;
 
-const ConfirmComeLeaveTemplate = (props) => {
-  const {statusComeLeaveAsk, reversed, typeConfirm} = props;
+const ConfirmDayOffTemplate = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const {statusDayOff = 0, reversed, showButton = true} = props;
 
   let userInfo = models.getUserInfo();
 
@@ -26,17 +26,18 @@ const ConfirmComeLeaveTemplate = (props) => {
 
   let filter = {
     parentId: userInfo?._id,
-    comeLeave: true,
-    statusComeLeaveAsk: statusComeLeaveAsk,
+    status: statusDayOff,
   };
   if (reversed) {
-    filter.reverseStatusComeLeaveAsk = true;
+    filter.reverseStatus = true;
   }
+
   const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
 
   useEffect(() => {
     console.log(
-      'page hasNext refreshing',
+      // 'page hasNext refreshing',
+      'page refreshing',
       state.page,
       // state.hasNext,
       state.refreshing,
@@ -45,18 +46,18 @@ const ConfirmComeLeaveTemplate = (props) => {
   }, [state]);
 
   useEffect(() => {
-    dayWorkReducer?.changeListConfirmComeLeave && onRefresh();
-  }, [dayWorkReducer?.changeListConfirmComeLeave]);
+    dayWorkReducer?.changeListConfirmDayOff && onRefresh();
+  }, [dayWorkReducer?.changeListConfirmDayOff]);
 
   const setOnEndReachedCalledDuringMomentum = (value) => {
     onEndReachedCalledDuringMomentum = value;
   };
 
   const onRefresh = (newFilter = {}) => {
-    dispatch(actions.changeListConfirmComeLeave(false));
+    dispatch(actions.changeListConfirmDayOff(false));
     filter = {
       parentId: userInfo?._id,
-      comeLeave: true,
+      status: statusDayOff,
       ...newFilter,
     };
     setState({
@@ -69,11 +70,7 @@ const ConfirmComeLeaveTemplate = (props) => {
 
   const getData = async (newFilter = filter) => {
     try {
-      let res = await API.getDataListAskComeLeaveProcessed(
-        dispatch,
-        newFilter,
-        state.page,
-      );
+      let res = await API.getDataListDayOff(dispatch, newFilter, state.page);
 
       setState({
         ...state,
@@ -107,10 +104,9 @@ const ConfirmComeLeaveTemplate = (props) => {
   };
   const renderItem = ({item, index}) => {
     return (
-      <ItemHistoryConfirmComeLeave
-        {...{item, index}}
+      <ItemConfirmDayOff
+        {...{item, index, showButton}}
         style={{marginBottom: 10}}
-        typeConfirm={typeConfirm}
       />
     );
   };
@@ -118,7 +114,7 @@ const ConfirmComeLeaveTemplate = (props) => {
     <>
       {state.refreshing && <LoadingView />}
       <CustomFlatList
-        data={state?.data?.length > 0 ? state?.data : []}
+        data={state?.data && state?.data.length > 0 ? state.data : []}
         renderItem={renderItem}
         refreshing={state.refreshing}
         changeOnEndReached={setOnEndReachedCalledDuringMomentum}
@@ -140,4 +136,4 @@ const ConfirmComeLeaveTemplate = (props) => {
   );
 };
 
-export default ConfirmComeLeaveTemplate;
+export default ConfirmDayOffTemplate;

@@ -1,12 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import ConfirmDayOffTemplate from './components/ConfirmDayOffTemplate';
 
 const ConfirmDayOff = () => {
-  return (
-    <View>
-      <Text>ConfirmDayOff</Text>
-    </View>
-  );
+  return <ConfirmDayOffTemplate statusDayOff={0} showButton={true} />;
 };
 
 export default ConfirmDayOff;
