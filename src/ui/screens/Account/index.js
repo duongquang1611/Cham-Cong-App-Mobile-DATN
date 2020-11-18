@@ -130,7 +130,7 @@ const AccountScreen = () => {
             ...styles.center,
             height: 100,
             width: 100,
-            overflow: 'hidden',
+            // overflow: 'hidden',
           }}>
           <Image
             source={
@@ -141,15 +141,16 @@ const AccountScreen = () => {
                 : AppImages.male
             }
             style={{
-              height: 100,
-              width: 100,
+              height: 98,
+              width: 98,
+              borderRadius: 100,
             }}
             resizeMode="cover"
           />
           <TouchableOpacity
-            style={styles.containerCamera}
+            style={styles.containerCamera2}
             onPress={() => setDataSheet(CHOOSE_UPLOAD_IMAGE)}>
-            <IconView name="camera" color="white" />
+            <IconView name="camera" color="white" size={15} />
           </TouchableOpacity>
         </View>
         <View
@@ -240,10 +241,16 @@ const AccountScreen = () => {
       name: image.path.substring(image.path.lastIndexOf('/') + 1),
     });
 
-    let res = await API.uploadImage(dispatch, form);
-    console.log('AccountScreen -> res', res);
-    if (res && res.resize) {
-      setUserInfo({...userInfo, avatar: res.resize});
+    // let res = await API.uploadImage(dispatch, form); // upload image
+    // console.log('AccountScreen -> res', res);
+    // if (res && res.resize) {
+    //   setUserInfo({...userInfo, avatar: res.resize});
+    // }
+
+    // upload image to update user
+    let res = await API.PUT(API.detailUser(userLocal._id), form);
+    if (res && res._id) {
+      setUserInfo(res);
     }
   };
 
@@ -573,6 +580,17 @@ const styles = StyleSheet.create({
     zIndex: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  containerCamera2: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    bottom: 0,
+    right: -5,
+    position: 'absolute',
+    zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    padding: 8,
   },
   containerPickerGender: {
     borderColor: commons.colorMain,
