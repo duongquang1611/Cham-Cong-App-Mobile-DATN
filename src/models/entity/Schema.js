@@ -3,6 +3,7 @@ export const ROLE_TABLE = 'ROLE'; //Config app
 export const USER_INFO_TABLE = 'USER_INFO'; // Thong tin nguoi dung
 export const PARENT_TABLE = 'PARENT'; // Thong tin nguoi dung
 export const COMPANY_TABLE = 'COMPANY'; // Thong tin nguoi dung
+export const AVATAR_TABLE = 'AVATAR'; // Thong tin nguoi dung
 // export const MENU_APP_TABLE = 'MENU_APP'// Loai BDS
 // export const CATEGORIES_TABLE = 'CATEGORIES'// Loai BDS
 // export const PROVINCIAL_CITIES_TABLE = 'PROVINCIAL_CITIES'// Danh sach tinh thanh

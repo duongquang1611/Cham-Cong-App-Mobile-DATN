@@ -15,7 +15,7 @@ const ParentEntity = {
     email: {type: 'string?'},
     gender: {type: 'int?'},
     dateOfBirth: {type: 'date?'},
-    avatar: {type: 'string?'},
+    avatar: {type: 'AVATAR?', default: null},
     createdAt: {type: 'string?'},
     updatedAt: {type: 'string?'},
   },

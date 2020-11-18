@@ -38,8 +38,8 @@ const DrawerContent = (props) => {
             <View style={styles.avatar}>
               <Avatar.Image
                 source={
-                  userInfo?.avatar
-                    ? {uri: userInfo?.avatar}
+                  userInfo?.avatar && userInfo?.avatar?.thumb500
+                    ? {uri: userInfo?.avatar?.thumb500}
                     : userInfo?.gender == 0
                     ? AppImages.female
                     : AppImages.male

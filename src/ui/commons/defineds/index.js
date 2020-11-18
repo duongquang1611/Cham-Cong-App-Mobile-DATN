@@ -11,6 +11,7 @@ import fonts from './Fonts';
 // import t from './Translation';
 const NAME_APP = 'Chấm công App';
 const textM2 = 'm\u00B2';
+const noData = 'Chưa có dữ liệu';
 
 const defineds = {
   NAME_APP,
@@ -18,6 +19,7 @@ const defineds = {
   ...colors,
   ...dimensions,
   ...fonts,
+  noData,
   scale,
   verticalScale,
   heightPercent,

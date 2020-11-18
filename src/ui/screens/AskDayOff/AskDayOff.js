@@ -241,7 +241,7 @@ const AskDayOff = (props) => {
             }}
             // label={<LabelView title={'Tiêu đề'} />}
             placeholder="Nhập tiêu đề (VD: Thai sản, hỏng xe, ...)"
-            // value={ noData}
+            // value={ commons.noData}
             returnKeyType="next"
             onChangeText={onChangeText}
             onSubmitEditing={() => focusTheField('reason')}
@@ -260,7 +260,7 @@ const AskDayOff = (props) => {
             // label={<LabelView title={'Lý do'} />}
             placeholder="Nhập lý do ..."
             onChangeText={onChangeText}
-            // value={ noData}
+            // value={ commons.noData}
             returnKeyType="next"
           />
         </BlockView>

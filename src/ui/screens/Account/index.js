@@ -1,29 +1,57 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
-import AppImages from '../../../../assets/images';
-import baseStyles from '../../../baseStyles';
-import models from '../../../models';
-import API from '../../../networking';
-import commons from '../../commons';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Picker} from '@react-native-community/picker';
 import {
   HeaderMenuDrawer,
   IconView,
   InputView,
   TextView,
   NewPicker,
-} from '../../components';
+} from 'cc-components';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Picker} from '@react-native-community/picker';
+import ImageCropPicker from 'react-native-image-crop-picker';
 import moment from 'moment';
+
+import AppImages from '../../../../assets/images';
+import baseStyles from '../../../baseStyles';
+import models from '../../../models';
+import API from '../../../networking';
+import commons from '../../commons';
 
 // Nữ:0, Nam:1
 const GENDER = [
   {id: 0, name: 'Nữ'},
   {id: 1, name: 'Nam'},
 ];
+
+const CHOOSE_UPLOAD_IMAGE = [
+  {
+    id: 0,
+    name: 'Chụp ảnh',
+  },
+  {
+    id: 1,
+    name: 'Chọn từ thư viện',
+  },
+];
+
+const renderSeparator = () => {
+  return <View style={{height: 1, backgroundColor: commons.border}} />;
+};
+
 const LabelView = (props) => {
   const {title = ''} = props;
   return (
@@ -37,7 +65,7 @@ const LabelView = (props) => {
     </Text>
   );
 };
-let noData = 'Chưa có thông tin';
+let newUserInfo = {};
 const AccountScreen = () => {
   const dispatch = useDispatch();
   const authReducer = useSelector((state) => state.authReducer);
@@ -46,9 +74,14 @@ const AccountScreen = () => {
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [isVisibleDate, setIsVisibleDate] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
   let userLocal = models.getUserInfo();
+  // newUserInfo = {...userLocal};
+  const [dataSheet, setDataSheet] = useState([]);
+
   const [userInfo, setUserInfo] = useState(userLocal);
   console.log('AccountScreen -> userInfo', userInfo?._id);
+  const refBottomSheet = useRef();
   let refInput = {};
   const focusTheField = (id) => {
     refInput[id].focus();
@@ -62,14 +95,26 @@ const AccountScreen = () => {
   };
 
   useEffect(() => {
-    getDetailUser(userInfo?._id);
-  }, []);
+    refreshing && getDetailUser(userInfo?._id);
+  }, [refreshing]);
 
+  useEffect(() => {
+    if (dataSheet.length > 0) {
+      refBottomSheet.current.open();
+    }
+  }, [dataSheet]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+  }, []);
   const getDetailUser = async (id) => {
     try {
       let res = await API.GET(API.detailUser(id));
+      models.saveUserInfoData(res);
+      setRefreshing(false);
       setUserInfo(res);
     } catch (error) {
+      setRefreshing(false);
       console.log('getDetailUser -> error', error);
     }
   };
@@ -89,9 +134,9 @@ const AccountScreen = () => {
           }}>
           <Image
             source={
-              userInfo.avatar
-                ? {uri: userInfo.avatar}
-                : userInfo.gender == 0
+              userInfo?.avatar && userInfo?.avatar?.thumb500
+                ? {uri: userInfo?.avatar?.thumb500}
+                : userInfo && userInfo?.gender && userInfo?.gender == 0
                 ? AppImages.female
                 : AppImages.male
             }
@@ -101,9 +146,11 @@ const AccountScreen = () => {
             }}
             resizeMode="cover"
           />
-          <View style={styles.containerCamera}>
+          <TouchableOpacity
+            style={styles.containerCamera}
+            onPress={() => setDataSheet(CHOOSE_UPLOAD_IMAGE)}>
             <IconView name="camera" color="white" />
-          </View>
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -148,7 +195,7 @@ const AccountScreen = () => {
               fontWeight: 'bold',
               marginHorizontal: 8,
             }}
-            value={userInfo?.companyId?.name}
+            value={userInfo?.companyId?.name || commons.noData}
           />
         </View>
       </View>
@@ -158,14 +205,127 @@ const AccountScreen = () => {
     setIsVisibleDate(true);
   };
 
-  const onChangeText = ({id, data}) => {};
+  const onChangeText = ({id, data}) => {
+    newUserInfo[id] = data;
+    console.log('onChangeText -> newUserInfo', newUserInfo);
+  };
   const handleConfirm = (date) => {
+    onChangeText({id: 'dateOfBirth', data: date});
     hidePicker();
-    console.log('handleConfirm -> date', date);
-    // onChangeText({id: 'time', data: date.toISOString()});
   };
   const hidePicker = () => {
     setIsVisibleDate(false);
+  };
+
+  // upload image
+  const handleUploadRNFetchBlob = async (image) => {
+    // c1: success
+    // let data = [];
+    // data.push({
+    //   name: 'file',
+    //   type: image.mime,
+    //   filename: image.path.substring(image.path.lastIndexOf('/') + 1),
+    //   data: image.data,
+    // });
+
+    // let res = await API.uploadImageRNFetchBlob(data);
+    // console.log('AccountScreen -> res', res);
+
+    // c2: success
+    const form = new FormData();
+
+    form.append('file', {
+      uri: image.path,
+      type: image.mime,
+      name: image.path.substring(image.path.lastIndexOf('/') + 1),
+    });
+
+    let res = await API.uploadImage(dispatch, form);
+    console.log('AccountScreen -> res', res);
+    if (res && res.resize) {
+      setUserInfo({...userInfo, avatar: res.resize});
+    }
+  };
+
+  const openCameraCapture = () => {
+    ImageCropPicker.openCamera({
+      width: commons.SCREEN_WIDTH,
+      height: commons.SCREEN_HEIGHT,
+      cropping: true,
+      includeBase64: true,
+    })
+      .then((image) => {
+        handleUploadRNFetchBlob(image);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const openImagePicker = () => {
+    ImageCropPicker.openPicker({
+      // multiple: true,
+      mediaType: 'photo',
+      includeBase64: true,
+    })
+      .then((image) => {
+        handleUploadRNFetchBlob(image);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const handleChooseUploadImage = ({data}) => {
+    refBottomSheet.current.close();
+    // setDataSheet([]);
+    switch (data) {
+      case CHOOSE_UPLOAD_IMAGE[0]:
+        openCameraCapture();
+        break;
+      case CHOOSE_UPLOAD_IMAGE[1]:
+        openImagePicker();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const renderItemChooseImage = ({item}) => {
+    return (
+      <TextView
+        data={item}
+        onPress={handleChooseUploadImage}
+        style={{
+          padding: commons.padding15,
+          paddingHorizontal: commons.padding20,
+          alignItems: 'center',
+        }}
+        nameIconLeft={item.id == 1 ? 'photograph' : 'camera'}
+        typeIconLeft={'Fontisto'}
+        colorIconLeft={'black'}
+        sizeIconLeft={item.id == 1 ? commons.sizeIcon20 : commons.sizeIcon18}
+        styleContainerText={{}}
+        styleText={{
+          fontSize: commons.fontSize16,
+          fontWeight: 'bold',
+          marginLeft: commons.margin,
+        }}>
+        {item.name}
+      </TextView>
+    );
+  };
+  const ContentBottomSheet = (props) => {
+    return (
+      <>
+        <FlatList
+          data={dataSheet}
+          keyExtractor={(item, index) => item.toString() + index}
+          showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          ItemSeparatorComponent={renderSeparator}
+          style={{backgroundColor: 'white'}}
+          renderItem={renderItemChooseImage}
+        />
+      </>
+    );
   };
   return (
     <>
@@ -173,7 +333,9 @@ const AccountScreen = () => {
         mode={'date'}
         isVisible={isVisibleDate}
         date={
-          userInfo?.dateOfBirth ? new Date(userInfo?.dateOfBirth) : new Date()
+          userInfo?.dateOfBirth || newUserInfo?.dateOfBirth
+            ? new Date(userInfo?.dateOfBirth || newUserInfo?.dateOfBirth)
+            : new Date()
         }
         locale="vi"
         confirmTextIOS="Thay Đổi"
@@ -190,7 +352,12 @@ const AccountScreen = () => {
         onPressMenuRight={onPressEdit}
         styleMenuRight={{marginRight: 5}}
       />
-      <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <LinearGradient
           locations={[0, 0.2, 0.7]}
           colors={commons.colorsLinearGradient}
@@ -219,10 +386,11 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
+            onChangeText={onChangeText}
             colorTextDisable={'black'}
             label={<LabelView title={'Tên người dùng'} />}
             placeholder="Nhập tên ..."
-            value={userInfo?.name || noData}
+            value={userInfo?.name || commons.noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
             returnKeyType="next"
@@ -236,10 +404,11 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
+            onChangeText={onChangeText}
             colorTextDisable={'black'}
             label={<LabelView title={'Số điện thoại'} />}
             placeholder="Nhập số điện thoại ..."
-            value={userInfo?.phoneNumber || noData}
+            value={userInfo?.phoneNumber || commons.noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
             colorBorderDisable={commons.colorMain}
@@ -252,7 +421,7 @@ const AccountScreen = () => {
               ...styles.containerInput,
             }}
             colorTextDisable={'black'}
-            value={userInfo?.parentId?.name || noData}
+            value={userInfo?.parentId?.name || commons.noData}
             label={<LabelView title={'Quản lý trực tiếp'} />}
             isShowClean={false}
             styleContainer={{borderWidth: 0}}
@@ -264,10 +433,11 @@ const AccountScreen = () => {
             style={{
               ...styles.containerInput,
             }}
+            onChangeText={onChangeText}
             colorTextDisable={'black'}
             label={<LabelView title={'Email'} />}
             placeholder="Nhập email ..."
-            value={userInfo?.email || noData}
+            value={userInfo?.email || commons.noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
             isShowClean={isEditing}
             colorBorderDisable={commons.colorMain}
@@ -286,9 +456,15 @@ const AccountScreen = () => {
             // label={<LabelView title={'Ngày sinh'} />}
             onPressText={isEditing && onPressDateOfBirth}
             placeholder="Nhập ngày sinh ..."
-            value={userInfo?.dateOfBirth || noData}
+            value={
+              userInfo?.dateOfBirth || newUserInfo?.dateOfBirth
+                ? moment(
+                    userInfo?.dateOfBirth || newUserInfo?.dateOfBirth,
+                  ).format(commons.FORMAT_DATE_VN)
+                : commons.noData
+            }
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
-            isShowClean={isEditing}
+            isShowClean={false}
             colorBorderDisable={commons.colorMain}
             returnKeyType="next"
             editable={isEditing && false}
@@ -306,8 +482,9 @@ const AccountScreen = () => {
                 width: '100%',
               }}
               enabled={isEditing}
-              selectedValue={GENDER.find((item) => item.id == userInfo.gender)}
+              selectedValue={GENDER.find((item) => item.id == userInfo?.gender)}
               onValueChange={(itemValue, itemIndex) => {
+                onChangeText({id: 'gender', data: itemValue.id});
                 setUserInfo({...userInfo, gender: itemValue.id});
               }}
             />
@@ -319,7 +496,9 @@ const AccountScreen = () => {
               ...styles.containerInput,
             }}
             colorTextDisable={'black'}
-            value={moment(userInfo?.createdAt).format('DD-MM-YYYY') || noData}
+            value={
+              moment(userInfo?.createdAt).format('DD-MM-YYYY') || commons.noData
+            }
             label={<LabelView title={'Ngày tạo'} />}
             isShowClean={false}
             styleContainer={{borderWidth: 0}}
@@ -331,13 +510,34 @@ const AccountScreen = () => {
               ...styles.containerInput,
             }}
             colorTextDisable={'black'}
-            value={moment(userInfo?.updatedAt).format('DD-MM-YYYY') || noData}
+            value={
+              moment(userInfo?.updatedAt).format('DD-MM-YYYY') || commons.noData
+            }
             label={<LabelView title={'Cập nhật lần cuối'} />}
             isShowClean={false}
             styleContainer={{borderWidth: 0}}
             editable={false}
           />
         </View>
+        <RBSheet
+          ref={refBottomSheet}
+          animationType="fade"
+          height={
+            (CHOOSE_UPLOAD_IMAGE.length + 1) * (commons.heightHeader + 10)
+          }
+          onClose={() => setDataSheet([])}
+          openDuration={200}
+          closeOnPressMask={true}
+          closeOnDragDown={true}
+          closeOnPressBack={false}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 10,
+              borderTopLeftRadius: 10,
+            },
+          }}>
+          <ContentBottomSheet />
+        </RBSheet>
       </ScrollView>
     </>
   );
@@ -365,7 +565,7 @@ const styles = StyleSheet.create({
     marginVertical: commons.margin15,
   },
   containerCamera: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     bottom: 0,
     height: '40%',
     width: '100%',

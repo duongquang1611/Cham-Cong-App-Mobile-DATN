@@ -1,18 +1,28 @@
 import {CommonActions, useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {appNavigate} from '../../../navigations';
 import {LoadingView, showAlert} from '../../components';
 import NetInfo from '@react-native-community/netinfo';
+import actions from '../../../redux/actions';
 
 const SplashScreen = () => {
   const isLoginSuccess = useSelector(
     (state) => state.authReducer.isLoginSuccess,
   );
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.commonReducer.isLoading);
+  // isLoading && dispatch(actions.isShowLoading(false));
   const navigation = useNavigation();
 
   console.log('SplashScreen -> isLoginSuccess', isLoginSuccess);
+
+  useEffect(() => {
+    return () => {
+      isLoading && dispatch(actions.isShowLoading(false));
+    };
+  }, []);
   useEffect(() => {
     // Subscribe
     const unsubscribe = NetInfo.addEventListener((stateNet) => {

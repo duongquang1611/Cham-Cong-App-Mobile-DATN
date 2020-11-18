@@ -5,6 +5,7 @@ import {showAlert} from '../ui/components';
 import urlAPI from './urlAPI';
 import dayWorkAPI from './dayWorkAPI';
 import companyAPI from './companyAPI';
+import uploadAPI from './uploadAPI';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const isSuccess = (res) => {
@@ -60,6 +61,7 @@ instanceAPI.interceptors.request.use(async (request) => {
   }
 
   if (request.data instanceof FormData) {
+    console.log('request.data', request.data);
     request.headers = {
       'Content-Type': 'multipart/form-data',
     };
@@ -125,5 +127,6 @@ const API = {
   ...urlAPI,
   ...dayWorkAPI,
   ...companyAPI,
+  ...uploadAPI,
 };
 export default API;

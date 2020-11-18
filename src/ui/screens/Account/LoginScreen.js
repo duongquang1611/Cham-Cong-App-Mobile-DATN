@@ -33,6 +33,7 @@ const LoginScreen = (props) => {
     dispatch(actions.isShowLoading(true));
     try {
       let res = await API.POST(API.signin, paramsLogin);
+      console.log('LoginScreen -> res', res);
       let data = {
         userId: res.user._id,
         token: res.token,
