@@ -44,6 +44,7 @@ const LoginScreen = (props) => {
         models.saveUserInfoData(res.user);
         // save login token to redux
         dispatch(actions.responseLoginSuccess(data));
+        dispatch(actions.saveUserData(res.user));
       }
       dispatch(actions.isShowLoading(false));
     } catch (error) {

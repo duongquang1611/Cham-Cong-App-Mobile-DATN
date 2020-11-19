@@ -5,6 +5,7 @@ import {types} from '../actions';
 const initialState = {
   isLoginSuccess: false,
   isLogoutSuccess: true,
+  userData: {},
 };
 
 export default function authReducer(state = initialState, action) {
@@ -27,6 +28,11 @@ export default function authReducer(state = initialState, action) {
       return Object.assign({}, state, {
         isLoginSuccess: false,
         isLogoutSuccess: true,
+      });
+    }
+    case types.SAVE_USER_DATA: {
+      return Object.assign({}, state, {
+        userData: action.data,
       });
     }
 

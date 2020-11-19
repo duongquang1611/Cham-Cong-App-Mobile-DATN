@@ -6,7 +6,7 @@ import {getParamsRequest} from '../ui/components/CustomFlatList/getParamsRequest
 const getDetailDayWork = async (dispatch, params) => {
   try {
     let res = await API.GET(API.workDay, params);
-    if (res.length > 0) dispatch(actions.saveDetailDayWork(res[0]));
+    if (res && res.length > 0) dispatch(actions.saveDetailDayWork(res[0]));
     else dispatch(actions.saveDetailDayWork({}));
   } catch (error) {
     console.log('Day Work API error', error);
@@ -15,7 +15,7 @@ const getDetailDayWork = async (dispatch, params) => {
 const getListDayWork = async (dispatch, params) => {
   try {
     let res = await API.GET(API.workDay, params);
-    if (res.length > 0) dispatch(actions.saveListDayWork(res));
+    if (res && res.length > 0) dispatch(actions.saveListDayWork(res));
     else dispatch(actions.saveListDayWork([]));
   } catch (error) {
     console.log('Day Work API error', error);

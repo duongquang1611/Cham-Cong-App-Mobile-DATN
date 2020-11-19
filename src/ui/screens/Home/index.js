@@ -177,10 +177,10 @@ const HomeScreen = (props) => {
           }}>
           {`Địa chỉ IP ${isValidIpToCheckin() ? '' : 'không '}hợp lệ`}
         </TextView>
-        <Text style={{...styles.lineHeightText}}>
+        {/* <Text style={{...styles.lineHeightText}}>
           Tổng số phút đi muộn trong tháng:{' '}
           <Text style={{fontWeight: 'bold'}}>0 ph</Text>
-        </Text>
+        </Text> */}
         <Text style={{...styles.lineHeightText}}>
           Tình trạng:{' '}
           <Text style={{fontWeight: 'bold'}}>{getTextStatus().msg}</Text>
@@ -251,6 +251,22 @@ const HomeScreen = (props) => {
   const CheckinView = (props) => {
     return (
       <View>
+        <Text style={styles.title}>Giờ làm việc</Text>
+        <View style={styles.containerTimeAllow}>
+          <ColumnBaseView
+            title={'Checkin'}
+            showTitle={false}
+            msg={detailCompany?.config?.checkin || DEFAULT_TIME}
+            colorMsg={commons.colorMain}
+          />
+          <ColumnBaseView
+            title="Checkout"
+            showTitle={false}
+            msg={detailCompany?.config?.checkout || DEFAULT_TIME}
+            colorMsg="red"
+            end={true}
+          />
+        </View>
         <Text style={styles.title}>Thời gian cho phép chấm công</Text>
         <View style={styles.containerTimeAllow}>
           <ColumnBaseView
@@ -323,13 +339,15 @@ const HomeScreen = (props) => {
       </Modal>
       <ScrollView
         style={{...styles.containerScrollView}}
-        contentContainerStyle={{justifyContent: 'space-between', flex: 1}}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
         showsVerticalScrollIndicator={false}>
         <View>
           <SelectUserCheckin />
           <View style={styles.viewBottomBlock} />
-          <Text>calendar</Text>
-          <View style={styles.viewBottomBlock} />
+          {/* <Text>calendar</Text> */}
+          {/* <View style={styles.viewBottomBlock} /> */}
           <SyntheticInfo />
           <TimeCheckin />
           <View style={styles.viewBottomBlock} />
@@ -369,8 +387,8 @@ const HomeScreen = (props) => {
               {getTextStatus().msgButton}
             </TextView>
           </View>
+          <CheckinView />
         </View>
-        <CheckinView />
       </ScrollView>
     </>
   );

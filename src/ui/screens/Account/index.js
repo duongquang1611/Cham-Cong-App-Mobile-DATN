@@ -32,6 +32,7 @@ import baseStyles from '../../../baseStyles';
 import models from '../../../models';
 import API from '../../../networking';
 import commons from '../../commons';
+import actions from '../../../redux/actions';
 
 // Nữ:0, Nam:1
 const GENDER = [
@@ -91,6 +92,7 @@ const AccountScreen = () => {
 
   const saveUserInApp = (data) => {
     models.saveUserInfoData(data);
+    dispatch(actions.saveUserData(data));
     setUserInfo(data);
   };
 

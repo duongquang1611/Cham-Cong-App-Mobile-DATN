@@ -12,5 +12,11 @@ const requestLogout = (data) => {
     data: data,
   };
 };
+const saveUserData = (data) => {
+  return {
+    type: types.SAVE_USER_DATA,
+    data: data,
+  };
+};
 
-export default {responseLoginSuccess, requestLogout};
+export default {responseLoginSuccess, requestLogout, saveUserData};

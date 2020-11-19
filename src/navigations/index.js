@@ -26,8 +26,10 @@ import LoginScreen from '../ui/screens/Account/LoginScreen';
 import SplashScreen from '../ui/screens/Splash';
 import AppImages from '../../assets/images';
 import SetupServer from '../ui/screens/SetupServer';
-import Register from '../ui/screens/Account/Register';
 import SetupCompany from '../ui/screens/SetupCompany';
+import TabManagement from '../ui/screens/Management';
+import AddAccount from '../ui/screens/Management/Account/AddAccount';
+import AddCompany from '../ui/screens/Management/Company/AddCompany';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -43,7 +45,7 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="AccountScreen"
+        initialRouteName="TabManagement"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -120,7 +122,7 @@ const RootNavigation = () => {
                 resizeMode="contain"
               />
             ),
-            drawerLabel: 'Xin nghỉ phép',
+            drawerLabel: 'Xin nghỉ',
           }}
         />
         <Drawer.Screen
@@ -134,7 +136,7 @@ const RootNavigation = () => {
                 resizeMode="contain"
               />
             ),
-            drawerLabel: 'Duyệt nghỉ phép',
+            drawerLabel: 'Duyệt xin nghỉ',
           }}
         />
         <Drawer.Screen
@@ -165,26 +167,22 @@ const RootNavigation = () => {
             drawerLabel: 'Tổng hợp báo cáo',
           }}
         />
+
         <Drawer.Screen
-          name="Register"
-          component={Register}
+          name="TabManagement"
+          component={TabManagement}
           options={{
             drawerIcon: ({color, size}) => (
-              // <IconView
-              //   name="account-check-outline"
-              //   size={size}
-              //   color={color}
-              //   type={'MaterialCommunityIcons'}
-              // />
               <Image
-                source={AppImages.add_user}
+                source={AppImages.management}
                 style={{width: size - 4, height: size}}
                 resizeMode="contain"
               />
             ),
-            drawerLabel: 'Tạo tài khoản',
+            drawerLabel: 'Quản lý',
           }}
         />
+
         <Drawer.Screen
           name="SetupCompany"
           component={SetupCompany}
@@ -252,26 +250,9 @@ const RootNavigation = () => {
           headerShown: false,
         }}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="AddCompany" component={AddCompany} />
+        <Stack.Screen name="AddAccount" component={AddAccount} />
         {isLoginSuccess ? (
-          /* <>
-            <Stack.Screen
-              name="HomeScreen"
-              component={HomeScreen}
-              options={{
-                // headerShown: false,
-                headerRight: (props) => (
-                  <TouchableOpacity
-                    style={{marginRight: 10}}
-                    onPress={() => {
-                      alert('Anh yeu em');
-                    }}>
-                    <Text>I L U</Text>
-                  </TouchableOpacity>
-                ),
-              }}
-            />
-            <Stack.Screen name="AccountScreen" component={AccountScreen} />
-          </> */
           <Stack.Screen name="DrawerStack" component={DrawerStack} />
         ) : (
           <>

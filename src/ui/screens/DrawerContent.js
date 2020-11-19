@@ -90,22 +90,6 @@ const DrawerContent = (props) => {
         </Drawer.Section>
         {/* <Drawer.Section title="Preferences"> */}
         <Drawer.Section>
-          {/* <TouchableRipple onPress={() => {}}>
-            <View style={styles.preference}>
-              <Text>Dark Theme</Text>
-              <View pointerEvents="none">
-                <Switch value={false} />
-              </View>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
-            <View style={styles.preference}>
-              <Text>RTL</Text>
-              <View pointerEvents="none">
-                <Switch value={false} />
-              </View>
-            </View>
-          </TouchableRipple> */}
           <DrawerItem
             icon={({color, size}) => (
               <IconView

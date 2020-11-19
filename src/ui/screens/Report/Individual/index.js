@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import commons from '../../../commons';
-import {HeaderMenuDrawer, IconView} from '../../../components';
+import {HeaderMenuDrawer, IconView, LoadingView} from '../../../components';
 import SubInfoCheckinView from './SubInfoCheckinView';
 import styles from './styles';
 import ColumnBaseView from './ColumnBaseView';
@@ -12,6 +12,8 @@ import moment from 'moment/min/moment-with-locales';
 moment.locale(commons.getDeviceLanguage(false));
 
 const HEIGHT_MORE_INFO = 120;
+
+let filterMonthYear = commons.getDayMonthYear(undefined, false);
 const BlockView = (props) => {
   const {style, children} = props;
   return <View style={[styles.containerBlock, style]}>{children}</View>;
@@ -56,16 +58,21 @@ const ReportIndividual = () => {
   });
 
   useEffect(() => {
-    getData();
+    getData(filterMonthYear);
   }, [detailDayWork]);
 
   useEffect(() => {
-    state.refreshing && getData();
+    state.refreshing && getData(filterMonthYear);
   }, [state.refreshing]);
 
-  const getData = async () => {
+  const getData = async (newFilter = {}) => {
+    console.log('newFilter', newFilter);
     try {
-      API.getListDayWork(dispatch);
+      // get list day work of me
+      API.getListDayWork(dispatch, {
+        me: true,
+        ...newFilter,
+      });
     } catch (error) {}
   };
 
@@ -84,7 +91,9 @@ const ReportIndividual = () => {
     }
   };
   const onMonthChange = (month) => {
-    // console.log('onMonthChange -> month', month);
+    filterMonthYear = {month: month.month, year: month.year};
+    // getData(filterMonthYear);
+    onRefresh();
   };
 
   const renderHeader = (date) => {
@@ -133,7 +142,7 @@ const ReportIndividual = () => {
             ...styles.containerRowBaseInfo,
             flexDirection: 'column',
           }}>
-          <RowBaseView title="Số ngày phép còn trong năm" msg={0} />
+          {/* <RowBaseView title="Số ngày phép còn trong năm" msg={0} /> */}
           <RowBaseView title="Tổng số phút đi muộn trong tháng" msg={0} />
           <RowBaseView
             title="Tổng số phút về sớm trong tháng"
@@ -214,6 +223,8 @@ const ReportIndividual = () => {
         refreshControl={
           <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
         }>
+        {state.refreshing && <LoadingView />}
+
         <BaseInfoCheckinView />
         <BlockView style={styles.customBlockCheckin}>
           <Text style={styles.titleCheckin}>Lịch Chấm Công</Text>

@@ -4,7 +4,14 @@ import commons from '../../../commons';
 import styles from './styles';
 
 const ColumnBaseView = (props) => {
-  const {title, msg, colorMsg = 'black', end = false, reverse = false} = props;
+  const {
+    title,
+    msg,
+    colorMsg = 'black',
+    end = false,
+    reverse = false,
+    showTitle = true,
+  } = props;
   return (
     <View
       style={{
@@ -23,11 +30,11 @@ const ColumnBaseView = (props) => {
             }}>
             {msg}
           </Text>
-          <Text>{title}</Text>
+          {showTitle && <Text>{title}</Text>}
         </>
       ) : (
         <>
-          <Text>{title}</Text>
+          {showTitle && <Text>{title}</Text>}
           <Text
             style={{
               color: colorMsg,

@@ -3,7 +3,6 @@ import {Platform, View, Text, LogBox} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {MenuProvider} from 'react-native-popup-menu';
 import RootNavigation from './navigations';
-
 // redux
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';

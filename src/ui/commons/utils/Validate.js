@@ -2,7 +2,7 @@ import phoneGoogle from 'google-libphonenumber';
 const PNF = phoneGoogle.PhoneNumberFormat;
 const phoneUtil = phoneGoogle.PhoneNumberUtil.getInstance();
 import Toast from 'react-native-root-toast';
-
+import models from '../../../models';
 export function comparePhoneNumber(
   phoneNumber1,
   phoneNumber2,
@@ -87,4 +87,18 @@ export function isImage(url) {
 
 export function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+export function isRole(roleCode, userData) {
+  // staff
+  // manager
+  // admin_company
+  // director
+  // admin_system
+
+  // console.log('isRole -> user.roleId?.code', userData.roleId?.code);
+
+  if (userData && userData.roleId && userData.roleId?.code === roleCode)
+    return true;
+  return false;
 }

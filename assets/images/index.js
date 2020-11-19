@@ -38,6 +38,8 @@ const AppImages = {
   server: require('./server.png'),
   add_user: require('./add_user.png'),
   settings: require('./settings.png'),
+  add_company: require('./add_company.png'),
+  management: require('./management.png'),
   male: {uri: 'https://i.imgur.com/1mBGvt3.jpg'},
   female: {uri: 'https://i.imgur.com/xCplblE.jpg'},
 };
