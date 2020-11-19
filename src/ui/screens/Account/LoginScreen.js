@@ -34,16 +34,17 @@ const LoginScreen = (props) => {
     try {
       let res = await API.POST(API.signin, paramsLogin);
       console.log('LoginScreen -> res', res);
-      let data = {
-        userId: res.user._id,
-        token: res.token,
-        roleId: res.user.roleId._id,
-      };
-      // save user info to realm
-      models.saveUserInfoData(res.user);
-      // save login token to redux
-      dispatch(actions.responseLoginSuccess(data));
-      // }
+      if (res && res.user && res.user._id) {
+        let data = {
+          userId: res.user._id,
+          token: res.token,
+          roleId: res.user.roleId._id,
+        };
+        // save user info to realm
+        models.saveUserInfoData(res.user);
+        // save login token to redux
+        dispatch(actions.responseLoginSuccess(data));
+      }
       dispatch(actions.isShowLoading(false));
     } catch (error) {
       console.log('handleRequetsLogin -> error', error);

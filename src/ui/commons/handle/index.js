@@ -104,7 +104,7 @@ function handleClickEmail(email) {
   let subject = 'Chấm công';
   let body = 'Tôi muốn biết thêm thông tin chi tiết về ...';
   try {
-    let check = commons.validateEmail(email);
+    let check = commons.isValidEmail(email);
     linkingEmail = `mailto:${email}?subject=${subject}&body=${body}`;
     if (check) {
       Linking.openURL(linkingEmail);

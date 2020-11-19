@@ -19,6 +19,8 @@ import {
   InputView,
   TextView,
   NewPicker,
+  LoadingView,
+  showAlert,
 } from 'cc-components';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Picker} from '@react-native-community/picker';
@@ -69,12 +71,12 @@ let newUserInfo = {};
 const AccountScreen = () => {
   const dispatch = useDispatch();
   const authReducer = useSelector((state) => state.authReducer);
-  const isLoading = useSelector((state) => state.commonReducer.isLoading);
   const {isLoginSuccess} = authReducer;
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [isVisibleDate, setIsVisibleDate] = useState(false);
   const [refreshing, setRefreshing] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   let userLocal = models.getUserInfo();
   // newUserInfo = {...userLocal};
   const [dataSheet, setDataSheet] = useState([]);
@@ -86,11 +88,32 @@ const AccountScreen = () => {
   const focusTheField = (id) => {
     refInput[id].focus();
   };
-  const onPressEdit = () => {
+
+  const saveUserInApp = (data) => {
+    models.saveUserInfoData(data);
+    setUserInfo(data);
+  };
+
+  const onPressEdit = async () => {
     if (!isEditing) {
       setIsEditing(!isEditing);
     } else {
+      // save update info
       setIsEditing(!isEditing);
+      setIsLoading(true);
+      try {
+        let res = await API.PUT(API.detailUser(userLocal?._id), newUserInfo);
+        setIsLoading(false);
+        if (res && res._id) {
+          saveUserInApp(res);
+          showAlert({msg: 'Cập nhật thông tin thành công.'});
+          newUserInfo = {};
+        }
+      } catch (error) {
+        console.log('AccountScreen -> error', error);
+        newUserInfo = {};
+        setIsLoading(false);
+      }
     }
   };
 
@@ -110,9 +133,10 @@ const AccountScreen = () => {
   const getDetailUser = async (id) => {
     try {
       let res = await API.GET(API.detailUser(id));
-      models.saveUserInfoData(res);
       setRefreshing(false);
-      setUserInfo(res);
+      if (res && res._id) {
+        saveUserInApp(res);
+      }
     } catch (error) {
       setRefreshing(false);
       console.log('getDetailUser -> error', error);
@@ -334,14 +358,25 @@ const AccountScreen = () => {
       </>
     );
   };
+  const handleInputVerify = ({id, data}) => {
+    console.log('handleInputVerify -> id, data', id, data);
+    switch (id) {
+      case 'phoneNumber':
+        return data.trim() == '' || commons.isValidPhoneNumber(data);
+      case 'email':
+        return data.trim() == '' || commons.isValidEmail(data);
+      default:
+        return true;
+    }
+  };
   return (
     <>
       <DateTimePickerModal
         mode={'date'}
         isVisible={isVisibleDate}
         date={
-          userInfo?.dateOfBirth || newUserInfo?.dateOfBirth
-            ? new Date(userInfo?.dateOfBirth || newUserInfo?.dateOfBirth)
+          newUserInfo?.dateOfBirth || userInfo?.dateOfBirth
+            ? new Date(newUserInfo?.dateOfBirth || userInfo?.dateOfBirth)
             : new Date()
         }
         locale="vi"
@@ -350,6 +385,7 @@ const AccountScreen = () => {
         onConfirm={handleConfirm}
         onCancel={hidePicker}
       />
+
       <HeaderMenuDrawer
         titleScreen={'Thông tin người dùng'}
         nameMenuRight={isEditing ? 'content-save' : 'account-edit'}
@@ -376,26 +412,19 @@ const AccountScreen = () => {
           <HeaderInfoView />
         </LinearGradient>
 
-        <View
-          style={{
-            backgroundColor: 'white',
-            elevation: 2,
-            marginTop: -30,
-            marginHorizontal: commons.margin20,
-            paddingHorizontal: commons.padding15,
-            borderRadius: 8,
-            marginBottom: 10,
-            paddingTop: 25,
-          }}>
+        <View style={styles.containerInfoView}>
+          {isLoading && <LoadingView />}
+          <LabelView title={'Tên người dùng'} />
           <InputView
             id="name"
             ref={(input) => (refInput['name'] = input)}
             style={{
-              ...styles.containerInput,
+              // ...styles.containerInput,
+              marginBottom: 15,
             }}
             onChangeText={onChangeText}
             colorTextDisable={'black'}
-            label={<LabelView title={'Tên người dùng'} />}
+            // label={<LabelView title={'Tên người dùng'} />}
             placeholder="Nhập tên ..."
             value={userInfo?.name || commons.noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
@@ -405,15 +434,19 @@ const AccountScreen = () => {
             colorBorderDisable={commons.colorMain}
             onSubmitEditing={() => focusTheField('phoneNumber')}
           />
+          <LabelView title={'Số điện thoại'} />
           <InputView
             id="phoneNumber"
             ref={(input) => (refInput['phoneNumber'] = input)}
             style={{
-              ...styles.containerInput,
+              // ...styles.containerInput,
+              marginBottom: 15,
             }}
             onChangeText={onChangeText}
+            handleInputVerify={handleInputVerify}
+            textError={'Số điện thoại không hợp lệ.'}
             colorTextDisable={'black'}
-            label={<LabelView title={'Số điện thoại'} />}
+            // label={<LabelView title={'Số điện thoại'} />}
             placeholder="Nhập số điện thoại ..."
             value={userInfo?.phoneNumber || commons.noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
@@ -434,15 +467,19 @@ const AccountScreen = () => {
             styleContainer={{borderWidth: 0}}
             editable={false}
           />
+          <LabelView title={'Email'} />
           <InputView
             id="email"
             ref={(input) => (refInput['email'] = input)}
             style={{
-              ...styles.containerInput,
+              // ...styles.containerInput,
+              marginBottom: 15,
             }}
             onChangeText={onChangeText}
+            handleInputVerify={handleInputVerify}
+            textError={'Email không hợp lệ.'}
             colorTextDisable={'black'}
-            label={<LabelView title={'Email'} />}
+            // label={<LabelView title={'Email'} />}
             placeholder="Nhập email ..."
             value={userInfo?.email || commons.noData}
             styleContainer={{borderWidth: isEditing ? 0.5 : 0}}
@@ -464,9 +501,9 @@ const AccountScreen = () => {
             onPressText={isEditing && onPressDateOfBirth}
             placeholder="Nhập ngày sinh ..."
             value={
-              userInfo?.dateOfBirth || newUserInfo?.dateOfBirth
+              newUserInfo?.dateOfBirth || userInfo?.dateOfBirth
                 ? moment(
-                    userInfo?.dateOfBirth || newUserInfo?.dateOfBirth,
+                    newUserInfo?.dateOfBirth || userInfo?.dateOfBirth,
                   ).format(commons.FORMAT_DATE_VN)
                 : commons.noData
             }
@@ -599,5 +636,15 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  containerInfoView: {
+    backgroundColor: 'white',
+    // elevation: 2,
+    marginTop: -30,
+    marginHorizontal: commons.margin20,
+    paddingHorizontal: commons.padding15,
+    borderRadius: 8,
+    marginBottom: 10,
+    paddingTop: 25,
   },
 });
