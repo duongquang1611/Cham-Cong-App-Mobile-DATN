@@ -1,7 +1,7 @@
 import {showAlert} from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
 import API from '../../../../networking';
 import commons from '../../../commons';
@@ -22,11 +22,12 @@ const SeparatorView = () => {
 };
 
 const AccountManagement = () => {
+  const dispatch = useDispatch();
   const authReducer = useSelector((state) => state.authReducer);
   const {userData} = authReducer;
-  // console.log('AccountManagement -> userData', userData);
+  const companyReducer = useSelector((state) => state.companyReducer);
+  const {allUsers} = companyReducer;
   const [state, setState] = useState({
-    allUsers: [],
     refreshing: true,
   });
 
@@ -44,13 +45,9 @@ const AccountManagement = () => {
       filter.companyId = user.companyId._id;
       console.log('AccountManagement -> filter', filter);
     }
-    let res = await API.GET(API.searchUsers, filter);
+    API.getListUsers(dispatch, filter);
     // console.log('AccountManagement -> res', res);
-    if (res && res.length > 0) {
-      setState({...state, allUsers: res, refreshing: false});
-    } else {
-      setState({...state, refreshing: false});
-    }
+    setState({...state, refreshing: false});
   };
 
   const deleteAccount = async (item) => {
@@ -89,12 +86,12 @@ const AccountManagement = () => {
   };
   return (
     <FlatList
-      data={state.allUsers}
+      data={allUsers}
       renderItem={renderItem}
       keyExtractor={(item, index) => {
         return index.toString();
       }}
-      extraData={state.allUsers}
+      extraData={allUsers}
       contentContainerStyle={{
         paddingTop: commons.margin5,
         paddingHorizontal: commons.margin,
@@ -111,12 +108,6 @@ const AccountManagement = () => {
         <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
       }
     />
-    // <CustomFlatList
-    //   refreshing={state.refreshing}
-    //   onRefresh={onRefresh}
-    //   data={state.allUsers}
-    //   renderItem={renderItem}
-    // />
   );
 };
 

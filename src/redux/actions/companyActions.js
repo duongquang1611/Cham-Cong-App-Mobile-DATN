@@ -6,4 +6,17 @@ const saveDetailCompany = (data) => {
     data: data,
   };
 };
-export default {saveDetailCompany};
+
+const saveListCompanies = (data) => {
+  return {
+    type: types.SAVE_LIST_COMPANY,
+    data: data,
+  };
+};
+const saveListUsers = (data) => {
+  return {
+    type: types.SAVE_LIST_USER,
+    data: data,
+  };
+};
+export default {saveDetailCompany, saveListCompanies, saveListUsers};

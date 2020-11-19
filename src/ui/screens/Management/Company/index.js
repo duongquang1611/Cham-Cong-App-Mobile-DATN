@@ -1,7 +1,7 @@
 import {showAlert} from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
 import API from '../../../../networking';
 import commons from '../../../commons';
@@ -22,9 +22,10 @@ const SeparatorView = () => {
 };
 
 const CompanyManagement = () => {
-  const authReducer = useSelector((state) => state.authReducer);
+  const companyReducer = useSelector((state) => state.companyReducer);
+  const {allCompanies} = companyReducer;
+  const dispatch = useDispatch();
   const [state, setState] = useState({
-    allCompanies: [],
     refreshing: true,
   });
 
@@ -33,12 +34,8 @@ const CompanyManagement = () => {
   }, [state.refreshing]);
 
   const getData = async () => {
-    let res = await API.GET(API.searchCompanies);
-    if (res && res.length > 0) {
-      setState({...state, allCompanies: res, refreshing: false});
-    } else {
-      setState({...state, refreshing: false});
-    }
+    setState({...state, refreshing: false});
+    API.getListCompanies(dispatch);
   };
 
   const deleteCompany = async (item) => {
@@ -77,12 +74,12 @@ const CompanyManagement = () => {
   };
   return (
     <FlatList
-      data={state.allCompanies}
+      data={allCompanies}
       renderItem={renderItem}
       keyExtractor={(item, index) => {
         return index.toString();
       }}
-      extraData={state.allCompanies}
+      extraData={allCompanies}
       contentContainerStyle={{
         paddingTop: commons.margin5,
         paddingHorizontal: commons.margin,
@@ -99,12 +96,6 @@ const CompanyManagement = () => {
         <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
       }
     />
-    // <CustomFlatList
-    //   refreshing={state.refreshing}
-    //   onRefresh={onRefresh}
-    //   data={state.allCompanies}
-    //   renderItem={renderItem}
-    // />
   );
 };
 
