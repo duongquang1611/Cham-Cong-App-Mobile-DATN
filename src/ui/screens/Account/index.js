@@ -69,7 +69,7 @@ const LabelView = (props) => {
   );
 };
 let newUserInfo = {};
-const AccountScreen = () => {
+const AccountScreen = (props) => {
   const dispatch = useDispatch();
   const authReducer = useSelector((state) => state.authReducer);
   const {isLoginSuccess} = authReducer;

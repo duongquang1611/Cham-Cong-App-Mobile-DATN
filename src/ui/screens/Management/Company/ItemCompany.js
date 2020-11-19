@@ -30,8 +30,8 @@ const RowInfoModal = (props) => {
     </View>
   );
 };
-const ItemAccount = (props) => {
-  const {item, index, deleteAccount, editAccount} = props;
+const ItemCompany = (props) => {
+  const {item, index, deleteCompany, editCompany} = props;
   const [isVisible, setIsVisible] = useState(false);
   const closeRow = (index) => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
@@ -43,11 +43,11 @@ const ItemAccount = (props) => {
     closeRow(index + 1);
     switch (id) {
       case 'edit':
-        editAccount(item);
+        editCompany(item);
         break;
 
       case 'delete':
-        deleteAccount(item);
+        deleteCompany(item);
         break;
 
       default:
@@ -108,30 +108,17 @@ const ItemAccount = (props) => {
               borderRadius: 10,
               alignItems: 'center',
             }}>
-            <Text style={styles.textTitleModal}>Thông tin tài khoản</Text>
-            <RowInfoModal title="Tài khoản" value={item?.username} />
+            <Text style={styles.textTitleModal}>Thông tin công ty</Text>
             <RowInfoModal title="Tên" value={item?.name} />
-            <RowInfoModal title="Chức vụ" value={item?.roleId?.name} />
-            <RowInfoModal
-              title="Quản lý trực tiếp"
-              value={item?.parentId?.name}
-            />
-            <RowInfoModal title="Công ty" value={item?.companyId?.name} />
             <RowInfoModal title="Số điện thoại" value={item?.phoneNumber} />
-            <RowInfoModal title="Địa chỉ" value={item?.address} />
             <RowInfoModal title="Email" value={item?.email} />
+            <RowInfoModal title="Địa chỉ" value={item?.address} />
+            <RowInfoModal title="Website" value={item?.website} />
             <RowInfoModal
-              title="Giới tính"
-              value={item?.gender ? (item?.gender == 1 ? 'Nam' : 'Nữ') : ''}
+              title="Người đại diện"
+              value={item?.representativeName}
             />
-            <RowInfoModal
-              title="Ngày sinh"
-              value={
-                item?.dateOfBirth
-                  ? moment(item?.dateOfBirth).format(commons.FORMAT_DATE_VN)
-                  : ''
-              }
-            />
+
             <RowInfoModal
               title="Cập nhật lần cuối"
               value={moment(item?.updatedAt).format(commons.FORMAT_DATE_VN)}
@@ -160,37 +147,23 @@ const ItemAccount = (props) => {
           style={{
             backgroundColor: 'white',
             minHeight: 60,
-            flexDirection: 'row',
             padding: 10,
+            paddingHorizontal: 15,
           }}
           onPress={changeVisibleModal}>
-          <Image
-            source={
-              item?.avatar && item?.avatar?.thumb200
-                ? {uri: item?.avatar?.thumb200}
-                : item && item?.gender && item?.gender == 0
-                ? AppImages.female
-                : AppImages.male
-            }
-            style={{
-              height: 60,
-              width: 60,
-              borderRadius: 100,
-            }}
-            resizeMode="cover"
+          <Text style={{fontSize: commons.fontSize16}}>{item?.name}</Text>
+          <TextView
+            style={{marginTop: 5}}
+            value={' ' + (item?.address || commons.noData)}
+            nameIconLeft={'address-location'}
           />
-          <View style={{marginLeft: 15}}>
-            <Text style={styles.title}>{item?.username}</Text>
-            <Text>{item?.name}</Text>
-            <Text>{item?.roleId?.name}</Text>
-          </View>
         </TouchableOpacity>
       </Swipeable>
     </>
   );
 };
 
-export default ItemAccount;
+export default ItemCompany;
 
 const styles = StyleSheet.create({
   ...baseStyles,
@@ -210,6 +183,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     flexDirection: 'row',
+    flexShrink: 1,
   },
   textTitleModal: {
     ...baseStyles.title,

@@ -1,16 +1,14 @@
+import {showAlert} from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
-import {Portal, Provider} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import models from '../../../../models';
 import API from '../../../../networking';
 import commons from '../../../commons';
-import ButtonPlusFAB from '../ButtonPlusFAB';
-import {CustomFlatList, showAlert} from 'cc-components';
 import ItemAccount from './ItemAccount';
 const EmptyList = () => {
   return (
-    <Text style={{textAlign: 'center', marginTop: 10}}>Chưa có dữ liệu</Text>
+    <Text style={{textAlign: 'center', marginTop: 10}}>{commons.noData}</Text>
   );
 };
 const SeparatorView = () => {
@@ -69,6 +67,7 @@ const AccountManagement = () => {
     };
     showAlert({
       msg: `Xác nhận xóa tài khoản ${item.username} ?`,
+      showCancel: true,
       onPressOK: onPressDeleteAccount,
     });
   };
