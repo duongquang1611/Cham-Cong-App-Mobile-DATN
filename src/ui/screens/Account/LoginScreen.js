@@ -1,11 +1,19 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Keyboard, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
+import {appNavigate} from '../../../navigations';
 import API from '../../../networking';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
-import {ButtonView, InputView, LoadingView} from '../../components';
+import {
+  ButtonView,
+  HeaderView,
+  IconView,
+  InputView,
+  LoadingView,
+} from '../../components';
 import styles from './styles';
 
 var paramsLogin = {};
@@ -14,6 +22,7 @@ const LoginScreen = (props) => {
   let autoFocus = props.autoFocus == undefined ? false : props.autoFocus;
   const [isVerified, setIsVerified] = useState();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const isLoading = useSelector((state) => state.commonReducer.isLoading);
 
   const setParamsLogin = ({id, data}) => {
@@ -61,6 +70,11 @@ const LoginScreen = (props) => {
     // refDialog && refDialog.hideDialog();
     // AppNavigate.navigateToRegisterScreen(navigation.dispatch);
   };
+  const navigateToSetupServer = () => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'SetupServer', {
+      preRoute: 'login',
+    });
+  };
 
   let refInput = {};
   const focusTheField = (id) => {
@@ -68,58 +82,86 @@ const LoginScreen = (props) => {
   };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      {isLoading && <LoadingView />}
-      <View style={styles.containerFormInput}>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: commons.fontSizeHeader,
-            color: commons.colorMain,
-            fontWeight: 'bold',
-          }}>
-          Đăng nhập
-        </Text>
-        <InputView
-          id={'username'}
-          ref={(input) => (refInput['username'] = input)}
-          style={{marginTop: 20}}
-          onChangeText={setParamsLogin}
-          handleInputVerify={handleInputVerify}
-          placeholder={'Nhập tên tài khoản'}
-          label={'Tài khoản'}
-          iconLeft={'user-name'}
-          textError={'Không được để trống tài khoản'}
-          autoFocus={autoFocus}
-          returnKeyType="next"
-          onSubmitEditing={() => {
-            focusTheField('password');
-          }}
-          blurOnSubmit={false}
+    <>
+      <HeaderView
+        isToolbar={true}
+        isStatusBar={true}
+        nonShowBack
+        titleScreen={''}
+        colorIconBack="white"
+      />
+      <View
+        style={{
+          position: 'absolute',
+          right: 20,
+          top: commons.heightHeader,
+          zIndex: 100,
+        }}>
+        <IconView
+          name="settings"
+          size={28}
+          onPress={navigateToSetupServer}
+          color="white"
         />
-        <InputView
-          id={'password'}
-          ref={(input) => (refInput['password'] = input)}
-          style={{marginTop: 20}}
-          placeholder={'Nhập mật khẩu'}
-          label={'Mật khẩu'}
-          iconLeft={'password-outline'}
-          secureTextEntry={true}
-          //   isShowClean={false}
-          handleInputVerify={handleInputVerify}
-          onChangeText={setParamsLogin}
-          textError={'Không được để trống mật khẩu'}
-        />
+      </View>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: commons.colorMain,
+        }}>
+        {isLoading && <LoadingView />}
+        <View style={styles.containerFormInput}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: commons.fontSizeHeader,
+              color: commons.colorMain,
+              fontWeight: 'bold',
+            }}>
+            Đăng nhập
+          </Text>
+          <InputView
+            id={'username'}
+            ref={(input) => (refInput['username'] = input)}
+            style={{marginTop: 20}}
+            onChangeText={setParamsLogin}
+            handleInputVerify={handleInputVerify}
+            placeholder={'Nhập tên tài khoản'}
+            label={'Tài khoản'}
+            iconLeft={'user-name'}
+            textError={'Không được để trống tài khoản'}
+            autoFocus={autoFocus}
+            returnKeyType="next"
+            onSubmitEditing={() => {
+              focusTheField('password');
+            }}
+            blurOnSubmit={false}
+          />
+          <InputView
+            id={'password'}
+            ref={(input) => (refInput['password'] = input)}
+            style={{marginTop: 20}}
+            placeholder={'Nhập mật khẩu'}
+            label={'Mật khẩu'}
+            iconLeft={'password-outline'}
+            secureTextEntry={true}
+            //   isShowClean={false}
+            handleInputVerify={handleInputVerify}
+            onChangeText={setParamsLogin}
+            textError={'Không được để trống mật khẩu'}
+          />
 
-        <ButtonView
-          onPress={handleRequetsLogin}
-          disabled={!isVerified}
-          styleDisabled={styles.styleDisabled}
-          title={'Đăng nhập'}
-          style={styles.styleButtonFocus}
-          styleTitle={styles.styleTextButton}
-        />
-        {/* <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <ButtonView
+            onPress={handleRequetsLogin}
+            disabled={!isVerified}
+            styleDisabled={styles.styleDisabled}
+            title={'Đăng nhập'}
+            style={styles.styleButtonFocus}
+            styleTitle={styles.styleTextButton}
+          />
+          {/* <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <TextView
             onPress={navigateToRegister}
             style={styles.styleContainrTextLink}
@@ -139,8 +181,9 @@ const LoginScreen = (props) => {
             {'Quên mật khẩu?'}
           </TextView>
         </View> */}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

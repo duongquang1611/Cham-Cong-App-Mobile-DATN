@@ -16,7 +16,7 @@ function MapInput(props) {
     //     props.notifyChange(details.geometry.location);
     //   }}
     //   query={{
-    //     key: 'AIzaSyC_I8fto3Nyu2edss8j64IuLfC99YY5sOQ',
+    //     key: 'AIzaSyBPU8TzcHT4Ye6ja81vYadAc3WK40nS9Fs',
     //     language: 'en',
     //   }}
     //   nearbyPlacesAPI="none"
@@ -39,6 +39,7 @@ function MapInput(props) {
     <GooglePlacesAutocomplete
       placeholder="Nhập địa chỉ ... "
       autoFocus={true}
+      minLength={2} // minimum length of text to search
       returnKeyType={'search'} // Can be left out for default return key
       listViewDisplayed={'auto'} // 'auto' / null
       fetchDetails={true}
@@ -47,14 +48,14 @@ function MapInput(props) {
         // 'details' is provided when fetchDetails = true
         props.notifyChange(details.geometry.location);
       }}
+      loader={true}
       query={{
-        key: 'AIzaSyC_I8fto3Nyu2edss8j64IuLfC99YY5sOQ',
+        key: 'AIzaSyBPU8TzcHT4Ye6ja81vYadAc3WK40nS9Fs',
         language: 'en',
       }}
-      nearbyPlacesAPI="none"
+      //   nearbyPlacesAPI="none"
       //   nearbyPlacesAPI="GooglePlacesSearch"
       debounce={300}
-      minLength={2} // minimum length of text to search
       renderDescription={(row) => {
         console.log('MapInput -> row', row);
         return row.description || row.vicinity;

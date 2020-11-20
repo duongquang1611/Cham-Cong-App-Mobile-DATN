@@ -38,10 +38,11 @@ const baseStyles = StyleSheet.create({
     marginVertical: commons.margin,
   },
   containerScrollView: {
-    flex: 1,
+    // flex: 1,
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
+
   lineHeightText: {
     lineHeight: 25,
   },

@@ -36,6 +36,7 @@
     "prop-types": "^15.7.2",
     "querystring": "^0.2.0",
     "react": "16.13.1",
+    "react-hook-form": "^6.11.3",
     "react-native": "0.63.3",
     "react-native-calendars": "^1.403.0",
     "react-native-camera": "^3.40.0",

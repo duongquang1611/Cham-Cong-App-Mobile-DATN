@@ -60,6 +60,7 @@ const ChooseAddress = (props) => {
   };
 
   const getCoordsFromName = (loc) => {
+    console.log('getCoordsFromName -> loc', loc);
     setState({
       ...state,
       region: {
@@ -86,9 +87,9 @@ const ChooseAddress = (props) => {
         colorIconBack="white"
       />
       <View style={{flex: 1}}>
-        {/* <View style={{flex: 1}}> */}
-        <MapInput notifyChange={(loc) => getCoordsFromName(loc)} />
-        {/* </View> */}
+        {/* <View style={{flex: 1}}>
+          <MapInput notifyChange={(loc) => getCoordsFromName(loc)} />
+        </View> */}
 
         {state.region['latitude'] ? (
           <View style={{flex: 1}}>

@@ -19,7 +19,7 @@
       android:theme="@style/AppTheme">
       <meta-data
      android:name="com.google.android.geo.API_KEY"
-     android:value="AIzaSyC_I8fto3Nyu2edss8j64IuLfC99YY5sOQ"/>
+     android:value="AIzaSyBPU8TzcHT4Ye6ja81vYadAc3WK40nS9Fs"/>
   
     <!-- You will also only need to add this uses-library tag -->
     <uses-library android:name="org.apache.http.legacy" android:required="false"/>

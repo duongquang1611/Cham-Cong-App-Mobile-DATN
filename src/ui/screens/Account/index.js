@@ -392,9 +392,9 @@ const AccountScreen = (props) => {
         titleScreen={'Thông tin người dùng'}
         nameMenuRight={isEditing ? 'content-save' : 'account-edit'}
         typeMenuRight="MaterialCommunityIcons"
+        onPressMenuRight={onPressEdit}
         colorMenuRight="white"
         sizeMenuRight={commons.sizeIcon28}
-        onPressMenuRight={onPressEdit}
         styleMenuRight={{marginRight: 5}}
       />
       <ScrollView

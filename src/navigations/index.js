@@ -46,8 +46,8 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="SetupCompany"
-        // initialRouteName="HomeScreen"
+        // initialRouteName="SetupCompany"
+        initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
         <Drawer.Screen
@@ -259,6 +259,7 @@ const RootNavigation = () => {
         ) : (
           <>
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="SetupServer" component={SetupServer} />
           </>
         )}
       </RootStack.Navigator>

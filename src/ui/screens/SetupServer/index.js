@@ -1,18 +1,27 @@
-import {HeaderMenuDrawer, InputView, RadioGroup} from 'cc-components';
+import {
+  HeaderMenuDrawer,
+  HeaderView,
+  InputView,
+  RadioGroup,
+} from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import API from '../../../networking';
 import commons from '../../commons';
 import baseStyles from '../../../baseStyles';
+import {useRoute} from '@react-navigation/native';
 const SERVER = [
   {id: 0, name: 'Heroku Server', server: API.baseApiUrlHeroku},
   {id: 1, name: 'Local Server', server: API.BASE_API_URL},
   {id: 2, name: 'Tùy chỉnh', server: API.BASE_API_URL},
 ];
 
-const SetupServer = () => {
+const titleScreen = 'Cài đặt Server';
+const SetupServer = (props) => {
   const [dataServer, setDataServer] = useState(SERVER[0]);
+  const route = useRoute();
+  console.log(route.params);
   useEffect(() => {
     getServer();
   }, []);
@@ -52,7 +61,17 @@ const SetupServer = () => {
   };
   return (
     <>
-      <HeaderMenuDrawer titleScreen="Cài đặt Server" />
+      {route?.params && route?.params?.preRoute === 'login' ? (
+        <HeaderView
+          isToolbar={true}
+          isStatusBar={true}
+          // nonShowBack
+          titleScreen={titleScreen}
+          colorIconBack="white"
+        />
+      ) : (
+        <HeaderMenuDrawer titleScreen={titleScreen} />
+      )}
       <View style={{margin: 10}}>
         <Text style={[styles.title, {marginVertical: 5}]}>Lựa chọn Server</Text>
         <RadioGroup
