@@ -300,7 +300,7 @@ const HomeScreen = (props) => {
   const onPressCheckTime = () => {
     // console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
     // Check địa chỉ IP khi checkin
-
+    console.log(detailDayWork.checkin);
     if (!detailDayWork?.checkin) {
       API.createOrUpdateDayWork(dispatch);
       // setState({...state, visible: true});

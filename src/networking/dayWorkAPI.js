@@ -84,6 +84,7 @@ const getDataListAskComeLeaveProcessed = async (dispatch, params, page = 0) => {
 const createOrUpdateDayWork = async (dispatch, params) => {
   try {
     let res = await API.PUT(API.workDay, params);
+
     dispatch(actions.saveDetailDayWork(res));
   } catch (error) {
     console.log('Day Work API error', error);
