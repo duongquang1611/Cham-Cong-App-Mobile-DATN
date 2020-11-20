@@ -9,6 +9,8 @@ buildscript {
         
         // https://github.com/react-native-netinfo/react-native-netinfo
         androidXCore = "1.0.2"
+        playServicesVersion = "17.0.0"
+        androidMapsUtilsVersion = "2.1.0"
     }
     repositories {
         google()

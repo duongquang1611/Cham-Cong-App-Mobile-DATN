@@ -30,6 +30,7 @@ import SetupCompany from '../ui/screens/SetupCompany';
 import TabManagement from '../ui/screens/Management';
 import AddAccount from '../ui/screens/Management/Account/AddAccount';
 import AddCompany from '../ui/screens/Management/Company/AddCompany';
+import ChooseAddress from '../ui/screens/SetupCompany/ChooseAddress';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -45,8 +46,8 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        // initialRouteName="TabManagement"
-        initialRouteName="HomeScreen"
+        initialRouteName="SetupCompany"
+        // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
         <Drawer.Screen
@@ -252,6 +253,7 @@ const RootNavigation = () => {
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="AddCompany" component={AddCompany} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
+        <Stack.Screen name="ChooseAddress" component={ChooseAddress} />
         {isLoginSuccess ? (
           <Stack.Screen name="DrawerStack" component={DrawerStack} />
         ) : (
