@@ -59,5 +59,20 @@ const baseStyles = StyleSheet.create({
     fontSize: commons.fontSize16,
     fontWeight: 'bold',
   },
+  containerBottomButton: {
+    bottom: 0,
+    left: 0,
+    right: 0,
+    position: 'absolute',
+    height: commons.heightHeader,
+    width: '100%',
+    backgroundColor: commons.colorMain,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textBottomButton: {
+    color: 'white',
+    fontSize: commons.fontSize16,
+  },
 });
 export default baseStyles;

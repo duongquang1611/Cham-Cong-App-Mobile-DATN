@@ -25,6 +25,7 @@ const TextInputController = (props) => {
     errors,
     control,
     keyboardType = 'default',
+    editable = true,
   } = props;
   let rules = {required: true};
   if (keyboardType === 'numeric') rules.min = 0;
@@ -32,6 +33,7 @@ const TextInputController = (props) => {
   return (
     <View style={styles.containerRow}>
       <Text style={{flex: 1, fontSize: 16}}>{placeholder}</Text>
+      <View style={{flex: 0.2}} />
       <View style={{flex: 2}}>
         <Controller
           control={control}
@@ -43,6 +45,7 @@ const TextInputController = (props) => {
               value={value}
               placeholder={placeholder}
               keyboardType={keyboardType}
+              editable={editable}
             />
           )}
           name={name}

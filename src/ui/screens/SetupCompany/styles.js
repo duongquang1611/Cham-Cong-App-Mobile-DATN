@@ -6,8 +6,10 @@ const {StyleSheet} = require('react-native');
 const styles = StyleSheet.create({
   ...baseStyles,
   input: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderColor: commons.colorMain,
+    color: 'black',
+    fontSize: commons.fontSize15,
     // marginBottom: commons.margin5,
   },
   error: {
