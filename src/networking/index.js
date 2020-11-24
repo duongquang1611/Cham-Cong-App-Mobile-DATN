@@ -35,6 +35,9 @@ instanceAPI.interceptors.response.use(
     } else if (error.response.data.msg) {
       messageError = error.response.data.msg;
     }
+    if (typeof messageError !== 'string')
+      messageError = JSON.stringify(messageError);
+
     return showAlert({msg: messageError});
     // return Promise.reject(error);
   },

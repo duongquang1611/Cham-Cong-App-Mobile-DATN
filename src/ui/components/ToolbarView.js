@@ -62,10 +62,12 @@ function getCenterElement(props) {
 }
 
 function getRightElement(props) {
+  let showMenuRight =
+    props.showMenuRight !== undefined ? props.showMenuRight : true;
   if (!props || (props.rightElement && props.rightElement.props)) {
     return props.rightElement;
   } else if (typeof props.nameMenuRight === 'string') {
-    return (
+    return showMenuRight ? (
       <IconView
         onPress={props.onPressMenuRight}
         style={[styles.styleIconRight, props.styleMenuRight]}
@@ -74,6 +76,8 @@ function getRightElement(props) {
         size={props.sizeMenuRight || commons.sizeIcon}
         color={props.colorMenuRight || 'white'}
       />
+    ) : (
+      <></>
     );
   }
 }
