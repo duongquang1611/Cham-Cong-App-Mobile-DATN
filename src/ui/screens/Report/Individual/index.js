@@ -122,7 +122,7 @@ const ReportIndividual = () => {
         <View style={styles.containerRowBaseInfo}>
           <ColumnBaseView
             title="Ngày Công"
-            msg={`${filterListDayWork('isSuccessDay', true).length} /24`}
+            msg={`${filterListDayWork('isSuccessDay', true).length}`}
             colorMsg="green"
           />
           <ColumnBaseView

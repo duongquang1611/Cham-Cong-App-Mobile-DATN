@@ -1,8 +1,10 @@
-import {showAlert} from 'cc-components';
+import {useNavigation} from '@react-navigation/native';
+import {LoadingView, showAlert} from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
+import {appNavigate} from '../../../../navigations';
 import API from '../../../../networking';
 import commons from '../../../commons';
 import ItemAccount from './ItemAccount';
@@ -25,6 +27,7 @@ const AccountManagement = () => {
   const dispatch = useDispatch();
   const authReducer = useSelector((state) => state.authReducer);
   const {userData} = authReducer;
+  const navigation = useNavigation();
   const companyReducer = useSelector((state) => state.companyReducer);
   const {allUsers} = companyReducer;
   const [state, setState] = useState({
@@ -68,8 +71,8 @@ const AccountManagement = () => {
       onPressOK: onPressDeleteAccount,
     });
   };
-  const editAccount = async (userId) => {
-    // let res = await API.DELETE(API.detailUser(userId));
+  const editAccount = (item) => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'EditAccount');
   };
 
   const renderItem = ({item, index}) => {
@@ -85,29 +88,32 @@ const AccountManagement = () => {
     setState({...state, refreshing: true});
   };
   return (
-    <FlatList
-      data={allUsers}
-      renderItem={renderItem}
-      keyExtractor={(item, index) => {
-        return index.toString();
-      }}
-      extraData={allUsers}
-      contentContainerStyle={{
-        paddingTop: commons.margin5,
-        paddingHorizontal: commons.margin,
-      }}
-      ListEmptyComponent={EmptyList}
-      automaticallyAdjustContentInsets={false}
-      keyboardDismissMode="on-drag"
-      keyboardShouldPersistTaps="handled"
-      removeClippedSubviews={true}
-      style={{backgroundColor: 'white'}}
-      initialNumToRender={10}
-      ItemSeparatorComponent={SeparatorView}
-      refreshControl={
-        <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
-      }
-    />
+    <>
+      {state.refreshing && <LoadingView />}
+      <FlatList
+        data={allUsers}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
+        extraData={allUsers}
+        contentContainerStyle={{
+          paddingTop: commons.margin5,
+          paddingHorizontal: commons.margin,
+        }}
+        ListEmptyComponent={EmptyList}
+        automaticallyAdjustContentInsets={false}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        removeClippedSubviews={true}
+        style={{backgroundColor: 'white'}}
+        initialNumToRender={10}
+        ItemSeparatorComponent={SeparatorView}
+        refreshControl={
+          <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </>
   );
 };
 

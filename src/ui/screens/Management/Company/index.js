@@ -1,8 +1,10 @@
-import {showAlert} from 'cc-components';
+import {useNavigation} from '@react-navigation/native';
+import {LoadingView, showAlert} from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
+import {appNavigate} from '../../../../navigations';
 import API from '../../../../networking';
 import commons from '../../../commons';
 import ItemCompany from './ItemCompany';
@@ -25,6 +27,8 @@ const CompanyManagement = () => {
   const companyReducer = useSelector((state) => state.companyReducer);
   const {allCompanies} = companyReducer;
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   const [state, setState] = useState({
     refreshing: true,
   });
@@ -56,8 +60,10 @@ const CompanyManagement = () => {
       onPressOK: onPressDeleteCompany,
     });
   };
-  const editCompany = async (userId) => {
-    // let res = await API.DELETE(API.detailUser(userId));
+  const editCompany = (item) => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'EditCompany', {
+      data: item,
+    });
   };
 
   const renderItem = ({item, index}) => {
@@ -73,29 +79,33 @@ const CompanyManagement = () => {
     setState({...state, refreshing: true});
   };
   return (
-    <FlatList
-      data={allCompanies}
-      renderItem={renderItem}
-      keyExtractor={(item, index) => {
-        return index.toString();
-      }}
-      extraData={allCompanies}
-      contentContainerStyle={{
-        paddingTop: commons.margin5,
-        paddingHorizontal: commons.margin,
-      }}
-      ListEmptyComponent={EmptyList}
-      automaticallyAdjustContentInsets={false}
-      keyboardDismissMode="on-drag"
-      keyboardShouldPersistTaps="handled"
-      removeClippedSubviews={true}
-      style={{backgroundColor: 'white'}}
-      initialNumToRender={10}
-      ItemSeparatorComponent={SeparatorView}
-      refreshControl={
-        <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
-      }
-    />
+    <>
+      {state.refreshing && <LoadingView />}
+
+      <FlatList
+        data={allCompanies}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
+        extraData={allCompanies}
+        contentContainerStyle={{
+          paddingTop: commons.margin5,
+          paddingHorizontal: commons.margin,
+        }}
+        ListEmptyComponent={EmptyList}
+        automaticallyAdjustContentInsets={false}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        removeClippedSubviews={true}
+        style={{backgroundColor: 'white'}}
+        initialNumToRender={10}
+        ItemSeparatorComponent={SeparatorView}
+        refreshControl={
+          <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </>
   );
 };
 

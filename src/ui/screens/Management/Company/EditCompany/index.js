@@ -12,26 +12,29 @@ import styles from './styles';
 import {useForm} from 'react-hook-form';
 import API from '../../../../../networking';
 import commons from '../../../../commons';
-const AddCompany = (props) => {
+import {useRoute} from '@react-navigation/native';
+const EditCompany = (props) => {
+  const route = useRoute();
+  const {data} = route.params;
   const {control, handleSubmit, errors, register, setValue} = useForm();
   const [state, setState] = useState({
     isLoading: false,
   });
-  const onSubmit = async (data) => {
-    console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', data);
+  const onSubmit = async (formData) => {
+    // console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', formData);
     setState({...state, isLoading: true});
 
     try {
-      let res = await API.POST(API.searchCompanies, data);
+      let res = await API.PUT(API.detailCompany(data._id), formData);
       if (res && res._id) {
-        showAlert({msg: 'Tạo mới công ty thành công.'});
+        showAlert({msg: 'Cập nhật công ty thành công.'});
         setState({...state, isLoading: false});
       } else {
         setState({...state, isLoading: false});
       }
     } catch (error) {
       setState({...state, isLoading: false});
-      console.log('Add company error', error);
+      console.log('Edit company error', error);
     }
   };
 
@@ -41,7 +44,7 @@ const AddCompany = (props) => {
         isToolbar={true}
         isStatusBar={true}
         // nonShowBack
-        titleScreen={'Thêm công ty'}
+        titleScreen={'Cập nhật công ty'}
         colorIconBack="white"
       />
       {state.isLoading && <LoadingView />}
@@ -61,6 +64,7 @@ const AddCompany = (props) => {
                 message: 'Tên công ty không được để trống.',
               },
             },
+            defaultValue: data?.name,
             errors,
             control,
           }}
@@ -77,6 +81,7 @@ const AddCompany = (props) => {
                 message: 'Số điện thoại không hợp lệ.',
               },
             },
+            defaultValue: data?.phoneNumber,
             errors,
             control,
           }}
@@ -94,6 +99,7 @@ const AddCompany = (props) => {
                 message: 'Email không hợp lệ',
               },
             },
+            defaultValue: data?.email,
             errors,
             control,
           }}
@@ -103,6 +109,7 @@ const AddCompany = (props) => {
             name: 'address',
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
+            defaultValue: data?.address,
             errors,
             control,
           }}
@@ -113,6 +120,7 @@ const AddCompany = (props) => {
             name: 'website',
             label: 'Website Công ty',
             placeholder: 'Nhập website công ty',
+            defaultValue: data?.website,
             errors,
             control,
           }}
@@ -122,6 +130,7 @@ const AddCompany = (props) => {
             name: 'representativeName',
             label: 'Tên người đại diện',
             placeholder: 'Nhập tên người đại diện',
+            defaultValue: data?.representativeName,
             errors,
             control,
           }}
@@ -138,6 +147,7 @@ const AddCompany = (props) => {
                 message: 'Số điện thoại không hợp lệ.',
               },
             },
+            defaultValue: data?.representativePhoneNumber,
             errors,
             control,
           }}
@@ -155,6 +165,7 @@ const AddCompany = (props) => {
                 message: 'Email không hợp lệ',
               },
             },
+            defaultValue: data?.representativeEmail,
             errors,
             control,
           }}
@@ -164,10 +175,10 @@ const AddCompany = (props) => {
         id={'Submit'}
         onPress={handleSubmit(onSubmit)}
         // onPress={() => setValue('roleId', 'xxxxxxxx')}
-        text="Tạo mới công ty"
+        text="Cập nhật"
       />
     </>
   );
 };
 
-export default memo(AddCompany);
+export default memo(EditCompany);

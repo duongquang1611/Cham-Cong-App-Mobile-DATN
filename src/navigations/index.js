@@ -31,6 +31,8 @@ import TabManagement from '../ui/screens/Management';
 import AddAccount from '../ui/screens/Management/Account/AddAccount';
 import AddCompany from '../ui/screens/Management/Company/AddCompany';
 import ChooseAddress from '../ui/screens/SetupCompany/ChooseAddress';
+import EditAccount from '../ui/screens/Management/Account/EditAccount';
+import EditCompany from '../ui/screens/Management/Company/EditCompany';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
@@ -254,6 +256,8 @@ const RootNavigation = () => {
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="AddCompany" component={AddCompany} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
+        <Stack.Screen name="EditAccount" component={EditAccount} />
+        <Stack.Screen name="EditCompany" component={EditCompany} />
         <Stack.Screen name="ChooseAddress" component={ChooseAddress} />
         {isLoginSuccess ? (
           <Stack.Screen name="DrawerStack" component={DrawerStack} />
