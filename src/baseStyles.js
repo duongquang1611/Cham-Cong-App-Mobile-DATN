@@ -64,15 +64,25 @@ const baseStyles = StyleSheet.create({
     left: 0,
     right: 0,
     position: 'absolute',
-    height: commons.heightHeader,
+    height: commons.heightHeader + 5,
     width: '100%',
-    backgroundColor: commons.colorMain,
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 5,
   },
   textBottomButton: {
     color: 'white',
     fontSize: commons.fontSize16,
+  },
+  subContainerBottomButton: {
+    backgroundColor: commons.colorMain,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    borderRadius: 5,
   },
 });
 export default baseStyles;

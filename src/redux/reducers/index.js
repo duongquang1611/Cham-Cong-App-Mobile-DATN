@@ -10,7 +10,7 @@ import companyReducer from './companyReducer';
 const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: [''],
+  blacklist: ['isLoading'],
 };
 
 const rootReducer = combineReducers({

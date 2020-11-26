@@ -93,6 +93,11 @@ const HomeScreen = (props) => {
           userCompany: data[0],
           isLoading: false,
         });
+      } else {
+        setState({
+          ...state,
+          isLoading: false,
+        });
       }
     } catch (error) {
       setState({

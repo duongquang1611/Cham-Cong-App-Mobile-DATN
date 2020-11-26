@@ -4,6 +4,7 @@ import {
   LoadingView,
   showAlert,
   TextView,
+  BottomButton,
 } from 'cc-components';
 import React, {useEffect, useState, useCallback} from 'react';
 import {Controller, useForm} from 'react-hook-form';
@@ -122,6 +123,7 @@ const SetupCompany = (props) => {
       });
     let updateData = {...formatForm, companyId: user?.companyId?._id, ...data};
     API.postConfigCompany(dispatch, updateData);
+
     onRefresh();
   };
 
@@ -424,17 +426,7 @@ const SetupCompany = (props) => {
           </ScrollView>
         )}
       {state.isEditing && (
-        <TextView
-          id="Submit"
-          onPress={handleSubmit(onSubmit)}
-          style={styles.containerBottomButton}
-          styleText={styles.textBottomButton}>
-          Cập nhật
-        </TextView>
-
-        /* <View style={{bottom: 0, left: 0, right: 0, position: 'absolute'}}>
-          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-        </View> */
+        <BottomButton id={'Submit'} onPress={handleSubmit(onSubmit)} />
       )}
     </>
   );

@@ -13,6 +13,7 @@ import showAlert from './showAlert';
 import NewPicker from './NewPicker';
 import BlockView from './BlockView';
 import TextWarning from './TextWarning';
+import BottomButton from './BottomButton';
 
 import CustomFlatList from './CustomFlatList';
 
@@ -34,4 +35,5 @@ export {
   BlockView,
   TextWarning,
   CustomFlatList,
+  BottomButton,
 };

@@ -46,7 +46,7 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="SetupCompany"
+        initialRouteName="TabManagement"
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -246,7 +246,8 @@ const RootNavigation = () => {
     <NavigationContainer>
       <RootStack.Navigator
         // initialRouteName={isLoginSuccess ? 'HomeScreen' : 'AccountScreen'}
-        initialRouteName={'SplashScreen'}
+        // initialRouteName={'SplashScreen'}
+        initialRouteName={'AddAccount'}
         screenOptions={{
           headerShown: false,
         }}>

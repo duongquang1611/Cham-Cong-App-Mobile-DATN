@@ -12,17 +12,17 @@ const SplashScreen = () => {
     (state) => state.authReducer.isLoginSuccess,
   );
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.commonReducer.isLoading);
+  // const isLoading = useSelector((state) => state.commonReducer.isLoading);
   // isLoading && dispatch(actions.isShowLoading(false));
   const navigation = useNavigation();
 
   console.log('SplashScreen -> isLoginSuccess', isLoginSuccess);
 
-  useEffect(() => {
-    return () => {
-      isLoading && dispatch(actions.isShowLoading(false));
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     isLoading && dispatch(actions.isShowLoading(false));
+  //   };
+  // }, []);
   useEffect(() => {
     // Subscribe
     const unsubscribe = NetInfo.addEventListener((stateNet) => {

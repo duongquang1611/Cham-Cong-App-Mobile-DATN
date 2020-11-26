@@ -35,8 +35,10 @@ instanceAPI.interceptors.response.use(
     } else if (error.response.data.msg) {
       messageError = error.response.data.msg;
     }
-    if (typeof messageError !== 'string')
-      messageError = JSON.stringify(messageError);
+    if (typeof messageError !== 'string') {
+      console.log('Error API:', error.response.data.msg);
+      messageError = 'Lỗi không xác định';
+    }
 
     return showAlert({msg: messageError});
     // return Promise.reject(error);
@@ -51,7 +53,10 @@ instanceAPI.interceptors.request.use(async (request) => {
       baseApiUrl = urlAPI.BASE_API_URL;
     } else {
       let baseApiUrlObj = JSON.parse(baseApiUrl);
-      if (baseApiUrlObj.id === 1 && baseApiUrlObj !== urlAPI.BASE_API_URL) {
+      if (
+        baseApiUrlObj.id === 1 &&
+        baseApiUrlObj.server !== urlAPI.BASE_API_URL
+      ) {
         baseApiUrl = urlAPI.BASE_API_URL;
       } else {
         baseApiUrl = baseApiUrlObj.server;
