@@ -1,4 +1,4 @@
-import {InputView} from 'cc-components';
+import {InputView, TextWarning} from 'cc-components';
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import {StyleSheet, Text, View, TextInput} from 'react-native';
@@ -29,7 +29,7 @@ const InputController = (props) => {
     keyboardType = 'default',
     editable = true,
     secureTextEntry = false,
-    showBottomSheet,
+    onPressText,
     initRules = {},
   } = props;
 
@@ -43,7 +43,14 @@ const InputController = (props) => {
   }
   return (
     <View style={styles.containerInput}>
-      {label && <Text style={{fontSize: 16, marginBottom: 5}}>{label}</Text>}
+      {label ? (
+        <Text style={styles.textLabel}>
+          {label}
+          {rules.required && <Text style={{color: 'red'}}>{' * '}</Text>}
+        </Text>
+      ) : (
+        <></>
+      )}
       <View style={{}}>
         <Controller
           control={control}
@@ -66,7 +73,7 @@ const InputController = (props) => {
                 keyboardType={keyboardType}
                 editable={editable}
                 pointerEvents={'none'}
-                onPressText={showBottomSheet}
+                onPressText={onPressText}
                 secureTextEntry={secureTextEntry}
               />
             );

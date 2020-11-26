@@ -1,7 +1,14 @@
-import {HeaderView, TextView} from 'cc-components';
-import React, {memo, useEffect, useRef, useState} from 'react';
+import {HeaderView, LoadingView, showAlert, TextView} from 'cc-components';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import baseStyles from '../../../../../baseStyles';
 import InputController from '../../InputController';
 import {BottomButton} from 'cc-components';
@@ -9,16 +16,17 @@ import commons from '../../../../commons';
 import models from '../../../../../models';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
+import API from '../../../../../networking';
+import moment from 'moment';
 // Nữ:0, Nam:1
 const GENDER = [
-  {id: 0, name: 'Nữ'},
-  {id: 1, name: 'Nam'},
+  {_id: 0, name: 'Nữ'},
+  {_id: 1, name: 'Nam'},
 ];
 let dataSheet = [];
 let titleSheet = '';
 let typeParamChoose = '';
-
+let dateOfBirth = moment();
 const viewSeparator = () => {
   return <View style={{height: 1, backgroundColor: commons.border}} />;
 };
@@ -28,6 +36,11 @@ const AddAccount = (props) => {
   const [state, setState] = useState({
     percentHeight: 0,
     isVisibleModalDate: false,
+    refreshing: true,
+    isLoading: false,
+    allCompanies: [],
+    allRoles: [],
+    allUsers: [],
   });
   const refBottomSheet = useRef();
 
@@ -36,7 +49,44 @@ const AddAccount = (props) => {
   //     refBottomSheet.current.open();
   //   }
   // }, [state.dataSheet]);
+  const getData = async () => {
+    try {
+      let data = await Promise.all([
+        API.GET(API.searchCompanies),
+        API.GET(API.allRoles),
+        API.GET(API.searchUsersPublic, {}),
+      ]);
+      // console.log('🚀 ~ file: index.js ~ line 47 ~ getData ~ data', data);
+      if (
+        data[0] &&
+        data[1] &&
+        data[2] &&
+        Array.isArray(data[0]) &&
+        Array.isArray(data[1]) &&
+        Array.isArray(data[2])
+      ) {
+        setState({
+          ...state,
+          refreshing: false,
+          allCompanies: data[0],
+          allRoles: data[1],
+          allUsers: data[2],
+        });
+      } else {
+        setState({...state, refreshing: false});
+      }
+    } catch (error) {
+      console.log('🚀 ~ file: index.js ~ line 83 ~ getData ~ error', error);
+      setState({...state, refreshing: false});
+    }
+  };
+  useEffect(() => {
+    state.refreshing && getData();
+  }, [state.refreshing]);
 
+  const onRefresh = () => {
+    setState({...state, refreshing: true});
+  };
   useEffect(() => {
     state.percentHeight > 0
       ? refBottomSheet.current.open()
@@ -46,17 +96,59 @@ const AddAccount = (props) => {
   const hideBottomSheet = () => {
     setState({...state, percentHeight: 0});
   };
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', data);
+    setState({...state, isLoading: true});
+
+    try {
+      let res = await API.POST(API.signup);
+      if (res && res._id) {
+        showAlert({msg: 'Tạo tài khoản thành công.'});
+        setState({...state, isLoading: false});
+      } else {
+        showAlert({msg: 'Lỗi không xác định.'});
+        setState({...state, isLoading: false});
+      }
+    } catch (error) {
+      setState({...state, isLoading: false});
+      console.log('Signup error', error);
+    }
   };
-  const renderItemFilter = ({item, index}) => {
+  const onSelectedItem = ({data}) => {
+    hideBottomSheet();
+    setValue(typeParamChoose, data.name);
+
+    switch (typeParamChoose) {
+      case 'companyName': {
+        setValue('companyId', data._id.toString());
+        break;
+      }
+      case 'roleName': {
+        setValue('roleId', data._id.toString());
+        break;
+      }
+
+      case 'parentName': {
+        setValue('parentId', data._id.toString());
+        break;
+      }
+      case 'genderName': {
+        setValue('gender', data._id.toString());
+        break;
+      }
+
+      default:
+        break;
+    }
+  };
+  const renderItemSelect = ({item, index}) => {
     // let isChecked = isItemChecked(item, typeParamChoose);
     return (
       <TextView
         data={item}
         // nameIconRight={'icon-circle-correct'}
         // colorIconRight="green"
-        // onPress={handleChooseItemField}
+        onPress={onSelectedItem}
         style={{
           ...styles.styleContainerItemSheet,
           backgroundColor: 'transparent',
@@ -110,7 +202,7 @@ const AddAccount = (props) => {
             justifyContent: 'center',
           }}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItemFilter}
+          renderItem={renderItemSelect}
         />
       </View>
     );
@@ -120,22 +212,25 @@ const AddAccount = (props) => {
     dataSheet = data;
     let isShowSheet = true;
     switch (id) {
-      case 'companyId': {
+      case 'companyName': {
         titleSheet = 'Công ty';
+        dataSheet = state.allCompanies;
         break;
       }
-      case 'roleId': {
+      case 'roleName': {
         titleSheet = 'Chức vụ';
+        dataSheet = state.allRoles;
         break;
       }
 
-      case 'parentId': {
+      case 'parentName': {
         // isShowSheet = false;
         titleSheet = 'Quản lý trực tiếp';
+        dataSheet = state.allUsers;
 
         break;
       }
-      case 'gender': {
+      case 'genderName': {
         titleSheet = 'Giới tính';
         dataSheet = GENDER;
         break;
@@ -155,14 +250,17 @@ const AddAccount = (props) => {
   };
 
   const showPicker = () => {
-    setState({...state, isVisibleDate: true});
+    setState({...state, isVisibleModalDate: true});
   };
   const hidePicker = () => {
-    setState({...state, isVisibleDate: false});
+    setState({...state, isVisibleModalDate: false});
   };
   const handleConfirm = (date) => {
     // onChangeText({id: 'dateOfBirth', data: date});
     console.log('🚀 ~ file: index.js ~ line 193 ~ handleConfirm ~ date', date);
+    dateOfBirth = date;
+    setValue('dateName', moment(date).format(commons.FORMAT_DATE_VN));
+    setValue('dateOfBirth', moment(date).toISOString());
     hidePicker();
   };
 
@@ -171,11 +269,7 @@ const AddAccount = (props) => {
       <DateTimePickerModal
         mode={'date'}
         isVisible={state.isVisibleModalDate}
-        // date={
-        //   newUserInfo?.dateOfBirth || userInfo?.dateOfBirth
-        //     ? new Date(newUserInfo?.dateOfBirth || userInfo?.dateOfBirth)
-        //     : new Date()
-        // }
+        date={new Date(dateOfBirth)}
         locale="vi"
         confirmTextIOS="Thay Đổi"
         cancelTextIOS="Hủy"
@@ -189,10 +283,15 @@ const AddAccount = (props) => {
         titleScreen={'Tạo tài khoản'}
         colorIconBack="white"
       />
+      {state.refreshing && <LoadingView />}
+      {state.isLoading && <LoadingView />}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{flex: 1, marginBottom: 60}}
-        contentContainerStyle={styles.containerScrollView}>
+        style={{flex: 1, marginBottom: 50}}
+        contentContainerStyle={styles.containerScrollView}
+        refreshControl={
+          <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
+        }>
         <InputController
           {...{
             name: 'username',
@@ -228,14 +327,28 @@ const AddAccount = (props) => {
             control,
           }}
         />
-
         <InputController
           {...{
-            name: 'companyId',
+            name: 'name',
+            label: 'Họ tên',
+            placeholder: 'Nhập họ tên',
+            initRules: {
+              required: {
+                value: true,
+                message: 'Họ tên không được để trống.',
+              },
+            },
+            errors,
+            control,
+          }}
+        />
+        <InputController
+          {...{
+            name: 'companyName',
             label: 'Công ty',
             placeholder: 'Chọn công ty',
             editable: false,
-            showBottomSheet,
+            onPressText: showBottomSheet,
             errors,
             control,
           }}
@@ -243,22 +356,22 @@ const AddAccount = (props) => {
 
         <InputController
           {...{
-            name: 'roleId',
+            name: 'roleName',
             label: 'Chức vụ',
             placeholder: 'Chọn chức vụ',
             editable: false,
-            showBottomSheet,
+            onPressText: showBottomSheet,
             errors,
             control,
           }}
         />
         <InputController
           {...{
-            name: 'parentId',
+            name: 'parentName',
             label: 'Quản lý trực tiếp',
             placeholder: 'Chọn quản lý trực tiếp',
             editable: false,
-            showBottomSheet,
+            onPressText: showBottomSheet,
             errors,
             control,
           }}
@@ -307,25 +420,67 @@ const AddAccount = (props) => {
         />
         <InputController
           {...{
-            name: 'gender',
+            name: 'genderName',
             label: 'Giới tính',
             placeholder: 'Chọn giới tính',
             editable: false,
-            showBottomSheet,
+            onPressText: showBottomSheet,
             errors,
             control,
           }}
         />
         <InputController
           {...{
-            name: 'dateOfBirth',
+            name: 'dateName',
             label: 'Ngày sinh',
             placeholder: 'Chọn ngày sinh',
             editable: false,
+            onPressText: showPicker,
             errors,
             control,
           }}
         />
+        <View
+          style={{
+            height: 0,
+            width: 0,
+          }}>
+          <InputController
+            {...{
+              name: 'gender',
+              errors,
+              control,
+            }}
+          />
+          <InputController
+            {...{
+              name: 'companyId',
+              errors,
+              control,
+            }}
+          />
+          <InputController
+            {...{
+              name: 'roleId',
+              errors,
+              control,
+            }}
+          />
+          <InputController
+            {...{
+              name: 'parentId',
+              errors,
+              control,
+            }}
+          />
+          <InputController
+            {...{
+              name: 'dateOfBirth',
+              errors,
+              control,
+            }}
+          />
+        </View>
         <RBSheet
           ref={refBottomSheet}
           animationType="slide"
@@ -345,8 +500,8 @@ const AddAccount = (props) => {
       </ScrollView>
       <BottomButton
         id={'Submit'}
-        // onPress={handleSubmit(onSubmit)}
-        onPress={() => setValue('roleId', 'xxxxxxxx')}
+        onPress={handleSubmit(onSubmit)}
+        // onPress={() => setValue('roleId', 'xxxxxxxx')}
         text="Tạo tài khoản"
       />
     </>

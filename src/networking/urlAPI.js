@@ -28,10 +28,12 @@ const config = {
       };
     },
 
-    // users
-    searchUsers: 'users',
     signup: 'auth/signup',
     signin: 'auth/signin',
+
+    // users
+    searchUsers: 'users',
+    searchUsersPublic: 'users/public',
     detailUser: (id) => `users/${id}`,
 
     searchCompanies: 'companies',
@@ -44,6 +46,9 @@ const config = {
 
     dayOff: 'work-day/day-off', // get, put
     upload: 'upload',
+
+    //roles
+    allRoles: 'roles',
   },
 };
 

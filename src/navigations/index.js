@@ -246,8 +246,8 @@ const RootNavigation = () => {
     <NavigationContainer>
       <RootStack.Navigator
         // initialRouteName={isLoginSuccess ? 'HomeScreen' : 'AccountScreen'}
-        // initialRouteName={'SplashScreen'}
-        initialRouteName={'AddAccount'}
+        initialRouteName={'SplashScreen'}
+        // initialRouteName={'AddAccount'}
         screenOptions={{
           headerShown: false,
         }}>

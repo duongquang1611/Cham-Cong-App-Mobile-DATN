@@ -11,5 +11,6 @@ const styles = StyleSheet.create({
     fontSize: commons.fontSize12,
   },
   textInput: {fontSize: commons.fontSize14, color: 'black'},
+  textLabel: {fontSize: 16, marginBottom: 5},
 });
 export default styles;
