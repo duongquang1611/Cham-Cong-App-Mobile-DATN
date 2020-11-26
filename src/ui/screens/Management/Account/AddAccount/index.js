@@ -101,12 +101,11 @@ const AddAccount = (props) => {
     setState({...state, isLoading: true});
 
     try {
-      let res = await API.POST(API.signup);
+      let res = await API.POST(API.signup, data);
       if (res && res._id) {
         showAlert({msg: 'Tạo tài khoản thành công.'});
         setState({...state, isLoading: false});
       } else {
-        showAlert({msg: 'Lỗi không xác định.'});
         setState({...state, isLoading: false});
       }
     } catch (error) {
