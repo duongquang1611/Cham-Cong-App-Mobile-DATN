@@ -4,6 +4,12 @@ import {Controller} from 'react-hook-form';
 import {StyleSheet, Text, View, TextInput} from 'react-native';
 import commons from '../../commons';
 import styles from './styles';
+let listKeyEmailPhone = [
+  'email',
+  'phoneNumber',
+  'representativePhoneNumber',
+  'representativeEmail',
+];
 const TextRequired = (props) => {
   const {type = 'required', field} = props;
   let msg = 'Vui lòng điền đầy đủ thông tin';
@@ -38,7 +44,7 @@ const InputController = (props) => {
   if (keyboardType === 'numeric') rules.min = 0;
   //   console.log(errors);
   let changeDefaultValue = false;
-  if (name === 'email' || name === 'phoneNumber') {
+  if (listKeyEmailPhone.includes(name)) {
     changeDefaultValue = true;
   }
   return (
