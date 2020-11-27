@@ -1,6 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
-import {CustomFlatList, IconView, LoadingView, TextView} from 'cc-components';
-import React, {useEffect, useState} from 'react';
+import {
+  CustomFlatList,
+  HeaderView,
+  IconView,
+  LoadingView,
+  TextView,
+} from 'cc-components';
+import React, {useEffect, useState, useRef} from 'react';
+import {FlatList, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
@@ -8,9 +15,18 @@ import API from '../../../../networking';
 import actions from '../../../../redux/actions';
 import commons from '../../../commons';
 import ItemHistoryAskComeLeave from './Item';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import baseStyles from '../../../../baseStyles';
+import {SORT_COME_LEAVE} from '../../CATEGORIES';
 
 let onEndReachedCalledDuringMomentum = true;
-
+let dataSheet = [];
+let titleSheet = '';
+let typeParamChoose = '';
+let sortSelected = SORT_COME_LEAVE[0];
+const viewSeparator = () => {
+  return <View style={{height: 1, backgroundColor: commons.border}} />;
+};
 const HistoryAskComeLeaveTemplate = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -21,12 +37,17 @@ const HistoryAskComeLeaveTemplate = (props) => {
     page: 0,
     refreshing: true,
     data: [],
+    percentHeight: 0,
     // hasNext: true,
   });
+
+  const refBottomSheet = useRef();
 
   let filter = {
     userId: userInfo?._id,
     comeLeave: true,
+    sortType: sortSelected?.type,
+    sortValue: sortSelected?.value,
   };
 
   const dayWorkReducer = useSelector((state) => state.dayWorkReducer);
@@ -45,6 +66,15 @@ const HistoryAskComeLeaveTemplate = (props) => {
     dayWorkReducer?.changeListAskComeLeave && onRefresh();
   }, [dayWorkReducer?.changeListAskComeLeave]);
 
+  useEffect(() => {
+    state.percentHeight > 0
+      ? refBottomSheet.current.open()
+      : refBottomSheet.current.close();
+  }, [state.percentHeight]);
+  const hideBottomSheet = () => {
+    setState({...state, percentHeight: 0});
+  };
+
   const setOnEndReachedCalledDuringMomentum = (value) => {
     onEndReachedCalledDuringMomentum = value;
   };
@@ -54,11 +84,14 @@ const HistoryAskComeLeaveTemplate = (props) => {
     filter = {
       userId: userInfo?._id,
       comeLeave: true,
+      sortType: sortSelected?.type,
+      sortValue: sortSelected?.value,
       ...newFilter,
     };
     setState({
       ...state,
       page: 0,
+      percentHeight: 0,
       refreshing: true,
       // hasNext: true,
     });
@@ -107,43 +140,150 @@ const HistoryAskComeLeaveTemplate = (props) => {
       <ItemHistoryAskComeLeave {...{item, index}} style={{marginBottom: 10}} />
     );
   };
-  const onSelectedSort = ({id, data}) => {
+  const onSelectedSort = ({id, data = []}) => {
     console.log({id, data});
+    typeParamChoose = id;
+    dataSheet = data;
+    let isShowSheet = true;
+    switch (id) {
+      case 'sort': {
+        titleSheet = 'Sắp xếp theo';
+        dataSheet = SORT_COME_LEAVE;
+        break;
+      }
+      case 'filter': {
+        titleSheet = 'Lọc';
+        break;
+      }
+
+      default:
+        break;
+    }
+    if (isShowSheet) {
+      let allHeight = (dataSheet.length + 1) * commons.heightDefault;
+      let height =
+        allHeight < commons.SCREEN_HEIGHT ? allHeight : commons.SCREEN_HEIGHT;
+
+      // console.log(allHeight, height);
+      setState({...state, percentHeight: height + 50});
+    }
   };
   const renderHeader = () => {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          paddingVertical: commons.padding10,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}>
-          <IconView
-            id="sort"
-            type="FontAwesome"
-            name="sort"
-            color={commons.colorMain}
-            size={commons.sizeIcon20}
-            onPress={onSelectedSort}
-          />
-          <TextView id="sort_type" onPress={onSelectedSort}>
-            {'Sắp xếp'}
-          </TextView>
-        </View>
+      <View style={styles.containerRenderHeader}>
+        <TextView
+          id="sort"
+          typeIconLeft="MaterialCommunityIcons"
+          nameIconLeft={
+            commons.isEmptyObject(sortSelected)
+              ? 'sort'
+              : sortSelected?.value === 1
+              ? 'sort-reverse-variant'
+              : 'sort-variant'
+          }
+          style={{...styles.center}}
+          colorIconLeft={commons.colorMain}
+          sizeIconLeft={commons.sizeIcon24}
+          onPress={onSelectedSort}
+          styleText={{marginLeft: 5}}>
+          {commons.isEmptyObject(sortSelected) ? 'Sắp xếp' : sortSelected?.name}
+        </TextView>
       </View>
     );
   };
+
+  const onSelectedItem = ({data}) => {
+    // sortSelected
+    // hideBottomSheet();
+    switch (typeParamChoose) {
+      case 'sort': {
+        sortSelected = {...data};
+        break;
+      }
+      case 'filter': {
+        break;
+      }
+
+      default:
+        break;
+    }
+    onRefresh();
+  };
+
+  const renderItemSelect = ({item, index}) => {
+    // let isChecked = isItemChecked(item, typeParamChoose);
+    return (
+      <TextView
+        data={item}
+        // nameIconRight={'icon-circle-correct'}
+        // colorIconRight="green"
+        onPress={onSelectedItem}
+        style={{
+          ...styles.styleContainerItemSheet,
+          backgroundColor: 'transparent',
+        }}
+        styleText={{
+          ...styles.itemSheet,
+          fontWeight: 'normal',
+        }}
+        styleContainerText={styles.containerItemSheet}>
+        {item.name}
+      </TextView>
+    );
+  };
+
+  const HeaderBottomSheet = () => {
+    return (
+      <HeaderView
+        isToolbar={true}
+        isStatusBar={false}
+        titleScreen={titleSheet}
+        styleTitle={{color: commons.colorMain, backgroundColor: 'transparent'}}
+        styleHeader={{
+          backgroundColor: commons.border,
+        }}
+        colorsLinearGradient={['white', 'white', 'white']}
+        nameIconBack="clear"
+        colorIconBack={commons.colorMain}
+        onPressBack={hideBottomSheet}
+        // renderToolbarBottom={
+        //   typeParamChoose === TypeParams.Province && (
+        //     <Text>render province suggest</Text>
+        //   )
+        // }
+      />
+    );
+  };
+
+  const ContentBottomSheet = () => {
+    return (
+      <View style={{height: '100%'}}>
+        <HeaderBottomSheet />
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={dataSheet}
+          scrollEnabled
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          removeClippedSubviews={false}
+          ItemSeparatorComponent={viewSeparator}
+          style={{backgroundColor: 'white'}}
+          contentContainerStyle={{
+            justifyContent: 'center',
+          }}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItemSelect}
+        />
+      </View>
+    );
+  };
+
   return (
     <>
       {state.refreshing && <LoadingView />}
       <CustomFlatList
+        stickyHeaderIndices={[0]}
         renderHeader={renderHeader}
         data={state?.data && state?.data.length > 0 ? state.data : []}
         renderItem={renderItem}
@@ -154,7 +294,7 @@ const HistoryAskComeLeaveTemplate = (props) => {
           backgroundColor: 'rgba(0,0,0,0.05)',
           // flex: 1,
           flexGrow: 1,
-          paddingTop: commons.margin5,
+          // paddingTop: commons.margin5,
           paddingHorizontal: commons.margin,
         }}
         {...{
@@ -163,8 +303,43 @@ const HistoryAskComeLeaveTemplate = (props) => {
           onEndReachedCalledDuringMomentum,
         }}
       />
+      <RBSheet
+        ref={refBottomSheet}
+        animationType="slide"
+        height={state.percentHeight}
+        onClose={hideBottomSheet}
+        openDuration={250}
+        closeOnPressBack={true}
+        closeOnPressMask={true}
+        customStyles={{
+          wrapper: {
+            backgroundColor: 'transparent',
+          },
+          container: {
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10,
+            elevation: 10,
+          },
+        }}>
+        <ContentBottomSheet />
+      </RBSheet>
     </>
   );
 };
 
 export default HistoryAskComeLeaveTemplate;
+const styles = StyleSheet.create({
+  ...baseStyles,
+  containerRenderHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: commons.padding10,
+    backgroundColor: commons.border,
+    width: commons.widthPercent(100),
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    marginBottom: 5,
+    paddingHorizontal: commons.padding,
+  },
+});

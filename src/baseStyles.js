@@ -86,5 +86,20 @@ const baseStyles = StyleSheet.create({
     elevation: 5,
     borderRadius: 5,
   },
+  styleContainerItemSheet: {
+    height: commons.heightDefault,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: commons.margin,
+  },
+  itemSheet: {
+    fontSize: commons.fontSize16,
+    fontWeight: '800',
+  },
+  containerItemSheet: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
 });
 export default baseStyles;

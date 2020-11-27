@@ -506,19 +506,4 @@ export default memo(AddAccount);
 
 const styles = StyleSheet.create({
   ...baseStyles,
-  styleContainerItemSheet: {
-    height: commons.heightDefault,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: commons.margin,
-  },
-  itemSheet: {
-    fontSize: commons.fontSize16,
-    fontWeight: '800',
-  },
-  containerItemSheet: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
 });
