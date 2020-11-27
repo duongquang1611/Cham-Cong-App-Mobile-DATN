@@ -216,7 +216,7 @@ const ReportIndividual = () => {
 
   return (
     <>
-      <HeaderMenuDrawer titleScreen={'Báo cáo'} />
+      <HeaderMenuDrawer titleScreen={'Chi tiết chấm công'} />
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}

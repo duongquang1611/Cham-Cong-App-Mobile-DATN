@@ -70,7 +70,7 @@ export default StyleSheet.create({
 
   styleButtonFocus: {
     ...baseStyles.buttonFilledFocus,
-    marginTop: commons.margin20,
+    marginTop: commons.margin15,
     marginBottom: commons.margin8,
   },
 
@@ -209,4 +209,14 @@ export default StyleSheet.create({
     fontSize: commons.fontSize14,
     marginVertical: commons.margin15,
   },
+  containerInput: {
+    marginBottom: 10,
+  },
+  error: {
+    fontStyle: 'italic',
+    color: 'red',
+    fontSize: 12,
+  },
+  textInput: {fontSize: 14, color: 'black'},
+  textLabel: {fontSize: 16, marginBottom: 5},
 });

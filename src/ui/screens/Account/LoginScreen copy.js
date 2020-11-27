@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Keyboard, Text, TextInput, View} from 'react-native';
+import {Keyboard, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../models';
 import {appNavigate} from '../../../navigations';
@@ -13,25 +13,35 @@ import {
   IconView,
   InputView,
   LoadingView,
-} from 'cc-components';
+} from '../../components';
 import styles from './styles';
-import {useForm} from 'react-hook-form';
-import InputController from './InputController';
+
+var paramsLogin = {};
 
 const LoginScreen = (props) => {
   let autoFocus = props.autoFocus == undefined ? false : props.autoFocus;
+  const [isVerified, setIsVerified] = useState();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isLoading = useSelector((state) => state.commonReducer.isLoading);
-  // const {control, handleSubmit, errors, register, setValue} = useForm();
-  const form = useForm();
 
-  const handleRequetsLogin = async (formData) => {
+  const setParamsLogin = ({id, data}) => {
+    paramsLogin[id] = data;
+    setIsVerified(paramsLogin.username && paramsLogin.password);
+  };
+  const handleInputVerify = ({id, data}) => {
+    if (!data) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const handleRequetsLogin = async () => {
     Keyboard.dismiss();
-    console.log('paramsLogin', formData);
+    console.log('paramsLogin', paramsLogin);
     dispatch(actions.isShowLoading(true));
     try {
-      let res = await API.POST(API.signin, formData);
+      let res = await API.POST(API.signin, paramsLogin);
       console.log('LoginScreen -> res', res);
       if (res && res.user && res.user._id) {
         let data = {
@@ -64,6 +74,11 @@ const LoginScreen = (props) => {
     appNavigate.navToOtherScreen(navigation.dispatch, 'SetupServer', {
       preRoute: 'login',
     });
+  };
+
+  let refInput = {};
+  const focusTheField = (id) => {
+    refInput[id].focus();
   };
 
   return (
@@ -107,42 +122,41 @@ const LoginScreen = (props) => {
             }}>
             Đăng nhập
           </Text>
-          <InputController
-            {...{
-              name: 'username',
-              label: 'Tên tài khoản',
-              placeholder: 'Nhập tên tài khoản',
-              initRules: {
-                required: {
-                  value: true,
-                  message: 'Tên tài khoản không được để trống.',
-                },
-              },
-              form,
+          <InputView
+            id={'username'}
+            ref={(input) => (refInput['username'] = input)}
+            style={{marginTop: 20}}
+            onChangeText={setParamsLogin}
+            handleInputVerify={handleInputVerify}
+            placeholder={'Nhập tên tài khoản'}
+            label={'Tài khoản'}
+            iconLeft={'user-name'}
+            textError={'Không được để trống tài khoản'}
+            autoFocus={autoFocus}
+            returnKeyType="next"
+            onSubmitEditing={() => {
+              focusTheField('password');
             }}
+            blurOnSubmit={false}
           />
-          <InputController
-            {...{
-              name: 'password',
-              label: 'Mật khẩu',
-              placeholder: 'Nhập mật khẩu',
-              initRules: {
-                required: {
-                  value: true,
-                  message: 'Mật khẩu không được để trống.',
-                },
-                minLength: {
-                  value: 6,
-                  message: 'Mật khẩu cần ít nhất 6 ký tự.',
-                },
-              },
-              secureTextEntry: true,
-              form,
-              multiline: false,
-            }}
+          <InputView
+            id={'password'}
+            ref={(input) => (refInput['password'] = input)}
+            style={{marginTop: 20}}
+            placeholder={'Nhập mật khẩu'}
+            label={'Mật khẩu'}
+            iconLeft={'password-outline'}
+            secureTextEntry={true}
+            //   isShowClean={false}
+            handleInputVerify={handleInputVerify}
+            onChangeText={setParamsLogin}
+            textError={'Không được để trống mật khẩu'}
           />
+
           <ButtonView
-            onPress={form.handleSubmit(handleRequetsLogin)}
+            onPress={handleRequetsLogin}
+            disabled={!isVerified}
+            styleDisabled={styles.styleDisabled}
             title={'Đăng nhập'}
             style={styles.styleButtonFocus}
             styleTitle={styles.styleTextButton}

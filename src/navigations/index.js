@@ -153,7 +153,7 @@ const RootNavigation = () => {
                 resizeMode="contain"
               />
             ),
-            drawerLabel: 'Báo cáo',
+            drawerLabel: 'Chi tiết chấm công',
           }}
         />
         <Drawer.Screen

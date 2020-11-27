@@ -372,13 +372,17 @@ export default class BaseInput extends Component {
       }));
     };
     return isUseIconShowPassword ? (
-      <IconView
-        onPress={onPress}
-        style={style}
-        name={iconShow}
-        size={size}
-        color={color}
-      />
+      iconShow !== '' ? (
+        <IconView
+          onPress={onPress}
+          style={style}
+          name={iconShow}
+          size={size}
+          color={color}
+        />
+      ) : (
+        <View />
+      )
     ) : (
       <View />
     );

@@ -1,7 +1,7 @@
-import {InputView} from './InputView';
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Controller} from 'react-hook-form';
+import {InputView} from 'cc-components';
 let listKeyEmailPhone = [
   'email',
   'phoneNumber',
@@ -35,8 +35,8 @@ const InputController = (props) => {
     secureTextEntry = false,
     onPressText,
     initRules = {},
-    isShowClean = true,
     multiline = true,
+    isShowClean = true,
   } = props;
   const {errors, control} = form;
   const [state, setState] = useState({

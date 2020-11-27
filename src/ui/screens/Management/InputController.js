@@ -37,6 +37,7 @@ const InputController = (props) => {
     secureTextEntry = false,
     onPressText,
     initRules = {},
+    multiline = true,
     isShowClean = true,
   } = props;
   const [state, setState] = useState({
@@ -74,7 +75,7 @@ const InputController = (props) => {
             return (
               <InputView
                 id={name}
-                multiline={true}
+                multiline={multiline}
                 height={Math.max(commons.heightInputDefault, state.height)}
                 style={[{}]}
                 onContentSizeChange={updateSize}

@@ -325,6 +325,7 @@ const AddAccount = (props) => {
               },
             },
             secureTextEntry: true,
+            multiline: false,
             errors,
             control,
           }}

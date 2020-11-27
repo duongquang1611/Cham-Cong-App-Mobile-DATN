@@ -437,7 +437,9 @@ const EditAccount = (props) => {
             placeholder: 'Chọn giới tính',
             editable: false,
             onPressText: showBottomSheet,
-            defaultValue: data?.gender && GENDER[data.gender].name,
+            defaultValue: data?.gender
+              ? GENDER[parseInt(data.gender)].name
+              : null,
             errors,
             control,
           }}
