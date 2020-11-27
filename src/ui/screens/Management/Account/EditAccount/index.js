@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import baseStyles from '../../../../../baseStyles';
-import InputController from '../../InputController';
+import InputController from '../../../InputController';
 import {BottomButton} from 'cc-components';
 import commons from '../../../../commons';
 import models from '../../../../../models';
@@ -32,7 +32,8 @@ const viewSeparator = () => {
   return <View style={{height: 1, backgroundColor: commons.border}} />;
 };
 const EditAccount = (props) => {
-  const {control, handleSubmit, errors, register, setValue, reset} = useForm();
+  const form = useForm();
+  const {control, handleSubmit, errors, register, setValue} = form;
   const route = useRoute();
   const {data} = route.params;
   let user = models.getUserInfo();
@@ -306,8 +307,7 @@ const EditAccount = (props) => {
               },
             },
             defaultValue: data?.username,
-            errors,
-            control,
+            form,
           }}
         />
         {/* <InputController
@@ -329,8 +329,7 @@ const EditAccount = (props) => {
             editable: false,
             isShowClean: false,
             defaultValue: data?.password,
-            errors,
-            control,
+            form
           }}
         /> */}
         <InputController
@@ -345,8 +344,7 @@ const EditAccount = (props) => {
               },
             },
             defaultValue: data?.name,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -358,8 +356,7 @@ const EditAccount = (props) => {
             // onPressText: showBottomSheet,
             defaultValue: data?.companyId ? data?.companyId?.name : null,
             isShowClean: false,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -370,8 +367,7 @@ const EditAccount = (props) => {
             editable: false,
             onPressText: showBottomSheet,
             defaultValue: data?.roleId ? data?.roleId?.name : null,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -382,8 +378,7 @@ const EditAccount = (props) => {
             editable: false,
             onPressText: showBottomSheet,
             defaultValue: data?.parentId ? data?.parentId?.name : null,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -399,8 +394,7 @@ const EditAccount = (props) => {
               },
             },
             defaultValue: data?.phoneNumber,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -409,8 +403,7 @@ const EditAccount = (props) => {
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
             defaultValue: data?.address,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -426,8 +419,7 @@ const EditAccount = (props) => {
               },
             },
             defaultValue: data?.email,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -440,8 +432,7 @@ const EditAccount = (props) => {
             defaultValue: data?.gender
               ? GENDER[parseInt(data.gender)].name
               : null,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -454,8 +445,7 @@ const EditAccount = (props) => {
             defaultValue: data?.dateOfBirth
               ? moment(data.dateOfBirth).format(commons.FORMAT_DATE_VN)
               : null,
-            errors,
-            control,
+            form,
           }}
         />
         <View
@@ -468,8 +458,7 @@ const EditAccount = (props) => {
               name: 'gender',
               defaultValue: data?.gender ? data?.gender.toString() : null,
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
@@ -477,8 +466,7 @@ const EditAccount = (props) => {
               name: 'companyId',
               isShowClean: false,
               defaultValue: data?.companyId ? data?.companyId._id : null,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
@@ -486,8 +474,7 @@ const EditAccount = (props) => {
               name: 'roleId',
               defaultValue: data?.roleId?._id,
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
@@ -495,8 +482,7 @@ const EditAccount = (props) => {
               name: 'parentId',
               defaultValue: data?.parentId ? data?.parentId._id : null,
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
@@ -506,8 +492,7 @@ const EditAccount = (props) => {
                 ? moment(data?.dateOfBirth).toISOString()
                 : null,
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
         </View>

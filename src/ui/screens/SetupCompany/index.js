@@ -134,6 +134,8 @@ const SetupCompany = (props) => {
     }
   };
   const handleDateConfirm = (date) => {
+    date.setSeconds(0);
+    date.setMilliseconds(0);
     form[currentPicker] = date;
     // setValue(currentPicker, moment(date).format(commons.FORMAT_TIME_DIFF));
     hideDatePicker();

@@ -6,14 +6,16 @@ import {
 } from 'cc-components';
 import React, {memo, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
-import InputController from '../../InputController';
+import InputController from '../../../InputController';
+
 import {BottomButton} from 'cc-components';
 import styles from './styles';
 import {useForm} from 'react-hook-form';
 import API from '../../../../../networking';
 import commons from '../../../../commons';
 const AddCompany = (props) => {
-  const {control, handleSubmit, errors, register, setValue} = useForm();
+  const form = useForm();
+  const {control, handleSubmit, errors, register, setValue} = form;
   const [state, setState] = useState({
     isLoading: false,
   });
@@ -64,8 +66,7 @@ const AddCompany = (props) => {
                 message: 'Tên công ty không được để trống.',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -80,8 +81,7 @@ const AddCompany = (props) => {
                 message: 'Số điện thoại không hợp lệ.',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -97,8 +97,7 @@ const AddCompany = (props) => {
                 message: 'Email không hợp lệ',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -106,8 +105,7 @@ const AddCompany = (props) => {
             name: 'address',
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -116,8 +114,7 @@ const AddCompany = (props) => {
             name: 'website',
             label: 'Website Công ty',
             placeholder: 'Nhập website công ty',
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -125,8 +122,7 @@ const AddCompany = (props) => {
             name: 'representativeName',
             label: 'Tên người đại diện',
             placeholder: 'Nhập tên người đại diện',
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -141,8 +137,7 @@ const AddCompany = (props) => {
                 message: 'Số điện thoại không hợp lệ.',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -158,8 +153,7 @@ const AddCompany = (props) => {
                 message: 'Email không hợp lệ',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
       </ScrollView>

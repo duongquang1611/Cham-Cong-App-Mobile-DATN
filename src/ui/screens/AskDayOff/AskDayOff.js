@@ -59,6 +59,8 @@ const AskDayOff = (props) => {
   };
 
   const handleDateConfirm = useCallback((date) => {
+    date.setSeconds(0);
+    date.setMilliseconds(0);
     hideDatePicker();
     onChangeText({id: currentPicker, data: date.toISOString()});
   }, []);

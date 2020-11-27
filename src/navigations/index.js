@@ -33,11 +33,19 @@ import AddCompany from '../ui/screens/Management/Company/AddCompany';
 import ChooseAddress from '../ui/screens/SetupCompany/ChooseAddress';
 import EditAccount from '../ui/screens/Management/Account/EditAccount';
 import EditCompany from '../ui/screens/Management/Company/EditCompany';
+import models from '../models';
 
 const RootNavigation = () => {
   const isLoginSuccess = useSelector(
     (state) => state.authReducer.isLoginSuccess,
   );
+  let user = models.getUserInfo();
+  let isAdminSystem = commons.isRole('admin_system', user);
+  let isAdminCompanyOrDirector =
+    commons.isRole('admin_company', user) || commons.isRole('director', user);
+  let isManager = commons.isRole('manager', user);
+  let isStaff = commons.isRole('staff', user);
+  console.log({isAdminSystem, isAdminCompanyOrDirector, isManager, isStaff});
   const isLargeScreen = commons.widthPercent(100) >= 768;
 
   const DrawerStack = () => {
@@ -48,30 +56,35 @@ const RootNavigation = () => {
           activeTintColor: 'white',
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
-        initialRouteName="TabManagement"
+        // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
+        initialRouteName={
+          isAdminSystem ? 'TabManagement' : 'TabAskComeLateLeaveEarly'
+        }
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
-        <Drawer.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{
-            drawerIcon: ({color, size}) => (
-              // <IconView
-              //   name="home-outline"
-              //   size={size}
-              //   color={color}
-              //   type={'MaterialCommunityIcons'}
-              // />
-              <Image
-                source={AppImages.home}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Chấm công',
-          }}
-        />
+        {!isAdminSystem && (
+          <Drawer.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{
+              drawerIcon: ({color, size}) => (
+                // <IconView
+                //   name="home-outline"
+                //   size={size}
+                //   color={color}
+                //   type={'MaterialCommunityIcons'}
+                // />
+                <Image
+                  source={AppImages.home}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Chấm công',
+            }}
+          />
+        )}
         <Drawer.Screen
           name="AccountScreen"
           component={AccountScreen}

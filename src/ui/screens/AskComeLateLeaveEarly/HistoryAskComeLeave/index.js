@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
-import {CustomFlatList, LoadingView} from 'cc-components';
+import {CustomFlatList, IconView, LoadingView, TextView} from 'cc-components';
 import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
 import API from '../../../../networking';
@@ -106,10 +107,44 @@ const HistoryAskComeLeaveTemplate = (props) => {
       <ItemHistoryAskComeLeave {...{item, index}} style={{marginBottom: 10}} />
     );
   };
+  const onSelectedSort = ({id, data}) => {
+    console.log({id, data});
+  };
+  const renderHeader = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          paddingVertical: commons.padding10,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}>
+          <IconView
+            id="sort"
+            type="FontAwesome"
+            name="sort"
+            color={commons.colorMain}
+            size={commons.sizeIcon20}
+            onPress={onSelectedSort}
+          />
+          <TextView id="sort_type" onPress={onSelectedSort}>
+            {'Sắp xếp'}
+          </TextView>
+        </View>
+      </View>
+    );
+  };
   return (
     <>
       {state.refreshing && <LoadingView />}
       <CustomFlatList
+        renderHeader={renderHeader}
         data={state?.data && state?.data.length > 0 ? state.data : []}
         renderItem={renderItem}
         refreshing={state.refreshing}

@@ -6,7 +6,8 @@ import {
 } from 'cc-components';
 import React, {memo, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
-import InputController from '../../InputController';
+import InputController from '../../../InputController';
+
 import {BottomButton} from 'cc-components';
 import styles from './styles';
 import {useForm} from 'react-hook-form';
@@ -17,7 +18,8 @@ const EditCompany = (props) => {
   const route = useRoute();
   const {data} = route.params;
   console.log('🚀 ~ file: index.js ~ line 19 ~ EditCompany ~ data', data);
-  const {control, handleSubmit, errors, register, setValue, reset} = useForm();
+  const form = useForm();
+  const {control, handleSubmit, errors, register, setValue} = form;
   const [state, setState] = useState({
     isLoading: false,
   });
@@ -66,8 +68,7 @@ const EditCompany = (props) => {
               },
             },
             defaultValue: data?.name,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -83,8 +84,7 @@ const EditCompany = (props) => {
               },
             },
             defaultValue: data?.phoneNumber,
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -101,8 +101,7 @@ const EditCompany = (props) => {
               },
             },
             defaultValue: data?.email,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -111,8 +110,7 @@ const EditCompany = (props) => {
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
             defaultValue: data?.address,
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -122,8 +120,7 @@ const EditCompany = (props) => {
             label: 'Website Công ty',
             placeholder: 'Nhập website công ty',
             defaultValue: data?.website,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -132,8 +129,7 @@ const EditCompany = (props) => {
             label: 'Tên người đại diện',
             placeholder: 'Nhập tên người đại diện',
             defaultValue: data?.representativeName,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -149,8 +145,7 @@ const EditCompany = (props) => {
               },
             },
             defaultValue: data?.representativePhoneNumber,
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -167,8 +162,7 @@ const EditCompany = (props) => {
               },
             },
             defaultValue: data?.representativeEmail,
-            errors,
-            control,
+            form,
           }}
         />
       </ScrollView>

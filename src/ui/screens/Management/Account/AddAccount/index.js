@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import baseStyles from '../../../../../baseStyles';
-import InputController from '../../InputController';
+import InputController from '../../../InputController';
 import {BottomButton} from 'cc-components';
 import commons from '../../../../commons';
 import models from '../../../../../models';
@@ -31,7 +31,9 @@ const viewSeparator = () => {
   return <View style={{height: 1, backgroundColor: commons.border}} />;
 };
 const AddAccount = (props) => {
-  const {control, handleSubmit, errors, register, setValue} = useForm();
+  // const {control, handleSubmit, errors, register, setValue} = useForm();
+  const form = useForm();
+  const {control, handleSubmit, errors, register, setValue} = form;
   let user = models.getUserInfo();
   const [state, setState] = useState({
     percentHeight: 0,
@@ -305,8 +307,7 @@ const AddAccount = (props) => {
                 message: 'Tên tài khoản không được để trống.',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -326,8 +327,7 @@ const AddAccount = (props) => {
             },
             secureTextEntry: true,
             multiline: false,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -341,8 +341,7 @@ const AddAccount = (props) => {
                 message: 'Họ tên không được để trống.',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -352,8 +351,7 @@ const AddAccount = (props) => {
             placeholder: 'Chọn công ty',
             editable: false,
             onPressText: showBottomSheet,
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -364,8 +362,7 @@ const AddAccount = (props) => {
             placeholder: 'Chọn chức vụ',
             editable: false,
             onPressText: showBottomSheet,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -375,8 +372,7 @@ const AddAccount = (props) => {
             placeholder: 'Chọn quản lý trực tiếp',
             editable: false,
             onPressText: showBottomSheet,
-            errors,
-            control,
+            form,
           }}
         />
 
@@ -392,8 +388,7 @@ const AddAccount = (props) => {
                 message: 'Số điện thoại không hợp lệ.',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -401,8 +396,7 @@ const AddAccount = (props) => {
             name: 'address',
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -417,8 +411,7 @@ const AddAccount = (props) => {
                 message: 'Email không hợp lệ',
               },
             },
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -428,8 +421,7 @@ const AddAccount = (props) => {
             placeholder: 'Chọn giới tính',
             editable: false,
             onPressText: showBottomSheet,
-            errors,
-            control,
+            form,
           }}
         />
         <InputController
@@ -439,8 +431,7 @@ const AddAccount = (props) => {
             placeholder: 'Chọn ngày sinh',
             editable: false,
             onPressText: showPicker,
-            errors,
-            control,
+            form,
           }}
         />
         <View
@@ -452,40 +443,35 @@ const AddAccount = (props) => {
             {...{
               name: 'gender',
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
             {...{
               name: 'companyId',
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
             {...{
               name: 'roleId',
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
             {...{
               name: 'parentId',
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
           <InputController
             {...{
               name: 'dateOfBirth',
               isShowClean: false,
-              errors,
-              control,
+              form,
             }}
           />
         </View>

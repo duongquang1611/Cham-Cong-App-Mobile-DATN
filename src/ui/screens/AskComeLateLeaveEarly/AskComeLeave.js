@@ -56,6 +56,8 @@ const AskComeLeave = (props) => {
   };
 
   const handleDateConfirm = useCallback((date) => {
+    date.setSeconds(0);
+    date.setMilliseconds(0);
     hideDatePicker();
     onChangeText({id: 'time', data: date.toISOString()});
   }, []);

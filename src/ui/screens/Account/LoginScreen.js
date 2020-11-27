@@ -16,7 +16,8 @@ import {
 } from 'cc-components';
 import styles from './styles';
 import {useForm} from 'react-hook-form';
-import InputController from './InputController';
+// import InputController from './InputController';
+import InputController from '../InputController';
 
 const LoginScreen = (props) => {
   let autoFocus = props.autoFocus == undefined ? false : props.autoFocus;
@@ -25,14 +26,14 @@ const LoginScreen = (props) => {
   const isLoading = useSelector((state) => state.commonReducer.isLoading);
   // const {control, handleSubmit, errors, register, setValue} = useForm();
   const form = useForm();
-
+  const {control, handleSubmit, errors, register, setValue} = form;
   const handleRequetsLogin = async (formData) => {
     Keyboard.dismiss();
     console.log('paramsLogin', formData);
     dispatch(actions.isShowLoading(true));
     try {
       let res = await API.POST(API.signin, formData);
-      console.log('LoginScreen -> res', res);
+      // console.log('LoginScreen -> res', res);
       if (res && res.user && res.user._id) {
         let data = {
           userId: res.user._id,
@@ -104,6 +105,7 @@ const LoginScreen = (props) => {
               fontSize: commons.fontSizeHeader,
               color: commons.colorMain,
               fontWeight: 'bold',
+              marginBottom: 15,
             }}>
             Đăng nhập
           </Text>
@@ -142,7 +144,7 @@ const LoginScreen = (props) => {
             }}
           />
           <ButtonView
-            onPress={form.handleSubmit(handleRequetsLogin)}
+            onPress={handleSubmit(handleRequetsLogin)}
             title={'Đăng nhập'}
             style={styles.styleButtonFocus}
             styleTitle={styles.styleTextButton}
