@@ -14,6 +14,7 @@ import NewPicker from './NewPicker';
 import BlockView from './BlockView';
 import TextWarning from './TextWarning';
 import BottomButton from './BottomButton';
+import InputController from './InputController';
 
 import CustomFlatList from './CustomFlatList';
 
@@ -36,4 +37,5 @@ export {
   TextWarning,
   CustomFlatList,
   BottomButton,
+  InputController,
 };

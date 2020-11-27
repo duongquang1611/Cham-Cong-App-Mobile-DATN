@@ -17,12 +17,15 @@ const AddCompany = (props) => {
   const [state, setState] = useState({
     isLoading: false,
   });
-  const onSubmit = async (data) => {
-    console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', data);
+  const onSubmit = async (formData) => {
+    console.log(
+      '🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ formData',
+      formData,
+    );
     setState({...state, isLoading: true});
 
     try {
-      let res = await API.POST(API.searchCompanies, data);
+      let res = await API.POST(API.searchCompanies, formData);
       if (res && res._id) {
         showAlert({msg: 'Tạo mới công ty thành công.'});
         setState({...state, isLoading: false});

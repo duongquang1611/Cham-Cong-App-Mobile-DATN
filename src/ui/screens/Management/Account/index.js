@@ -72,7 +72,9 @@ const AccountManagement = () => {
     });
   };
   const editAccount = (item) => {
-    appNavigate.navToOtherScreen(navigation.dispatch, 'EditAccount');
+    appNavigate.navToOtherScreen(navigation.dispatch, 'EditAccount', {
+      data: item,
+    });
   };
 
   const renderItem = ({item, index}) => {

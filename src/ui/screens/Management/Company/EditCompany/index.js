@@ -16,7 +16,8 @@ import {useRoute} from '@react-navigation/native';
 const EditCompany = (props) => {
   const route = useRoute();
   const {data} = route.params;
-  const {control, handleSubmit, errors, register, setValue} = useForm();
+  console.log('🚀 ~ file: index.js ~ line 19 ~ EditCompany ~ data', data);
+  const {control, handleSubmit, errors, register, setValue, reset} = useForm();
   const [state, setState] = useState({
     isLoading: false,
   });
@@ -173,6 +174,10 @@ const EditCompany = (props) => {
       </ScrollView>
       <BottomButton
         id={'Submit'}
+        idCancel={'cancel'}
+        textCancel="Đặt lại"
+        onPressCancel={() => reset()}
+        showCancel={true}
         onPress={handleSubmit(onSubmit)}
         // onPress={() => setValue('roleId', 'xxxxxxxx')}
         text="Cập nhật"

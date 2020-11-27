@@ -1,15 +1,14 @@
-import {InputView, TextWarning} from 'cc-components';
+import {InputView} from './InputView';
 import React, {useState} from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, Text, View, TextInput} from 'react-native';
-import commons from '../../commons';
-import styles from './styles';
+import {StyleSheet, Text, View} from 'react-native';
 let listKeyEmailPhone = [
   'email',
   'phoneNumber',
   'representativePhoneNumber',
   'representativeEmail',
 ];
+const HEIGHT_INPUT_DEFAULT = 40;
 const TextRequired = (props) => {
   const {type = 'required', field} = props;
   let msg = 'Vui lòng điền đầy đủ thông tin';
@@ -75,12 +74,12 @@ const InputController = (props) => {
               <InputView
                 id={name}
                 multiline={true}
-                height={Math.max(commons.heightInputDefault, state.height)}
+                height={Math.max(HEIGHT_INPUT_DEFAULT, state.height)}
                 style={[{}]}
                 onContentSizeChange={updateSize}
                 styleTextInput={styles.textInput}
                 styleInputDisable={styles.textInput}
-                colorBorderDisable={commons.colorHintText}
+                colorBorderDisable={'#B7C8D1'}
                 onBlur={onBlur}
                 onChangeText={onChangeText}
                 value={value}
@@ -109,3 +108,15 @@ const InputController = (props) => {
 };
 
 export default InputController;
+const styles = StyleSheet.create({
+  containerInput: {
+    marginBottom: 10,
+  },
+  error: {
+    fontStyle: 'italic',
+    color: 'red',
+    fontSize: 12,
+  },
+  textInput: {fontSize: 14, color: 'black'},
+  textLabel: {fontSize: 16, marginBottom: 5},
+});

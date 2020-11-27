@@ -18,6 +18,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import API from '../../../../../networking';
 import moment from 'moment';
+import {useRoute} from '@react-navigation/native';
 // Nữ:0, Nam:1
 const GENDER = [
   {_id: 0, name: 'Nữ'},
@@ -31,7 +32,9 @@ const viewSeparator = () => {
   return <View style={{height: 1, backgroundColor: commons.border}} />;
 };
 const EditAccount = (props) => {
-  const {control, handleSubmit, errors, register, setValue} = useForm();
+  const {control, handleSubmit, errors, register, setValue, reset} = useForm();
+  const route = useRoute();
+  const {data} = route.params;
   let user = models.getUserInfo();
   const [state, setState] = useState({
     percentHeight: 0,
@@ -96,14 +99,14 @@ const EditAccount = (props) => {
   const hideBottomSheet = () => {
     setState({...state, percentHeight: 0});
   };
-  const onSubmit = async (data) => {
-    console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', data);
+  const onSubmit = async (formData) => {
+    console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', formData);
     setState({...state, isLoading: true});
 
     try {
-      let res = await API.POST(API.signup, data);
+      let res = await API.PUT(API.detailUser(data._id), formData);
       if (res && res._id) {
-        showAlert({msg: 'Tạo tài khoản thành công.'});
+        showAlert({msg: 'Cập nhật tài khoản thành công.'});
         setState({...state, isLoading: false});
       } else {
         setState({...state, isLoading: false});
@@ -279,7 +282,7 @@ const EditAccount = (props) => {
         isToolbar={true}
         isStatusBar={true}
         // nonShowBack
-        titleScreen={'Tạo tài khoản'}
+        titleScreen={'Cập nhật tài khoản'}
         colorIconBack="white"
       />
       {state.refreshing && <LoadingView />}
@@ -302,11 +305,12 @@ const EditAccount = (props) => {
                 message: 'Tên tài khoản không được để trống.',
               },
             },
+            defaultValue: data?.username,
             errors,
             control,
           }}
         />
-        <InputController
+        {/* <InputController
           {...{
             name: 'password',
             label: 'Mật khẩu',
@@ -322,10 +326,13 @@ const EditAccount = (props) => {
               },
             },
             secureTextEntry: true,
+            editable: false,
+            isShowClean: false,
+            defaultValue: data?.password,
             errors,
             control,
           }}
-        />
+        /> */}
         <InputController
           {...{
             name: 'name',
@@ -337,6 +344,7 @@ const EditAccount = (props) => {
                 message: 'Họ tên không được để trống.',
               },
             },
+            defaultValue: data?.name,
             errors,
             control,
           }}
@@ -347,12 +355,13 @@ const EditAccount = (props) => {
             label: 'Công ty',
             placeholder: 'Chọn công ty',
             editable: false,
-            onPressText: showBottomSheet,
+            // onPressText: showBottomSheet,
+            defaultValue: data?.companyId ? data?.companyId?.name : null,
+            isShowClean: false,
             errors,
             control,
           }}
         />
-
         <InputController
           {...{
             name: 'roleName',
@@ -360,6 +369,7 @@ const EditAccount = (props) => {
             placeholder: 'Chọn chức vụ',
             editable: false,
             onPressText: showBottomSheet,
+            defaultValue: data?.roleId ? data?.roleId?.name : null,
             errors,
             control,
           }}
@@ -371,11 +381,11 @@ const EditAccount = (props) => {
             placeholder: 'Chọn quản lý trực tiếp',
             editable: false,
             onPressText: showBottomSheet,
+            defaultValue: data?.parentId ? data?.parentId?.name : null,
             errors,
             control,
           }}
         />
-
         <InputController
           {...{
             name: 'phoneNumber',
@@ -388,6 +398,7 @@ const EditAccount = (props) => {
                 message: 'Số điện thoại không hợp lệ.',
               },
             },
+            defaultValue: data?.phoneNumber,
             errors,
             control,
           }}
@@ -397,6 +408,7 @@ const EditAccount = (props) => {
             name: 'address',
             label: 'Địa chỉ',
             placeholder: 'Nhập địa chỉ',
+            defaultValue: data?.address,
             errors,
             control,
           }}
@@ -413,6 +425,7 @@ const EditAccount = (props) => {
                 message: 'Email không hợp lệ',
               },
             },
+            defaultValue: data?.email,
             errors,
             control,
           }}
@@ -424,6 +437,7 @@ const EditAccount = (props) => {
             placeholder: 'Chọn giới tính',
             editable: false,
             onPressText: showBottomSheet,
+            defaultValue: data?.gender && GENDER[data.gender].name,
             errors,
             control,
           }}
@@ -435,6 +449,9 @@ const EditAccount = (props) => {
             placeholder: 'Chọn ngày sinh',
             editable: false,
             onPressText: showPicker,
+            defaultValue: data?.dateOfBirth
+              ? moment(data.dateOfBirth).format(commons.FORMAT_DATE_VN)
+              : null,
             errors,
             control,
           }}
@@ -447,6 +464,8 @@ const EditAccount = (props) => {
           <InputController
             {...{
               name: 'gender',
+              defaultValue: data?.gender ? data?.gender.toString() : null,
+              isShowClean: false,
               errors,
               control,
             }}
@@ -454,6 +473,8 @@ const EditAccount = (props) => {
           <InputController
             {...{
               name: 'companyId',
+              isShowClean: false,
+              defaultValue: data?.companyId ? data?.companyId._id : null,
               errors,
               control,
             }}
@@ -461,6 +482,8 @@ const EditAccount = (props) => {
           <InputController
             {...{
               name: 'roleId',
+              defaultValue: data?.roleId?._id,
+              isShowClean: false,
               errors,
               control,
             }}
@@ -468,6 +491,8 @@ const EditAccount = (props) => {
           <InputController
             {...{
               name: 'parentId',
+              defaultValue: data?.parentId ? data?.parentId._id : null,
+              isShowClean: false,
               errors,
               control,
             }}
@@ -475,6 +500,10 @@ const EditAccount = (props) => {
           <InputController
             {...{
               name: 'dateOfBirth',
+              defaultValue: data?.dateOfBirth
+                ? moment(data?.dateOfBirth).toISOString()
+                : null,
+              isShowClean: false,
               errors,
               control,
             }}
@@ -498,7 +527,11 @@ const EditAccount = (props) => {
         </RBSheet>
       </ScrollView>
       <BottomButton
-        id={'Submit'}
+        id={'submit'}
+        idCancel={'cancel'}
+        textCancel="Đặt lại"
+        onPressCancel={() => reset()}
+        showCancel={true}
         onPress={handleSubmit(onSubmit)}
         // onPress={() => setValue('roleId', 'xxxxxxxx')}
         text="Cập nhật"

@@ -96,12 +96,15 @@ const AddAccount = (props) => {
   const hideBottomSheet = () => {
     setState({...state, percentHeight: 0});
   };
-  const onSubmit = async (data) => {
-    console.log('🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ data', data);
+  const onSubmit = async (formData) => {
+    console.log(
+      '🚀 ~ file: index.js ~ line 14 ~ onSubmit ~ formData',
+      formData,
+    );
     setState({...state, isLoading: true});
 
     try {
-      let res = await API.POST(API.signup, data);
+      let res = await API.POST(API.signup, formData);
       if (res && res._id) {
         showAlert({msg: 'Tạo tài khoản thành công.'});
         setState({...state, isLoading: false});
@@ -447,6 +450,7 @@ const AddAccount = (props) => {
           <InputController
             {...{
               name: 'gender',
+              isShowClean: false,
               errors,
               control,
             }}
@@ -454,6 +458,7 @@ const AddAccount = (props) => {
           <InputController
             {...{
               name: 'companyId',
+              isShowClean: false,
               errors,
               control,
             }}
@@ -461,6 +466,7 @@ const AddAccount = (props) => {
           <InputController
             {...{
               name: 'roleId',
+              isShowClean: false,
               errors,
               control,
             }}
@@ -468,6 +474,7 @@ const AddAccount = (props) => {
           <InputController
             {...{
               name: 'parentId',
+              isShowClean: false,
               errors,
               control,
             }}
@@ -475,6 +482,7 @@ const AddAccount = (props) => {
           <InputController
             {...{
               name: 'dateOfBirth',
+              isShowClean: false,
               errors,
               control,
             }}
