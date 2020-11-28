@@ -5,6 +5,7 @@ import {
   IconView,
   LoadingView,
   TextView,
+  CustomBottomSheet,
 } from 'cc-components';
 import React, {useEffect, useState, useRef} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
@@ -24,9 +25,7 @@ let dataSheet = [];
 let titleSheet = '';
 let typeParamChoose = '';
 let sortSelected = SORT_COME_LEAVE[0];
-const viewSeparator = () => {
-  return <View style={{height: 1, backgroundColor: commons.border}} />;
-};
+
 const HistoryAskComeLeaveTemplate = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -210,74 +209,74 @@ const HistoryAskComeLeaveTemplate = (props) => {
     onRefresh();
   };
 
-  const renderItemSelect = ({item, index}) => {
-    // let isChecked = isItemChecked(item, typeParamChoose);
-    return (
-      <TextView
-        data={item}
-        // nameIconRight={'icon-circle-correct'}
-        // colorIconRight="green"
-        onPress={onSelectedItem}
-        style={{
-          ...styles.styleContainerItemSheet,
-          backgroundColor: 'transparent',
-        }}
-        styleText={{
-          ...styles.itemSheet,
-          fontWeight: 'normal',
-        }}
-        styleContainerText={styles.containerItemSheet}>
-        {item.name}
-      </TextView>
-    );
-  };
+  // const renderItemSelect = ({item, index}) => {
+  //   // let isChecked = isItemChecked(item, typeParamChoose);
+  //   return (
+  //     <TextView
+  //       data={item}
+  //       // nameIconRight={'icon-circle-correct'}
+  //       // colorIconRight="green"
+  //       onPress={onSelectedItem}
+  //       style={{
+  //         ...styles.styleContainerItemSheet,
+  //         backgroundColor: 'transparent',
+  //       }}
+  //       styleText={{
+  //         ...styles.itemSheet,
+  //         fontWeight: 'normal',
+  //       }}
+  //       styleContainerText={styles.containerItemSheet}>
+  //       {item.name}
+  //     </TextView>
+  //   );
+  // };
 
-  const HeaderBottomSheet = () => {
-    return (
-      <HeaderView
-        isToolbar={true}
-        isStatusBar={false}
-        titleScreen={titleSheet}
-        styleTitle={{color: commons.colorMain, backgroundColor: 'transparent'}}
-        styleHeader={{
-          backgroundColor: commons.border,
-        }}
-        colorsLinearGradient={['white', 'white', 'white']}
-        nameIconBack="clear"
-        colorIconBack={commons.colorMain}
-        onPressBack={hideBottomSheet}
-        // renderToolbarBottom={
-        //   typeParamChoose === TypeParams.Province && (
-        //     <Text>render province suggest</Text>
-        //   )
-        // }
-      />
-    );
-  };
+  // const HeaderBottomSheet = () => {
+  //   return (
+  //     <HeaderView
+  //       isToolbar={true}
+  //       isStatusBar={false}
+  //       titleScreen={titleSheet}
+  //       styleTitle={{color: commons.colorMain, backgroundColor: 'transparent'}}
+  //       styleHeader={{
+  //         backgroundColor: commons.border,
+  //       }}
+  //       colorsLinearGradient={['white', 'white', 'white']}
+  //       nameIconBack="clear"
+  //       colorIconBack={commons.colorMain}
+  //       onPressBack={hideBottomSheet}
+  //       // renderToolbarBottom={
+  //       //   typeParamChoose === TypeParams.Province && (
+  //       //     <Text>render province suggest</Text>
+  //       //   )
+  //       // }
+  //     />
+  //   );
+  // };
 
-  const ContentBottomSheet = () => {
-    return (
-      <View style={{height: '100%'}}>
-        <HeaderBottomSheet />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={dataSheet}
-          scrollEnabled
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          removeClippedSubviews={false}
-          ItemSeparatorComponent={viewSeparator}
-          style={{backgroundColor: 'white'}}
-          contentContainerStyle={{
-            justifyContent: 'center',
-          }}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItemSelect}
-        />
-      </View>
-    );
-  };
+  // const ContentBottomSheet = () => {
+  //   return (
+  //     <View style={{height: '100%'}}>
+  //       <HeaderBottomSheet />
+  //       <FlatList
+  //         showsVerticalScrollIndicator={false}
+  //         data={dataSheet}
+  //         scrollEnabled
+  //         automaticallyAdjustContentInsets={false}
+  //         keyboardDismissMode="on-drag"
+  //         keyboardShouldPersistTaps="handled"
+  //         removeClippedSubviews={false}
+  //         ItemSeparatorComponent={viewSeparator}
+  //         style={{backgroundColor: 'white'}}
+  //         contentContainerStyle={{
+  //           justifyContent: 'center',
+  //         }}
+  //         keyExtractor={(item, index) => index.toString()}
+  //         renderItem={renderItemSelect}
+  //       />
+  //     </View>
+  //   );
+  // };
 
   return (
     <>
@@ -303,7 +302,7 @@ const HistoryAskComeLeaveTemplate = (props) => {
           onEndReachedCalledDuringMomentum,
         }}
       />
-      <RBSheet
+      {/* <RBSheet
         ref={refBottomSheet}
         animationType="slide"
         height={state.percentHeight}
@@ -322,7 +321,17 @@ const HistoryAskComeLeaveTemplate = (props) => {
           },
         }}>
         <ContentBottomSheet />
-      </RBSheet>
+      </RBSheet> */}
+      <CustomBottomSheet
+        {...{
+          refBottomSheet,
+          percentHeight: state.percentHeight,
+          hideBottomSheet,
+          onSelectedItem,
+          titleSheet,
+          dataSheet,
+        }}
+      />
     </>
   );
 };
@@ -341,5 +350,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 5,
     paddingHorizontal: commons.padding,
+    elevation: 3,
   },
 });

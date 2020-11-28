@@ -15,6 +15,7 @@ import BlockView from './BlockView';
 import TextWarning from './TextWarning';
 import BottomButton from './BottomButton';
 import InputController from './InputController';
+import CustomBottomSheet from './CustomBottomSheet';
 
 import CustomFlatList from './CustomFlatList';
 
@@ -38,4 +39,5 @@ export {
   CustomFlatList,
   BottomButton,
   InputController,
+  CustomBottomSheet,
 };
