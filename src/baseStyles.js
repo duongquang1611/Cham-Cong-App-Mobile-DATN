@@ -101,5 +101,18 @@ const baseStyles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
   },
+  containerRenderHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: commons.padding10,
+    backgroundColor: commons.border,
+    width: commons.widthPercent(100),
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    marginBottom: 5,
+    paddingHorizontal: commons.padding,
+    elevation: 3,
+  },
 });
 export default baseStyles;

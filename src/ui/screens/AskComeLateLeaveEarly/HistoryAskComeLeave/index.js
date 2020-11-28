@@ -29,6 +29,7 @@ let sortSelected = SORT_COME_LEAVE[0];
 const HistoryAskComeLeaveTemplate = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const refBottomSheet = useRef();
 
   let userInfo = models.getUserInfo();
 
@@ -39,8 +40,6 @@ const HistoryAskComeLeaveTemplate = (props) => {
     percentHeight: 0,
     // hasNext: true,
   });
-
-  const refBottomSheet = useRef();
 
   let filter = {
     userId: userInfo?._id,
@@ -70,6 +69,7 @@ const HistoryAskComeLeaveTemplate = (props) => {
       ? refBottomSheet.current.open()
       : refBottomSheet.current.close();
   }, [state.percentHeight]);
+
   const hideBottomSheet = () => {
     setState({...state, percentHeight: 0});
   };
@@ -339,17 +339,4 @@ const HistoryAskComeLeaveTemplate = (props) => {
 export default HistoryAskComeLeaveTemplate;
 const styles = StyleSheet.create({
   ...baseStyles,
-  containerRenderHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: commons.padding10,
-    backgroundColor: commons.border,
-    width: commons.widthPercent(100),
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    marginBottom: 5,
-    paddingHorizontal: commons.padding,
-    elevation: 3,
-  },
 });
