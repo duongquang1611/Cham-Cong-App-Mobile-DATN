@@ -73,7 +73,6 @@ const CustomBottomSheet = (props) => {
           automaticallyAdjustContentInsets={false}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
-          removeClippedSubviews={false}
           ItemSeparatorComponent={viewSeparator}
           style={{backgroundColor: 'white'}}
           contentContainerStyle={{
@@ -81,6 +80,10 @@ const CustomBottomSheet = (props) => {
           }}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItemSelect}
+          removeClippedSubviews={true}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={10}
         />
       </View>
     );

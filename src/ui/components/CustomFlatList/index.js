@@ -33,9 +33,7 @@ const CustomFlatList = (props) => {
       automaticallyAdjustContentInsets={false}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
-      removeClippedSubviews={true}
       style={{backgroundColor: 'white'}}
-      initialNumToRender={10}
       contentContainerStyle={{
         flex: 1,
         // backgroundColor: 'lightgray',
@@ -46,7 +44,7 @@ const CustomFlatList = (props) => {
       {...props}
       ListEmptyComponent={EmptyList}
       keyExtractor={(item, index) => {
-        return index.toString();
+        return item.toString() + index.toString();
       }}
       renderItem={renderItem}
       ItemSeparatorComponent={showSeparator && SeparatorView}
@@ -59,6 +57,10 @@ const CustomFlatList = (props) => {
       ListFooterComponent={() =>
         renderFooter(!onEndReachedCalledDuringMomentum)
       }
+      removeClippedSubviews={true}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      windowSize={10}
     />
   );
 };

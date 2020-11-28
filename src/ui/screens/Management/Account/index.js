@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
 import {LoadingView, showAlert} from 'cc-components';
-import React, {useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
 import {appNavigate} from '../../../../navigations';
 import API from '../../../../networking';
+import actions from '../../../../redux/actions';
 import commons from '../../../commons';
 import ItemAccount from './ItemAccount';
 const EmptyList = () => {
@@ -13,6 +14,8 @@ const EmptyList = () => {
     <Text style={{textAlign: 'center', marginTop: 10}}>{commons.noData}</Text>
   );
 };
+let filter = {};
+
 const SeparatorView = () => {
   return (
     <View
@@ -29,18 +32,37 @@ const AccountManagement = () => {
   const {userData} = authReducer;
   const navigation = useNavigation();
   const companyReducer = useSelector((state) => state.companyReducer);
+  const searchReducer = useSelector((state) => state.searchReducer);
   const {allUsers} = companyReducer;
   const [state, setState] = useState({
-    refreshing: true,
+    refreshing: false,
   });
 
   useEffect(() => {
     state.refreshing && getData();
   }, [state.refreshing]);
 
+  const onRefresh = (clearText = false) => {
+    if (clearText) filter = {};
+    setState({...state, refreshing: true});
+  };
+
+  useEffect(() => {
+    if (
+      searchReducer.textSearchUser &&
+      searchReducer.textSearchUser.trim().length !== 0
+    ) {
+      console.log('search');
+      filter.text = searchReducer.textSearchUser;
+      onRefresh();
+    } else {
+      onRefresh(true);
+    }
+  }, [searchReducer.textSearchUser]);
+
   const getData = async () => {
     let user = models.getUserInfo();
-    let filter = {};
+
     if (
       commons.isRole('admin_company', user) ||
       commons.isRole('director', user)
@@ -50,7 +72,10 @@ const AccountManagement = () => {
     }
     API.getListUsers(dispatch, filter);
     // console.log('AccountManagement -> res', res);
-    setState({...state, refreshing: false});
+
+    commons.wait(1500).then(() => {
+      setState({...state, refreshing: false});
+    });
   };
 
   const deleteAccount = async (item) => {
@@ -86,9 +111,6 @@ const AccountManagement = () => {
       />
     );
   };
-  const onRefresh = () => {
-    setState({...state, refreshing: true});
-  };
   return (
     <>
       {state.refreshing && <LoadingView />}
@@ -96,7 +118,7 @@ const AccountManagement = () => {
         data={allUsers}
         renderItem={renderItem}
         keyExtractor={(item, index) => {
-          return index.toString();
+          return item.toString() + index.toString();
         }}
         extraData={allUsers}
         contentContainerStyle={{
@@ -107,18 +129,20 @@ const AccountManagement = () => {
         automaticallyAdjustContentInsets={false}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        removeClippedSubviews={true}
         style={{backgroundColor: 'white'}}
-        initialNumToRender={10}
         ItemSeparatorComponent={SeparatorView}
         refreshControl={
           <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
         }
+        removeClippedSubviews={true}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={10}
       />
     </>
   );
 };
 
-export default AccountManagement;
+export default memo(AccountManagement);
 
 const styles = StyleSheet.create({});

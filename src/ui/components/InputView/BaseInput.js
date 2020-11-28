@@ -304,6 +304,7 @@ export default class BaseInput extends Component {
       height,
       styleIconRight,
       typeIconRight,
+      colorIconRight,
     } = this.props;
     let style = [stylesIconRight, {height: height}, styleIconRight];
     let size = iconRightSize || commons.sizeIcon18;
@@ -315,7 +316,7 @@ export default class BaseInput extends Component {
           name={iconRight || 'home'}
           type={typeIconRight || 'LocalIcon'}
           size={size}
-          color={commons.colorIcon}
+          color={colorIconRight || commons.colorIcon}
         />
       );
     } else {

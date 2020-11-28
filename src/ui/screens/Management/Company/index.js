@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {LoadingView, showAlert} from 'cc-components';
-import React, {useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
@@ -86,29 +86,31 @@ const CompanyManagement = () => {
         data={allCompanies}
         renderItem={renderItem}
         keyExtractor={(item, index) => {
-          return index.toString();
+          return item.toString() + index.toString();
         }}
         extraData={allCompanies}
         contentContainerStyle={{
           paddingTop: commons.margin5,
           paddingHorizontal: commons.margin,
         }}
-        ListEmptyComponent={EmptyList}
-        automaticallyAdjustContentInsets={false}
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-        removeClippedSubviews={true}
-        style={{backgroundColor: 'white'}}
-        initialNumToRender={10}
         ItemSeparatorComponent={SeparatorView}
         refreshControl={
           <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
         }
+        ListEmptyComponent={EmptyList}
+        automaticallyAdjustContentInsets={false}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        style={{backgroundColor: 'white'}}
+        initialNumToRender={10}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
+        windowSize={10}
       />
     </>
   );
 };
 
-export default CompanyManagement;
+export default memo(CompanyManagement);
 
 const styles = StyleSheet.create({});

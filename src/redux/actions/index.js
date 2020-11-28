@@ -4,6 +4,7 @@ import commonActions from './commonActions';
 import authActions from './authActions';
 import dayWorkActions from './dayWorkActions';
 import companyActions from './companyActions';
+import searchActions from './searchActions';
 
 const actions = {
   ...appNavigate,
@@ -11,6 +12,7 @@ const actions = {
   ...authActions,
   ...dayWorkActions,
   ...companyActions,
+  ...searchActions,
 };
 
 export {types};

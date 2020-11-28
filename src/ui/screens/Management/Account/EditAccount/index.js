@@ -198,7 +198,10 @@ const EditAccount = (props) => {
           automaticallyAdjustContentInsets={false}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
-          removeClippedSubviews={false}
+          removeClippedSubviews={true}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={10}
           ItemSeparatorComponent={viewSeparator}
           style={{backgroundColor: 'white'}}
           contentContainerStyle={{
