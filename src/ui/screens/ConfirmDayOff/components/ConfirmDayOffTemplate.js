@@ -123,7 +123,7 @@ const ConfirmDayOffTemplate = (props) => {
           backgroundColor: 'rgba(0,0,0,0.05)',
           // flex: 1,
           flexGrow: 1,
-          paddingTop: commons.margin5,
+          // paddingTop: commons.margin5,
           paddingHorizontal: commons.margin,
         }}
         {...{
