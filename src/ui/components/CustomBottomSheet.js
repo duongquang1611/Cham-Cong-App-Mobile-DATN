@@ -3,11 +3,15 @@ import React, {memo} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import commons from '../commons';
-
+let noData = 'Chưa có dữ liệu';
 const viewSeparator = () => {
   return <View style={{height: 1, backgroundColor: '#F0F0F0'}} />;
 };
 
+const EmptyList = () => {
+  return <Text style={styles.textEmpty}>{noData}</Text>;
+};
+let DEFAULT_HEIGHT_ADD = -50;
 const CustomBottomSheet = (props) => {
   const {
     refBottomSheet,
@@ -69,7 +73,7 @@ const CustomBottomSheet = (props) => {
         <FlatList
           showsVerticalScrollIndicator={false}
           data={dataSheet}
-          scrollEnabled
+          scrollEnabled={true}
           automaticallyAdjustContentInsets={false}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
@@ -84,6 +88,7 @@ const CustomBottomSheet = (props) => {
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           windowSize={10}
+          ListEmptyComponent={EmptyList}
         />
       </View>
     );
@@ -95,6 +100,7 @@ const CustomBottomSheet = (props) => {
       height={percentHeight}
       onClose={hideBottomSheet}
       openDuration={250}
+      // closeOnDragDown={true}
       closeOnPressBack={true}
       closeOnPressMask={true}
       customStyles={{
@@ -105,6 +111,10 @@ const CustomBottomSheet = (props) => {
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
           elevation: 10,
+          height:
+            commons.SCREEN_HEIGHT === percentHeight + DEFAULT_HEIGHT_ADD
+              ? '100%'
+              : percentHeight,
         },
       }}>
       <ContentBottomSheet />
@@ -129,5 +139,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+  },
+  textEmpty: {
+    textAlign: 'center',
+    color: 'grey',
+    fontSize: 14,
   },
 });

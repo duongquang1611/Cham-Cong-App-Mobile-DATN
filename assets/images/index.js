@@ -40,8 +40,15 @@ const AppImages = {
   settings: require('./settings.png'),
   add_company: require('./add_company.png'),
   management: require('./management.png'),
-  male: {uri: 'https://i.imgur.com/1mBGvt3.jpg'},
-  female: {uri: 'https://i.imgur.com/xCplblE.jpg'},
+  default_male_original: require('./default_male_original.jpg'),
+  default_female_original: require('./default_female_original.jpg'),
+  default_male_200: require('./default_male_200.jpg'),
+  default_female_200: require('./default_female_200.jpg'),
+  male: require('./default_male_200_compressed.jpg'),
+  female: require('./default_female_200_compressed.jpg'),
+
+  male_original: {uri: 'https://i.imgur.com/1mBGvt3.jpg'},
+  female_original: {uri: 'https://i.imgur.com/xCplblE.jpg'},
 };
 
 export default AppImages;

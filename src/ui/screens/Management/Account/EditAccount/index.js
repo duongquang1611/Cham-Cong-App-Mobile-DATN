@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import baseStyles from '../../../../../baseStyles';
 import InputController from '../../../InputController';
-import {BottomButton} from 'cc-components';
+import {BottomButton, CustomBottomSheet} from 'cc-components';
 import commons from '../../../../commons';
 import models from '../../../../../models';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -28,6 +28,9 @@ let dataSheet = [];
 let titleSheet = '';
 let typeParamChoose = '';
 let dateOfBirth = moment();
+
+let companyIdDefault = '';
+
 const viewSeparator = () => {
   return <View style={{height: 1, backgroundColor: commons.border}} />;
 };
@@ -47,18 +50,32 @@ const EditAccount = (props) => {
     allUsers: [],
   });
   const refBottomSheet = useRef();
+  let isAdminSystem = commons.isRole('admin_system', user);
 
   // useEffect(() => {
   //   if (state.dataSheet.length > 0) {
   //     refBottomSheet.current.open();
   //   }
   // }, [state.dataSheet]);
+
+  useEffect(() => {
+    if (data && data?.companyId && data?.companyId?._id) {
+      console.log('effect1');
+      companyIdDefault = data?.companyId?._id;
+      setValue('companyId', data?.companyId?._id);
+      setValue('companyName', data?.companyId?.name);
+    }
+  }, [data]);
+
   const getData = async () => {
     try {
+      if (data && data?.companyId && data?.companyId?._id) {
+        companyIdDefault = data?.companyId?._id;
+      }
       let data = await Promise.all([
         API.GET(API.searchCompanies),
         API.GET(API.allRoles),
-        API.GET(API.searchUsersPublic, {}),
+        API.GET(API.searchUsersPublic, {companyId: companyIdDefault}),
       ]);
       // console.log('🚀 ~ file: index.js ~ line 47 ~ getData ~ data', data);
       if (
@@ -123,6 +140,7 @@ const EditAccount = (props) => {
 
     switch (typeParamChoose) {
       case 'companyName': {
+        companyIdDefault = data._id;
         setValue('companyId', data._id.toString());
         break;
       }
@@ -144,75 +162,75 @@ const EditAccount = (props) => {
         break;
     }
   };
-  const renderItemSelect = ({item, index}) => {
-    // let isChecked = isItemChecked(item, typeParamChoose);
-    return (
-      <TextView
-        data={item}
-        // nameIconRight={'icon-circle-correct'}
-        // colorIconRight="green"
-        onPress={onSelectedItem}
-        style={{
-          ...styles.styleContainerItemSheet,
-          backgroundColor: 'transparent',
-        }}
-        styleText={{
-          ...styles.itemSheet,
-          fontWeight: 'normal',
-        }}
-        styleContainerText={styles.containerItemSheet}>
-        {item.name}
-      </TextView>
-    );
-  };
-  const HeaderBottomSheet = () => {
-    return (
-      <HeaderView
-        isToolbar={true}
-        isStatusBar={false}
-        titleScreen={titleSheet}
-        styleTitle={{color: commons.colorMain, backgroundColor: 'transparent'}}
-        styleHeader={{
-          backgroundColor: commons.border,
-        }}
-        colorsLinearGradient={['white', 'white', 'white']}
-        nameIconBack="clear"
-        colorIconBack={commons.colorMain}
-        onPressBack={hideBottomSheet}
-        // renderToolbarBottom={
-        //   typeParamChoose === TypeParams.Province && (
-        //     <Text>render province suggest</Text>
-        //   )
-        // }
-      />
-    );
-  };
-  const ContentBottomSheet = () => {
-    return (
-      <View style={{height: '100%'}}>
-        <HeaderBottomSheet />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={dataSheet}
-          scrollEnabled
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          removeClippedSubviews={true}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={10}
-          ItemSeparatorComponent={viewSeparator}
-          style={{backgroundColor: 'white'}}
-          contentContainerStyle={{
-            justifyContent: 'center',
-          }}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItemSelect}
-        />
-      </View>
-    );
-  };
+  // const renderItemSelect = ({item, index}) => {
+  //   // let isChecked = isItemChecked(item, typeParamChoose);
+  //   return (
+  //     <TextView
+  //       data={item}
+  //       // nameIconRight={'icon-circle-correct'}
+  //       // colorIconRight="green"
+  //       onPress={onSelectedItem}
+  //       style={{
+  //         ...styles.styleContainerItemSheet,
+  //         backgroundColor: 'transparent',
+  //       }}
+  //       styleText={{
+  //         ...styles.itemSheet,
+  //         fontWeight: 'normal',
+  //       }}
+  //       styleContainerText={styles.containerItemSheet}>
+  //       {item.name}
+  //     </TextView>
+  //   );
+  // };
+  // const HeaderBottomSheet = () => {
+  //   return (
+  //     <HeaderView
+  //       isToolbar={true}
+  //       isStatusBar={false}
+  //       titleScreen={titleSheet}
+  //       styleTitle={{color: commons.colorMain, backgroundColor: 'transparent'}}
+  //       styleHeader={{
+  //         backgroundColor: commons.border,
+  //       }}
+  //       colorsLinearGradient={['white', 'white', 'white']}
+  //       nameIconBack="clear"
+  //       colorIconBack={commons.colorMain}
+  //       onPressBack={hideBottomSheet}
+  //       // renderToolbarBottom={
+  //       //   typeParamChoose === TypeParams.Province && (
+  //       //     <Text>render province suggest</Text>
+  //       //   )
+  //       // }
+  //     />
+  //   );
+  // };
+  // const ContentBottomSheet = () => {
+  //   return (
+  //     <View style={{height: '100%'}}>
+  //       <HeaderBottomSheet />
+  //       <FlatList
+  //         showsVerticalScrollIndicator={false}
+  //         data={dataSheet}
+  //         scrollEnabled
+  //         automaticallyAdjustContentInsets={false}
+  //         keyboardDismissMode="on-drag"
+  //         keyboardShouldPersistTaps="handled"
+  //         removeClippedSubviews={true}
+  //         initialNumToRender={10}
+  //         maxToRenderPerBatch={10}
+  //         windowSize={10}
+  //         ItemSeparatorComponent={viewSeparator}
+  //         style={{backgroundColor: 'white'}}
+  //         contentContainerStyle={{
+  //           justifyContent: 'center',
+  //         }}
+  //         keyExtractor={(item, index) => index.toString()}
+  //         renderItem={renderItemSelect}
+  //       />
+  //     </View>
+  //   );
+  // };
   const showBottomSheet = ({id, data = []}) => {
     typeParamChoose = id;
     dataSheet = data;
@@ -232,7 +250,16 @@ const EditAccount = (props) => {
       case 'parentName': {
         // isShowSheet = false;
         titleSheet = 'Quản lý trực tiếp';
-        dataSheet = state.allUsers;
+        let userInCompany = [];
+        // if (companyIdDefault) {
+        userInCompany = state.allUsers.filter((user) => {
+          if (user?.companyId) {
+            return user?.companyId?._id === companyIdDefault;
+          }
+          return;
+        });
+        // }
+        dataSheet = userInCompany;
 
         break;
       }
@@ -358,7 +385,8 @@ const EditAccount = (props) => {
             editable: false,
             // onPressText: showBottomSheet,
             defaultValue: data?.companyId ? data?.companyId?.name : null,
-            isShowClean: false,
+            onPressText: isAdminSystem && showBottomSheet,
+            isShowClean: isAdminSystem,
             form,
           }}
         />
@@ -370,6 +398,12 @@ const EditAccount = (props) => {
             editable: false,
             onPressText: showBottomSheet,
             defaultValue: data?.roleId ? data?.roleId?.name : null,
+            initRules: {
+              required: {
+                value: true,
+                message: 'Chức vụ không được để trống.',
+              },
+            },
             form,
           }}
         />
@@ -499,7 +533,7 @@ const EditAccount = (props) => {
             }}
           />
         </View>
-        <RBSheet
+        {/* <RBSheet
           ref={refBottomSheet}
           animationType="slide"
           height={state.percentHeight}
@@ -514,8 +548,19 @@ const EditAccount = (props) => {
             },
           }}>
           <ContentBottomSheet />
-        </RBSheet>
+        </RBSheet> */}
       </ScrollView>
+
+      <CustomBottomSheet
+        {...{
+          refBottomSheet,
+          percentHeight: state.percentHeight,
+          hideBottomSheet,
+          onSelectedItem,
+          titleSheet,
+          dataSheet,
+        }}
+      />
       <BottomButton
         id={'submit'}
         idCancel={'cancel'}

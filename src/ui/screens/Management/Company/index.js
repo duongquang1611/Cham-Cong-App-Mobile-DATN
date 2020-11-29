@@ -8,6 +8,7 @@ import {appNavigate} from '../../../../navigations';
 import API from '../../../../networking';
 import commons from '../../../commons';
 import ItemCompany from './ItemCompany';
+
 const EmptyList = () => {
   return (
     <Text style={{textAlign: 'center', marginTop: 10}}>{commons.noData}</Text>
@@ -23,8 +24,11 @@ const SeparatorView = () => {
   );
 };
 
+let filter = {};
 const CompanyManagement = () => {
   const companyReducer = useSelector((state) => state.companyReducer);
+  const searchReducer = useSelector((state) => state.searchReducer);
+
   const {allCompanies} = companyReducer;
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -37,9 +41,29 @@ const CompanyManagement = () => {
     state.refreshing && getData();
   }, [state.refreshing]);
 
+  const onRefresh = (clearText = false) => {
+    if (clearText) filter = {};
+    setState({...state, refreshing: true});
+  };
+
+  useEffect(() => {
+    if (
+      searchReducer.textSearchCompany &&
+      searchReducer.textSearchCompany.trim().length !== 0
+    ) {
+      console.log('search');
+      filter.text = searchReducer.textSearchCompany;
+      onRefresh();
+    } else {
+      onRefresh(true);
+    }
+  }, [searchReducer.textSearchCompany]);
+
   const getData = async () => {
-    setState({...state, refreshing: false});
-    API.getListCompanies(dispatch);
+    API.getListCompanies(dispatch, filter);
+    commons.wait(1500).then(() => {
+      setState({...state, refreshing: false});
+    });
   };
 
   const deleteCompany = async (item) => {
@@ -75,9 +99,7 @@ const CompanyManagement = () => {
       />
     );
   };
-  const onRefresh = () => {
-    setState({...state, refreshing: true});
-  };
+
   return (
     <>
       {state.refreshing && <LoadingView />}
