@@ -33,6 +33,8 @@ const AccountManagement = () => {
   const navigation = useNavigation();
   const companyReducer = useSelector((state) => state.companyReducer);
   const searchReducer = useSelector((state) => state.searchReducer);
+  const commonReducer = useSelector((state) => state.commonReducer);
+  console.log({searchReducer, commonReducer});
   const {allUsers} = companyReducer;
   const [state, setState] = useState({
     refreshing: false,
@@ -73,7 +75,7 @@ const AccountManagement = () => {
     API.getListUsers(dispatch, filter);
     // console.log('AccountManagement -> res', res);
 
-    commons.wait(1500).then(() => {
+    commons.wait(1000).then(() => {
       setState({...state, refreshing: false});
     });
   };

@@ -61,7 +61,7 @@ const CompanyManagement = () => {
 
   const getData = async () => {
     API.getListCompanies(dispatch, filter);
-    commons.wait(1500).then(() => {
+    commons.wait(1000).then(() => {
       setState({...state, refreshing: false});
     });
   };

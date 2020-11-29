@@ -12,8 +12,8 @@ import commons from '../../commons';
 import baseStyles from '../../../baseStyles';
 import {useRoute} from '@react-navigation/native';
 const SERVER = [
-  {id: 0, name: 'Heroku Server', server: API.baseApiUrlHeroku},
-  {id: 1, name: 'Local Server', server: API.BASE_API_URL},
+  {id: 0, name: 'Local Server', server: API.BASE_API_URL},
+  {id: 1, name: 'Heroku Server', server: API.baseApiUrlHeroku},
   {id: 2, name: 'Tùy chỉnh', server: API.BASE_API_URL},
 ];
 
@@ -32,8 +32,8 @@ const SetupServer = (props) => {
       console.log('SetupServer -> baseUrl', baseUrl);
       if (baseUrl !== null) {
         let baseUrlParse = JSON.parse(baseUrl);
-        if (baseUrlParse?.id === 1) {
-          baseUrlParse = SERVER[1];
+        if (baseUrlParse?.id === 0) {
+          baseUrlParse = SERVER[0];
         }
         setDataServer(baseUrlParse);
       }
@@ -88,7 +88,7 @@ const SetupServer = (props) => {
           //   }}
           styleLabel={{marginLeft: 10}}
         />
-        {dataServer?.id !== 0 && (
+        {dataServer?.id !== 1 && (
           <InputView
             id="custom"
             onChangeText={onChangeText}
