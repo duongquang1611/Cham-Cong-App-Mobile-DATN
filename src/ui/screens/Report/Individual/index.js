@@ -11,9 +11,17 @@ import API from '../../../../networking';
 import moment from 'moment/min/moment-with-locales';
 moment.locale(commons.getDeviceLanguage(false));
 
+const sumComeLeave = (accumulator, currentValue, key) => {
+  return accumulator + currentValue[key];
+};
+
 const HEIGHT_MORE_INFO = 120;
 
 let filterMonthYear = commons.getDayMonthYear(undefined, false);
+let filterDayOff = {
+  status: 0,
+  reverseStatus: true,
+};
 const BlockView = (props) => {
   const {style, children} = props;
   return <View style={[styles.containerBlock, style]}>{children}</View>;
@@ -55,6 +63,7 @@ const ReportIndividual = () => {
       year: moment().format('YYYY'),
     },
     refreshing: false,
+    listDayOff: [],
   });
 
   useEffect(() => {
@@ -73,7 +82,9 @@ const ReportIndividual = () => {
         me: true,
         ...newFilter,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log('getData ~ error', error);
+    }
   };
 
   const filterListDayWork = (key, value, type) => {
@@ -83,11 +94,20 @@ const ReportIndividual = () => {
           (item) =>
             item['minutesComeLate'] > 0 || item['minutesLeaveEarly'] > 0,
         ).length;
-        break;
-
+      case 'MINUTES_COME_LATE':
+        return listDayWork.reduce(
+          (accumulator, currentValue) =>
+            sumComeLeave(accumulator, currentValue, key),
+          0,
+        );
+      case 'MINUTES_LEAVE_EARLY':
+        return listDayWork.reduce(
+          (accumulator, currentValue) =>
+            sumComeLeave(accumulator, currentValue, key),
+          0,
+        );
       default:
         return listDayWork.filter((item) => item[key] === value);
-        break;
     }
   };
   const onMonthChange = (month) => {
@@ -143,11 +163,26 @@ const ReportIndividual = () => {
             flexDirection: 'column',
           }}>
           {/* <RowBaseView title="Số ngày phép còn trong năm" msg={0} /> */}
-          <RowBaseView title="Tổng số phút đi muộn trong tháng" msg={0} />
+          <RowBaseView
+            title="Tổng số phút đi muộn trong tháng"
+            msg={
+              filterListDayWork(
+                'minutesComeLate',
+                undefined,
+                'MINUTES_COME_LATE',
+              ) + ' ph'
+            }
+          />
           <RowBaseView
             title="Tổng số phút về sớm trong tháng"
             end={true}
-            msg={0}
+            msg={
+              filterListDayWork(
+                'minutesLeaveEarly',
+                undefined,
+                'MINUTES_LEAVE_EARLY',
+              ) + ' ph'
+            }
           />
         </View>
       </View>

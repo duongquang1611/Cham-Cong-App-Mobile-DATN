@@ -57,7 +57,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
-        initialRouteName={isAdminSystem ? 'TabManagement' : 'TabManagement'}
+        initialRouteName={isAdminSystem ? 'TabManagement' : 'Report'}
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -178,7 +178,7 @@ const RootNavigation = () => {
                 resizeMode="contain"
               />
             ),
-            drawerLabel: 'Tổng hợp báo cáo',
+            drawerLabel: 'Tổng hợp chấm công',
           }}
         />
 
