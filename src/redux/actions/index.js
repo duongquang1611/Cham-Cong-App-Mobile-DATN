@@ -5,6 +5,7 @@ import authActions from './authActions';
 import dayWorkActions from './dayWorkActions';
 import companyActions from './companyActions';
 import searchActions from './searchActions';
+import reportActions from './reportActions';
 
 const actions = {
   ...appNavigate,
@@ -13,6 +14,7 @@ const actions = {
   ...dayWorkActions,
   ...companyActions,
   ...searchActions,
+  ...reportActions,
 };
 
 export {types};

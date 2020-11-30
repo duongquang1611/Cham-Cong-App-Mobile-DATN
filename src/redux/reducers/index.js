@@ -7,6 +7,7 @@ import commonReducer from './commonReducer';
 import dayWorkReducer from './dayWorkReducer';
 import companyReducer from './companyReducer';
 import searchReducer from './searchReducer';
+import reportReducer from './reportReducer';
 
 const rootPersistConfig = {
   key: 'root',
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   dayWorkReducer,
   companyReducer,
   searchReducer: persistReducer(searchConfig, searchReducer),
+  reportReducer,
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);
