@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import styles from '../styles';
-const AskCompany = () => {
+const AskComeLeaveCompany = () => {
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Text></Text>
     </View>
   );
 };
 
-export default AskCompany;
+export default AskComeLeaveCompany;

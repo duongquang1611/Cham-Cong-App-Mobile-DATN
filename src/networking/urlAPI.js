@@ -39,9 +39,12 @@ const config = {
     searchCompanies: 'companies',
     detailCompany: (id) => `companies/${id}`,
     configCompany: 'companies/config',
+    workDayCompany: `companies/work-day`,
+    askComeLeaveInCompany: `companies/ask-come-leave`,
+    askDayOffInCompany: `companies/ask-day-off`,
+    usersInCompany: `companies/users`,
 
     workDay: 'work-day', // list work day: get, update workDay: put, checkout thi them isCheckout: true
-    workDayCompany: (companyId) => `work-day/company/${companyId}`,
     askComeLeave: 'work-day/ask-come-leave', // put, chua co thi tao moi
 
     dayOff: 'work-day/day-off', // get, put
