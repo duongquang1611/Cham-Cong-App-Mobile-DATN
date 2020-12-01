@@ -19,7 +19,7 @@ let currentTabFocus = TypeTabManagement.account;
 let text = '';
 const TabManagement = () => {
   const Tab = createMaterialTopTabNavigator();
-  let userInfo = models.getUserInfo();
+  let user = models.getUserInfo();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const dayWorkReducer = useSelector((state) => state.dayWorkReducer);

@@ -57,7 +57,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
-        initialRouteName={isAdminSystem ? 'TabManagement' : 'Report'}
+        initialRouteName={isAdminSystem ? 'TabManagement' : 'TabManagement'}
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>

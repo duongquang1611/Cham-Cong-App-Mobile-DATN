@@ -1,4 +1,4 @@
-import {showAlert, TextView} from 'cc-components';
+import {IconView, showAlert, TextView} from 'cc-components';
 import React, {useState} from 'react';
 import {
   Alert,
@@ -21,6 +21,7 @@ const WIDTH_SWIPE = 70;
 
 const RowInfoModal = (props) => {
   const {title, value} = props;
+
   return (
     <View style={styles.containerRowInfoModal}>
       <Text style={{width: '25%', color: 'grey'}}>{title}</Text>
@@ -31,7 +32,13 @@ const RowInfoModal = (props) => {
   );
 };
 const ItemAccount = (props) => {
-  const {item, index, deleteAccount, editAccount} = props;
+  const {
+    item,
+    index,
+    deleteAccount,
+    editAccount,
+    showUpdateFace = false,
+  } = props;
   const [isVisible, setIsVisible] = useState(false);
   const closeRow = (index) => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
@@ -162,28 +169,48 @@ const ItemAccount = (props) => {
             minHeight: 60,
             flexDirection: 'row',
             padding: 10,
+            justifyContent: 'space-between',
           }}
           onPress={changeVisibleModal}>
-          <Image
-            source={
-              item?.avatar && item?.avatar?.thumb200
-                ? {uri: item?.avatar?.thumb200}
-                : item && item?.gender && item?.gender == 0
-                ? AppImages.female
-                : AppImages.male
-            }
-            style={{
-              height: 60,
-              width: 60,
-              borderRadius: 100,
-            }}
-            resizeMode="cover"
-          />
-          <View style={{marginLeft: 15}}>
-            <Text style={styles.title}>{item?.username}</Text>
-            <Text>{item?.name}</Text>
-            <Text>{item?.roleId?.name}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={
+                item?.avatar && item?.avatar?.thumb200
+                  ? {uri: item?.avatar?.thumb200}
+                  : item && item?.gender && item?.gender == 0
+                  ? AppImages.female
+                  : AppImages.male
+              }
+              style={{
+                height: 60,
+                width: 60,
+                borderRadius: 100,
+              }}
+              resizeMode="cover"
+            />
+            <View style={{marginLeft: 15}}>
+              <Text style={styles.title}>{item?.username}</Text>
+              <Text>{item?.name}</Text>
+              <Text>{item?.roleId?.name}</Text>
+            </View>
           </View>
+          {showUpdateFace && (
+            <TextView
+              onPress={() => alert('abc')}
+              id={}
+              data={item}
+              style={{...styles.center}}
+              centerElement={
+                <Image
+                  source={AppImages.face_recognition}
+                  style={{
+                    height: 50,
+                    width: 50,
+                  }}
+                  resizeMode="cover"
+                />
+              }></TextView>
+          )}
         </TouchableOpacity>
       </Swipeable>
     </>

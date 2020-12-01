@@ -34,6 +34,11 @@ const AccountManagement = () => {
   const companyReducer = useSelector((state) => state.companyReducer);
   const searchReducer = useSelector((state) => state.searchReducer);
   const commonReducer = useSelector((state) => state.commonReducer);
+  let user = models.getUserInfo();
+  let isAdminSystem = commons.isRole('admin_system', user);
+  let isAdminCompanyOrDirector =
+    commons.isRole('admin_company', user) || commons.isRole('director', user);
+
   console.log({searchReducer, commonReducer});
   const {allUsers} = companyReducer;
   const [state, setState] = useState({
@@ -63,12 +68,7 @@ const AccountManagement = () => {
   }, [searchReducer.textSearchUser]);
 
   const getData = async () => {
-    let user = models.getUserInfo();
-
-    if (
-      commons.isRole('admin_company', user) ||
-      commons.isRole('director', user)
-    ) {
+    if (isAdminCompanyOrDirector) {
       filter.companyId = user.companyId._id;
       console.log('AccountManagement -> filter', filter);
     }
@@ -109,6 +109,7 @@ const AccountManagement = () => {
       <ItemAccount
         item={item}
         index={index}
+        showUpdateFace={isAdminCompanyOrDirector}
         {...{deleteAccount, editAccount}}
       />
     );

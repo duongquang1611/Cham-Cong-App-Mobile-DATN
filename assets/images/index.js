@@ -49,6 +49,8 @@ const AppImages = {
 
   male_original: {uri: 'https://i.imgur.com/1mBGvt3.jpg'},
   female_original: {uri: 'https://i.imgur.com/xCplblE.jpg'},
+
+  face_recognition: require('./face_recognition.png'),
 };
 
 export default AppImages;

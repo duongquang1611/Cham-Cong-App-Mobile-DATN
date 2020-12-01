@@ -16,6 +16,7 @@ const ParentEntity = {
     gender: {type: 'int?'},
     dateOfBirth: {type: 'date?'},
     avatar: {type: 'AVATAR?', default: null},
+    personId: {type: 'string?'},
     createdAt: {type: 'string?'},
     updatedAt: {type: 'string?'},
   },
