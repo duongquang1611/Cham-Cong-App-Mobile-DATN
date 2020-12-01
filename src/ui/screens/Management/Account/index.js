@@ -120,7 +120,8 @@ const AccountManagement = () => {
         data={allUsers}
         renderItem={renderItem}
         keyExtractor={(item, index) => {
-          return item.toString() + index.toString();
+          // return item.toString() + index.toString();
+          return index.toString();
         }}
         extraData={allUsers}
         contentContainerStyle={{

@@ -108,7 +108,8 @@ const CompanyManagement = () => {
         data={allCompanies}
         renderItem={renderItem}
         keyExtractor={(item, index) => {
-          return item.toString() + index.toString();
+          // return item.toString() + index.toString();
+          return index.toString();
         }}
         extraData={allCompanies}
         contentContainerStyle={{

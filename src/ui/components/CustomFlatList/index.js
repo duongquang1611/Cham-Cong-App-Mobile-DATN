@@ -44,7 +44,8 @@ const CustomFlatList = (props) => {
       {...props}
       ListEmptyComponent={EmptyList}
       keyExtractor={(item, index) => {
-        return item.toString() + index.toString();
+        // return item.toString() + index.toString();
+        return index.toString();
       }}
       renderItem={renderItem}
       ItemSeparatorComponent={showSeparator && SeparatorView}
