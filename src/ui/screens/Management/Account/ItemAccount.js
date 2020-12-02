@@ -1,4 +1,4 @@
-import {IconView, showAlert, TextView} from 'cc-components';
+import {IconView, LoadingView, showAlert, TextView} from 'cc-components';
 import React, {useState} from 'react';
 import {
   Alert,
@@ -14,6 +14,8 @@ import AppImages from '../../../../../assets/images';
 import baseStyles from '../../../../baseStyles';
 import commons from '../../../commons';
 import moment from 'moment';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import API from '../../../../networking';
 
 let row = [];
 let prevOpenedRow = null;
@@ -37,6 +39,7 @@ const ItemAccount = (props) => {
     index,
     deleteAccount,
     editAccount,
+    handleUploadRNFetchBlob,
     showUpdateFace = false,
   } = props;
   const [isVisible, setIsVisible] = useState(false);
@@ -89,6 +92,33 @@ const ItemAccount = (props) => {
   };
   const changeVisibleModal = () => {
     setIsVisible(!isVisible);
+  };
+
+  const openCameraCapture = () => {
+    ImageCropPicker.openCamera({
+      // width: commons.SCREEN_WIDTH,
+      // height: commons.SCREEN_HEIGHT,
+      width: 300,
+      height: 400,
+      cropping: false,
+      includeBase64: false,
+    })
+      .then((image) => {
+        handleUploadRNFetchBlob(image, item._id);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const openImagePicker = () => {
+    ImageCropPicker.openPicker({
+      // multiple: true,
+      mediaType: 'photo',
+      // includeBase64: true,
+    })
+      .then((image) => {
+        handleUploadRNFetchBlob(image, item._id);
+      })
+      .catch((e) => console.log(e));
   };
   return (
     <>
@@ -196,8 +226,9 @@ const ItemAccount = (props) => {
           </View>
           {showUpdateFace && (
             <TextView
-              onPress={() => alert('abc')}
-              id={}
+              onPress={openCameraCapture}
+              // onPress={openImagePicker}
+              id={'face_recognition'}
               data={item}
               style={{...styles.center}}
               centerElement={

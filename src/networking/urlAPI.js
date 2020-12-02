@@ -8,8 +8,8 @@ const config = {
 
     baseApiUrlHeroku: 'https://cham-cong.herokuapp.com/api/',
     // ngrok
-    BASE_API_URL: 'http://d41b5937e2c7.ngrok.io/api/',
-    BASE_URL: 'http://d41b5937e2c7.ngrok.io/',
+    BASE_API_URL: 'http://aa3f388278bc.ngrok.io/api/',
+    BASE_URL: 'http://aa3f388278bc.ngrok.io/',
 
     // heroku
     // BASE_API_URL: `${baseUrlHeroku}/api/`,
@@ -52,6 +52,9 @@ const config = {
 
     //roles
     allRoles: 'roles',
+
+    addFace: (userId) => `face/${userId}/add-face`,
+    detectAndIdentify: (companyId) => `face/${companyId}/detect-and-identify`,
   },
 };
 

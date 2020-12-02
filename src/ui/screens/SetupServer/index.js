@@ -3,6 +3,7 @@ import {
   HeaderView,
   InputView,
   RadioGroup,
+  TextView,
 } from 'cc-components';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
@@ -11,6 +12,7 @@ import API from '../../../networking';
 import commons from '../../commons';
 import baseStyles from '../../../baseStyles';
 import {useRoute} from '@react-navigation/native';
+import {useNetInfo} from '@react-native-community/netinfo';
 const SERVER = [
   {id: 0, name: 'Local Server', server: API.BASE_API_URL},
   {id: 1, name: 'Heroku Server', server: API.baseApiUrlHeroku},
@@ -21,6 +23,8 @@ const titleScreen = 'Cài đặt Server';
 const SetupServer = (props) => {
   const [dataServer, setDataServer] = useState(SERVER[0]);
   const route = useRoute();
+  let net = useNetInfo();
+  console.log('🚀 ~ file: index.js ~ line 28 ~ SetupServer ~ net', net);
   console.log(route.params);
   useEffect(() => {
     getServer();
@@ -100,6 +104,19 @@ const SetupServer = (props) => {
           />
         )}
       </View>
+      {/* <TextView
+        style={{
+          backgroundColor: 'pink',
+          padding: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={async () => {
+          let res = await API.GET('/face/test');
+          console.log('res', res);
+        }}>
+        test
+      </TextView> */}
     </>
   );
 };

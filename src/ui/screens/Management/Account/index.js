@@ -43,6 +43,7 @@ const AccountManagement = () => {
   const {allUsers} = companyReducer;
   const [state, setState] = useState({
     refreshing: false,
+    isLoading: false,
   });
 
   useEffect(() => {
@@ -104,19 +105,44 @@ const AccountManagement = () => {
     });
   };
 
+  const handleUploadRNFetchBlob = async (image, userId) => {
+    setState({...state, isLoading: true});
+    console.log({userId});
+    const form = new FormData();
+    try {
+      form.append('file', {
+        uri: image.path,
+        type: image.mime,
+        name: image.path.substring(image.path.lastIndexOf('/') + 1),
+      });
+      // upload image to add face user
+      let res = await API.POST(API.addFace(userId), form);
+      if (res && res.msg) {
+        setState({...state, isLoading: false});
+        showAlert({msg: res.msg});
+      } else {
+        setState({...state, isLoading: false});
+      }
+    } catch (error) {
+      setState({...state, isLoading: false});
+      console.log('handleUploadRNFetchBlob ~ error', error);
+    }
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <ItemAccount
         item={item}
         index={index}
         showUpdateFace={isAdminCompanyOrDirector}
-        {...{deleteAccount, editAccount}}
+        {...{deleteAccount, editAccount, handleUploadRNFetchBlob}}
       />
     );
   };
   return (
     <>
       {state.refreshing && <LoadingView />}
+      {state.isLoading && <LoadingView />}
       <FlatList
         data={allUsers}
         renderItem={renderItem}
