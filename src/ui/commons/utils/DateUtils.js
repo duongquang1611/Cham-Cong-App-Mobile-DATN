@@ -118,3 +118,31 @@ export const getDiffTime = (date1, date2 = new Date()) => {
   // console.log('getDiffTime:', date1, date2, diff);
   return diff;
 };
+
+export const setTimeToDate = (time, date = new Date()) => {
+  // date: format ISOString, exam: 2020-11-06T10:18:33.145Z
+  // time: HH:mm:ss
+  // console.log(time);
+  let pieces = time.split(':');
+  let hour = 0,
+    minute = 0,
+    second = 0;
+  if (pieces.length === 3) {
+    hour = parseInt(pieces[0], 10);
+    minute = parseInt(pieces[1], 10);
+    second = parseInt(pieces[2], 10);
+  }
+  date.setSeconds(second);
+  date.setMinutes(minute);
+  date.setHours(hour);
+  return date;
+};
+
+export const rangeTimeDate = (date1, date2) => {
+  return new Date(date1).getTime() - new Date(date2).getTime();
+};
+
+export const isBeforeDate = (date1, date2 = new Date()) => {
+  let check = rangeTimeDate(date1, date2);
+  return check < 0;
+};

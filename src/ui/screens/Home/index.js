@@ -53,6 +53,12 @@ const HomeScreen = (props) => {
   const detailCompany = useSelector(
     (state) => state.companyReducer.detailCompany,
   );
+  let allowCheckin = commons.setTimeToDate(detailCompany?.config?.allowCheckin);
+  let allowCheckout = commons.setTimeToDate(
+    detailCompany?.config?.allowCheckout,
+  );
+  let defaultCheckin = commons.setTimeToDate(detailCompany?.config?.checkin);
+  let defaultCheckout = commons.setTimeToDate(detailCompany?.config?.checkout);
 
   const [state, setState] = useState({
     userCompany: [userInfo],
@@ -227,7 +233,7 @@ const HomeScreen = (props) => {
             ...styles.lineHeightText,
           }}>
           {state.isGrantedLocation
-            ? 'Kiểm tra vị trí thành công'
+            ? 'Đã cấp quyền truy cập vị trí'
             : 'Chưa cấp quyền truy cập vị trí'}
         </TextView>
         <TextView
@@ -367,19 +373,22 @@ const HomeScreen = (props) => {
   };
 
   const checkinAfterCheckFaceSuccess = () => {
+    console.log('checkin after face success');
     try {
-      // console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
-      // Check địa chỉ IP khi checkin
-      console.log(detailDayWork.checkin);
+      console.log('checkin', detailDayWork?.checkin);
       if (!detailDayWork?.checkin) {
-        API.createOrUpdateDayWork(dispatch, {userId: state.selectedUser?._id});
-        // setState({...state, visibleModal: true});
-        // chua checkin
+        // checkin
+        API.createOrUpdateDayWork(dispatch, {
+          userId: state.selectedUser?._id,
+          location: locationData,
+        });
       } else {
         // da checkin, press checkout -> disable button
+        // checkout
         API.createOrUpdateDayWork(dispatch, {
           isCheckout: true,
           userId: state.selectedUser?._id,
+          location: locationData,
         });
       }
     } catch (error) {
@@ -412,6 +421,7 @@ const HomeScreen = (props) => {
       ) {
         if (state.selectedUser?.personId === res[0]?.candidates[0]?.personId) {
           console.log(res[0]?.candidates[0]?.personId, 'Face is valid');
+          // face valid with personId in account
           checkinAfterCheckFaceSuccess();
         } else {
           showAlert({
@@ -439,6 +449,7 @@ const HomeScreen = (props) => {
       includeBase64: false,
     })
       .then((image) => {
+        // upload face to check identify account
         detectAndIdentifyImageCheckin(image);
       })
       .catch((e) => console.log(e));
@@ -450,29 +461,85 @@ const HomeScreen = (props) => {
         ip: netInfo?.details?.ipAddress,
         isGranted: state.isGrantedLocation,
       });
+      // check time to checkin
+      if (!detailDayWork?.checkin) {
+        // check in
+        let isBeforeAllowCheckin = commons.isBeforeDate(
+          new Date(),
+          allowCheckin,
+        );
+        let isAfterAllowCheckout = commons.isBeforeDate(
+          allowCheckout,
+          new Date(),
+        );
+
+        if (isBeforeAllowCheckin) {
+          showAlert({
+            msg: `Không thể thực hiện checkin trước ${detailCompany?.config?.allowCheckin}`,
+          });
+          return;
+        }
+        if (isAfterAllowCheckout) {
+          showAlert({
+            msg: `Không thể thực hiện checkout sau ${detailCompany?.config?.allowCheckout}`,
+          });
+          return;
+        }
+      } else {
+        // checkout
+        let isBeforeAllowCheckin = commons.isBeforeDate(
+          new Date(),
+          allowCheckin,
+        );
+        let isAfterAllowCheckout = commons.isBeforeDate(
+          allowCheckout,
+          new Date(),
+        );
+        if (isBeforeAllowCheckin) {
+          showAlert({
+            msg: `Không thể thực hiện checkout trước ${detailCompany?.config?.allowCheckin}`,
+          });
+          return;
+        }
+        if (isAfterAllowCheckout) {
+          showAlert({
+            msg: `Không thể thực hiện checkout sau ${detailCompany?.config?.allowCheckout}`,
+          });
+          return;
+        }
+      }
+
+      // check have personId to check face
       if (!state.selectedUser?.personId) {
         showAlert({
           msg: msgWarning.faceNotFound(state.selectedUser?.name),
         });
         return;
       }
+
+      // check have ip address
       if (!netInfo?.details?.ipAddress) {
         showAlert({
           msg: msgWarning.network,
         });
         return;
       }
+
+      // check grant location permission
       if (state.isGrantedLocation) {
         let location = await getLocation();
         if (location?.latitude) {
           // get location success
           locationData = location;
           console.log({locationData});
+
+          // open camera to upload face
           openCameraCapture();
         } else {
           showAlert({msg: 'Có lỗi xảy ra. Vui lòng thử lại sau.'});
         }
       } else {
+        // request location permission
         requestLocationPermission(onPressCheckTime);
       }
     } catch (error) {
