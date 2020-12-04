@@ -26,7 +26,8 @@ instanceAPI.interceptors.response.use(
     return response.data;
   },
   function (error) {
-    let messageError = 'Lỗi không xác định.';
+    console.log({error});
+    let messageError = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
     console.log('Error code:', error.response.status);
     if (error.response.status === 401) {
       models.handleSignOut();
@@ -37,7 +38,7 @@ instanceAPI.interceptors.response.use(
     }
     if (typeof messageError !== 'string') {
       console.log('Error API:', error.response.data.msg);
-      messageError = 'Lỗi không xác định';
+      messageError = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
     }
 
     return showAlert({msg: messageError});

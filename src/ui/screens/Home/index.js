@@ -1,6 +1,14 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {Modal, ScrollView, Text, View} from 'react-native';
+import React, {memo, useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  AsyncStorage,
+  Modal,
+  PermissionsAndroid,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from '@react-native-community/picker';
 import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
@@ -12,6 +20,7 @@ import {
   LoadingView,
   showAlert,
   TextView,
+  CustomBottomSheet,
 } from 'cc-components';
 import styles from './styles';
 import SubTimeCheckin from './SubTimeCheckin';
@@ -20,8 +29,13 @@ import commons from '../../commons';
 import moment from 'moment/min/moment-with-locales';
 import ColumnBaseView from '../Report/Individual/ColumnBaseView';
 import TimerIntervalView from './TimerIntervalView';
+import {getLocation} from '../../commons/location';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import msgWarning from './msgWarning';
 moment.locale(commons.getDeviceLanguage(false));
+
 const DEFAULT_TIME = '--h : --p : --s';
+let locationData = {};
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
@@ -43,41 +57,86 @@ const HomeScreen = (props) => {
   const [state, setState] = useState({
     userCompany: [userInfo],
     selectedUser: {...userInfo},
-    timer: null,
+    // timer: null,
     isLoading: true,
-    visible: false,
+    visibleModal: false,
     netDetails: {},
+    percentHeight: 0,
+    isGrantedLocation: false,
+    isCheckFace: false,
   });
+  const refBottomSheet = useRef();
+
+  // useEffect(() => {
+  //   if (userInfo?.companyId?._id) {
+  //     // console.log('HomeScreen -> companyId._id', userInfo.companyId._id);
+  //     getData(userInfo?.companyId?._id);
+  //   }
+  // }, [userInfo?._id]);
 
   useEffect(() => {
-    if (userInfo?.companyId?._id) {
-      // console.log('HomeScreen -> companyId._id', userInfo.companyId._id);
-      getData(userInfo?.companyId?._id);
+    if (state.selectedUser?.companyId?._id) {
+      // console.log('HomeScreen -> companyId._id', state.selectedUser.companyId._id);
+      getData(state.selectedUser?.companyId?._id);
     }
-  }, [userInfo?._id]);
+  }, [state.selectedUser?._id]);
 
-  useEffect(() => {
-    let diff = commons.getDiffTime(detailDayWork?.checkin);
+  // useEffect(() => {
+  //   let diff = commons.getDiffTime(detailDayWork?.checkin);
 
-    const interval = setInterval(() => {
-      if (detailDayWork?.checkin && !detailDayWork?.checkout) {
-        setState({
-          ...state,
-          timer: diff,
-        });
-      }
-    }, 1000);
+  //   const interval = setInterval(() => {
+  //     if (detailDayWork?.checkin && !detailDayWork?.checkout) {
+  //       setState({
+  //         ...state,
+  //         timer: diff,
+  //       });
+  //     }
+  //   }, 1000);
 
-    return () => clearInterval(interval);
-  }, [detailDayWork, state.timer]);
+  //   return () => clearInterval(interval);
+  // }, [detailDayWork, state.timer]);
 
   const logout = () => {
     dispatch(actions.requestLogout());
   };
+
+  const requestLocationPermission = async (cb) => {
+    console.log('request location');
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Access Required',
+          message: 'This App needs to Access your location',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        //To Check, If Permission is granted
+        setState({
+          ...state,
+          isGrantedLocation: true,
+        });
+        if (cb) {
+          cb();
+        }
+      } else {
+        showAlert({msg: 'Permission Denied.'});
+      }
+    } catch (err) {
+      console.log('ChooseAddress -> err', err);
+      showAlert({msg: err.message});
+    }
+  };
+
+  useEffect(() => {
+    // get permission location
+    !state.isGrantedLocation && requestLocationPermission();
+  }, [state.isGrantedLocation]);
+
   const setParamsDayWork = () => {
     return {
       dayWork: moment().format(commons.FORMAT_DATE),
-      userId: userInfo?._id,
+      userId: state.selectedUser?._id,
     };
   };
   const getData = async (companyId) => {
@@ -162,9 +221,14 @@ const HomeScreen = (props) => {
       <View style={{...styles.center}}>
         <TextView
           nameIconLeft="address-location"
-          colorIconLeft={'red'}
-          styleText={{color: 'red', ...styles.lineHeightText}}>
-          {'Địa điểm không hợp lệ'}
+          colorIconLeft={state.isGrantedLocation ? 'green' : 'red'}
+          styleText={{
+            color: state.isGrantedLocation ? 'black' : 'red',
+            ...styles.lineHeightText,
+          }}>
+          {state.isGrantedLocation
+            ? 'Kiểm tra vị trí thành công'
+            : 'Chưa cấp quyền truy cập vị trí'}
         </TextView>
         <TextView
           nameIconLeft={
@@ -255,8 +319,8 @@ const HomeScreen = (props) => {
   };
   const CheckinView = (props) => {
     return (
-      <View>
-        <Text style={styles.title}>Giờ làm việc</Text>
+      <View style={{paddingHorizontal: 10}}>
+        <Text style={{}}>Giờ làm việc</Text>
         <View style={styles.containerTimeAllow}>
           <ColumnBaseView
             title={'Checkin'}
@@ -272,7 +336,7 @@ const HomeScreen = (props) => {
             end={true}
           />
         </View>
-        <Text style={styles.title}>Thời gian cho phép chấm công</Text>
+        <Text style={{}}>Thời gian cho phép chấm công</Text>
         <View style={styles.containerTimeAllow}>
           <ColumnBaseView
             title={'Checkin'}
@@ -297,49 +361,146 @@ const HomeScreen = (props) => {
   };
   const onPressShowMoreInfoIp = () => {
     showAlert({
-      msg:
-        'Bạn cần kết nối tới kết nối mạng hợp lệ tại công ty để có thể Chấm công. Nếu bạn có bất cứ thắc mắc nào vui lòng liên hệ quản trị viên để biết thêm chi tiết.',
+      msg: msgWarning.network,
     });
     return;
   };
-  const onPressCheckTime = () => {
-    // console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
-    // Check địa chỉ IP khi checkin
-    console.log(detailDayWork.checkin);
-    if (!detailDayWork?.checkin) {
-      API.createOrUpdateDayWork(dispatch);
-      // setState({...state, visible: true});
-      // chua checkin
-    } else {
-      // da checkin, press checkout -> disable button
-      API.createOrUpdateDayWork(dispatch, {isCheckout: true});
+
+  const checkinAfterCheckFaceSuccess = () => {
+    try {
+      // console.log(detailCompany?.config?.ipAddress, netInfo?.details?.ipAddress);
+      // Check địa chỉ IP khi checkin
+      console.log(detailDayWork.checkin);
+      if (!detailDayWork?.checkin) {
+        API.createOrUpdateDayWork(dispatch, {userId: state.selectedUser?._id});
+        // setState({...state, visibleModal: true});
+        // chua checkin
+      } else {
+        // da checkin, press checkout -> disable button
+        API.createOrUpdateDayWork(dispatch, {
+          isCheckout: true,
+          userId: state.selectedUser?._id,
+        });
+      }
+    } catch (error) {
+      console.log('checkinAfterCheckFaceSuccess ~ error', error);
+    }
+  };
+
+  const detectAndIdentifyImageCheckin = async (image) => {
+    setState({...state, visibleModal: true});
+    // console.log({userId});
+    const form = new FormData();
+    try {
+      form.append('file', {
+        uri: image.path,
+        type: image.mime,
+        name: image.path.substring(image.path.lastIndexOf('/') + 1),
+      });
+      // upload image to add face user
+      let res = await API.POST(
+        API.detectAndIdentify(state.selectedUser?.companyId?._id),
+        form,
+      );
+      console.log({res});
+      if (
+        res &&
+        Array.isArray(res) &&
+        res.length > 0 &&
+        Array.isArray(res[0]?.candidates) &&
+        res[0]?.candidates[0]?.personId
+      ) {
+        if (state.selectedUser?.personId === res[0]?.candidates[0]?.personId) {
+          console.log(res[0]?.candidates[0]?.personId, 'Face is valid');
+          checkinAfterCheckFaceSuccess();
+        } else {
+          showAlert({
+            msg: msgWarning.faceNotCorrect,
+          });
+          console.log(res[0]?.candidates[0]?.personId);
+        }
+        setState({...state, visibleModal: false});
+      } else {
+        showAlert({msg: msgWarning.faceInvalid});
+        setState({...state, visibleModal: false});
+      }
+    } catch (error) {
+      console.log('detectAndIdentifyImageCheckin ~ error', error);
+      setState({...state, visibleModal: false});
+    }
+  };
+  const openCameraCapture = () => {
+    ImageCropPicker.openCamera({
+      // width: commons.SCREEN_WIDTH,
+      // height: commons.SCREEN_HEIGHT,
+      width: 300,
+      height: 400,
+      cropping: false,
+      includeBase64: false,
+    })
+      .then((image) => {
+        detectAndIdentifyImageCheckin(image);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const onPressCheckTime = async () => {
+    try {
+      console.log({
+        ip: netInfo?.details?.ipAddress,
+        isGranted: state.isGrantedLocation,
+      });
+      if (!state.selectedUser?.personId) {
+        showAlert({
+          msg: msgWarning.faceNotFound(state.selectedUser?.name),
+        });
+        return;
+      }
+      if (!netInfo?.details?.ipAddress) {
+        showAlert({
+          msg: msgWarning.network,
+        });
+        return;
+      }
+      if (state.isGrantedLocation) {
+        let location = await getLocation();
+        if (location?.latitude) {
+          // get location success
+          locationData = location;
+          console.log({locationData});
+          openCameraCapture();
+        } else {
+          showAlert({msg: 'Có lỗi xảy ra. Vui lòng thử lại sau.'});
+        }
+      } else {
+        requestLocationPermission(onPressCheckTime);
+      }
+    } catch (error) {
+      console.log({error});
     }
   };
   const closeModal = () => {
-    console.log('abc');
-    setState({...state, visible: false});
+    setState({...state, visibleModal: false});
   };
   return (
     <>
-      <HeaderMenuDrawer titleScreen={'Chấm công'} />
+      <HeaderMenuDrawer
+        titleScreen={`Chấm công ${moment().format('DD/MM/YYYY')}`}
+      />
       {state.isLoading && <LoadingView />}
       <Modal
         transparent={true}
-        visible={state.visible}
+        visible={state.visibleModal}
         onRequestClose={closeModal}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              width: 300,
-              height: 300,
-              backgroundColor: 'blue',
-            }}></View>
+        <View style={styles.containerModal}>
+          <View style={styles.containerContentModal}>
+            <Text>
+              {
+                'Đang kiểm tra dữ liệu khuôn mặt. Vui lòng chờ trong giây lát ...\n'
+              }
+            </Text>
+            <ActivityIndicator size="large" color={commons.colorMain} />
+          </View>
         </View>
       </Modal>
       <ScrollView
@@ -357,12 +518,10 @@ const HomeScreen = (props) => {
           <TimeCheckin />
           <View style={styles.viewBottomBlock} />
           <View style={{}}>
-            <Text style={styles.title}>
+            {/* <Text style={styles.title}>
               Ngày: {moment().format('DD-MM-YYYY')}
-            </Text>
-            <Text style={styles.title}>
-              Tổng thời gian làm: <TimerIntervalView {...{detailDayWork}} />
-            </Text>
+            </Text> */}
+
             <TextView
               style={{
                 backgroundColor: commons.colorMain,
@@ -371,6 +530,7 @@ const HomeScreen = (props) => {
               styleText={{
                 color: 'white',
                 fontSize: commons.fontSize16,
+                textAlign: 'center',
                 fontWeight: 'bold',
               }}
               styleTextDisabled={{
@@ -389,14 +549,31 @@ const HomeScreen = (props) => {
                 ...styles.buttonCheckTime,
               }}
               disabled={isDisableButtonCheckTime()}>
-              {getTextStatus().msgButton}
+              <Text
+                style={{
+                  ...styles.title,
+                }}>
+                {'Tổng TG làm:\n'} <TimerIntervalView {...{detailDayWork}} />
+                {'\n\n\n'}
+                {getTextStatus().msgButton}
+              </Text>
             </TextView>
           </View>
-          <CheckinView />
         </View>
       </ScrollView>
+      <CheckinView />
+      {/* <CustomBottomSheet
+        {...{
+          refBottomSheet,
+          percentHeight: state.percentHeight,
+          hideBottomSheet,
+          onSelectedItem,
+          titleSheet,
+          dataSheet,
+        }}
+      /> */}
     </>
   );
 };
 
-export default HomeScreen;
+export default memo(HomeScreen);

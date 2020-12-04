@@ -44,5 +44,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     elevation: 10,
   },
+  containerModal: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  containerContentModal: {
+    // width: 300,
+    // height: 150,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    width: '85%',
+  },
 });
 export default styles;

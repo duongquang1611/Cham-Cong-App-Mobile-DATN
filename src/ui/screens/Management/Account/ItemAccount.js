@@ -226,8 +226,8 @@ const ItemAccount = (props) => {
           </View>
           {showUpdateFace && (
             <TextView
-              onPress={openCameraCapture}
-              // onPress={openImagePicker}
+              // onPress={openCameraCapture}
+              onPress={openImagePicker}
               id={'face_recognition'}
               data={item}
               style={{...styles.center}}

@@ -93,6 +93,7 @@ const ListUserCompany = (props) => {
         return index.toString();
       }}
       extraData={usersInCompany}
+      style={{backgroundColor: 'white'}}
       contentContainerStyle={{
         paddingTop: commons.margin5,
         paddingHorizontal: commons.margin,
@@ -101,7 +102,6 @@ const ListUserCompany = (props) => {
       automaticallyAdjustContentInsets={false}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
-      style={{backgroundColor: 'white'}}
       ItemSeparatorComponent={SeparatorView}
       removeClippedSubviews={true}
       initialNumToRender={10}

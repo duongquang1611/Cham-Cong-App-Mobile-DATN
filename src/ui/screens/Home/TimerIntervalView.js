@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import commons from '../../commons';
 
@@ -18,13 +18,15 @@ const TimerIntervalView = (props) => {
   }, [detailDayWork, timer]);
   return (
     <Text>
-      {detailDayWork?.checkin && detailDayWork?.checkout
-        ? commons.getDiffTime(detailDayWork?.checkin, detailDayWork?.checkout)
-        : timer || commons.DEFAULT_TIME}
+      {detailDayWork?.checkin || detailDayWork?.checkout
+        ? detailDayWork?.checkin && detailDayWork?.checkout
+          ? commons.getDiffTime(detailDayWork?.checkin, detailDayWork?.checkout)
+          : timer
+        : commons.DEFAULT_TIME}
     </Text>
   );
 };
 
-export default TimerIntervalView;
+export default memo(TimerIntervalView);
 
 const styles = StyleSheet.create({});

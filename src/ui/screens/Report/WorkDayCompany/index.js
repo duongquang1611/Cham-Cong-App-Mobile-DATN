@@ -8,7 +8,7 @@ const WorkDayCompany = () => {
   const reportReducer = useSelector((state) => state.reportReducer);
   const {workDaysCompany} = reportReducer;
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <ListUserCompany
         detailData={workDaysCompany}
         typeTab={TypeTabReport.work_day}

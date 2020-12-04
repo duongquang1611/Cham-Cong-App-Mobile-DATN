@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {LoadingView, showAlert} from 'cc-components';
-import React, {memo, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
@@ -81,7 +81,7 @@ const AccountManagement = () => {
     });
   };
 
-  const deleteAccount = async (item) => {
+  const deleteAccount = useCallback(async (item) => {
     const onPressDeleteAccount = async () => {
       try {
         let res = await API.DELETE(API.detailUser(item._id));
@@ -98,12 +98,12 @@ const AccountManagement = () => {
       showCancel: true,
       onPressOK: onPressDeleteAccount,
     });
-  };
-  const editAccount = (item) => {
+  }, []);
+  const editAccount = useCallback((item) => {
     appNavigate.navToOtherScreen(navigation.dispatch, 'EditAccount', {
       data: item,
     });
-  };
+  }, []);
 
   const handleUploadRNFetchBlob = async (image, userId) => {
     setState({...state, isLoading: true});

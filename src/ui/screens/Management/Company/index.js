@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {LoadingView, showAlert} from 'cc-components';
-import React, {memo, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
@@ -66,7 +66,7 @@ const CompanyManagement = () => {
     });
   };
 
-  const deleteCompany = async (item) => {
+  const deleteCompany = useCallback(async (item) => {
     const onPressDeleteCompany = async () => {
       try {
         let res = await API.DELETE(API.detailCompany(item._id));
@@ -83,12 +83,12 @@ const CompanyManagement = () => {
       showCancel: true,
       onPressOK: onPressDeleteCompany,
     });
-  };
-  const editCompany = (item) => {
+  }, []);
+  const editCompany = useCallback((item) => {
     appNavigate.navToOtherScreen(navigation.dispatch, 'EditCompany', {
       data: item,
     });
-  };
+  }, []);
 
   const renderItem = ({item, index}) => {
     return (
