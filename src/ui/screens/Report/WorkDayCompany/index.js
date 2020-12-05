@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import ListUserCompany from '../ListUserCompany';
+import ListReportCompany from '../ListReportCompany';
 import {useSelector} from 'react-redux';
 import styles from '../styles';
 import {TypeTabReport} from '../TypeTabReport';
-const WorkDayCompany = () => {
+const WorkDayCompany = (props) => {
   const reportReducer = useSelector((state) => state.reportReducer);
   const {
     workDaysCompany,
@@ -13,10 +13,7 @@ const WorkDayCompany = () => {
   } = reportReducer;
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <ListUserCompany
-        detailData={workDaysCompany}
-        typeTab={TypeTabReport.work_day}
-      />
+      <ListReportCompany {...props} typeTab={TypeTabReport.work_day} />
     </View>
   );
 };

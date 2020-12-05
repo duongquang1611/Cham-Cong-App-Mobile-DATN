@@ -25,6 +25,7 @@ const SeparatorView = () => {
       }}></View>
   );
 };
+let sort = {sortType: 'updatedAt', sortValue: -1};
 
 const AccountManagement = () => {
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ const AccountManagement = () => {
       filter.companyId = user.companyId._id;
       console.log('AccountManagement -> filter', filter);
     }
-    API.getListUsers(dispatch, filter);
+    API.getListUsers(dispatch, {...filter, ...sort});
     // console.log('AccountManagement -> res', res);
 
     commons.wait(1000).then(() => {

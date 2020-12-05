@@ -7,7 +7,7 @@ const RoleEntity = {
     _id: {type: 'string?', default: 1},
     name: {type: 'string?'},
     code: {type: 'string?'},
-    level: {type: 'string?'},
+    level: {type: 'int?'},
   },
 };
 

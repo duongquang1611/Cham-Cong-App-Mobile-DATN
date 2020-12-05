@@ -9,11 +9,11 @@ import React, {
 } from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {Table, TableWrapper, Row} from 'react-native-table-component';
-import Context from '../../../../context/context';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
-import commons from '../../../commons';
-const AskDayOffCompany = (props) => {
+import Context from '../../../context/context';
+import commons from '../../commons';
+const ListReportCompany = (props) => {
   const context = useContext(Context);
   const reportReducer = useSelector((state) => state.reportReducer);
   const {
@@ -44,10 +44,6 @@ const AskDayOffCompany = (props) => {
     return detail || null;
   });
   const filterData = useCallback((data, key, value, type) => {
-    // console.log(
-    //   '🚀 ~ file: ListReportCompany.js ~ line 20 ~ filterData ~ data',
-    //   data,
-    // );
     switch (type) {
       case 'COME_LEAVE':
         return data.filter(
@@ -168,7 +164,7 @@ const AskDayOffCompany = (props) => {
     </View>
   );
 };
-export default memo(AskDayOffCompany);
+export default memo(ListReportCompany);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

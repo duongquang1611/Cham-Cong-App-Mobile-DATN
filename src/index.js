@@ -9,6 +9,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {myStore, persistor} from './redux/store';
 import {LoadingView} from './ui/components';
 import {LocaleConfig} from 'react-native-calendars';
+import GlobalState from './context/GlobalState';
 LocaleConfig.locales['vi'] = {
   monthNames: [
     'Tháng 2',
@@ -58,11 +59,13 @@ export default class App extends React.PureComponent {
     ]);
     return (
       <Provider store={myStore}>
-        <MenuProvider>
-          <PersistGate loading={<LoadingView />} persistor={persistor}>
-            <RootNavigation />
-          </PersistGate>
-        </MenuProvider>
+        <GlobalState>
+          <MenuProvider>
+            <PersistGate loading={<LoadingView />} persistor={persistor}>
+              <RootNavigation />
+            </PersistGate>
+          </MenuProvider>
+        </GlobalState>
       </Provider>
     );
   }

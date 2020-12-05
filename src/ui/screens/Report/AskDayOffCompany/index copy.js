@@ -1,20 +1,19 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 import ListUserCompany from '../ListUserCompany_copy';
-import styles from '../styles';
 import {TypeTabReport} from '../TypeTabReport';
-const AskComeLeaveCompany = () => {
+const AskDayOffCompany = () => {
   const reportReducer = useSelector((state) => state.reportReducer);
-  const {askComeLeaveInCompany} = reportReducer;
+  const {askDayOffInCompany} = reportReducer;
   return (
     <View>
       <ListUserCompany
-        typeTab={TypeTabReport.come_leave}
-        detailData={askComeLeaveInCompany}
+        typeTab={TypeTabReport.day_off}
+        detailData={askDayOffInCompany}
       />
     </View>
   );
 };
 
-export default AskComeLeaveCompany;
+export default AskDayOffCompany;
