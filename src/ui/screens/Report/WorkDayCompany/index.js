@@ -6,7 +6,11 @@ import styles from '../styles';
 import {TypeTabReport} from '../TypeTabReport';
 const WorkDayCompany = () => {
   const reportReducer = useSelector((state) => state.reportReducer);
-  const {workDaysCompany} = reportReducer;
+  const {
+    workDaysCompany,
+    askDayOffInCompany,
+    askComeLeaveInCompany,
+  } = reportReducer;
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ListUserCompany

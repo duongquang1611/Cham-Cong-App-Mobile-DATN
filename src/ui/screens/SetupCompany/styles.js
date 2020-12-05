@@ -22,6 +22,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: commons.margin,
   },
+  valueInfoCompany: {
+    color: 'black',
+    marginVertical: 15,
+    fontSize: commons.fontSize15,
+    paddingLeft: 8,
+  },
 });
 
 export default styles;

@@ -151,10 +151,7 @@ const SetupCompany = (props) => {
   };
 
   const hideDatePicker = () => {
-    console.log(
-      '🚀 ~ file: index.js ~ line 119 ~ hideDatePicker ~ state',
-      state,
-    );
+    console.log('hideDatePicker ~ state', state);
     setState({
       ...state,
       isDatePickerVisible: false,
@@ -179,22 +176,14 @@ const SetupCompany = (props) => {
           onPress={state.isEditing ? showDatePicker : null}
           style={{flex: 2, ...styles.input}}
           value={value}
-          styleValue={{
-            color: 'black',
-            marginVertical: 15,
-            fontSize: commons.fontSize15,
-          }}
+          styleValue={styles.valueInfoCompany}
         />
       </View>
     );
   };
 
   const onPressUseDefault = async ({id}) => {
-    console.log(
-      '🚀 ~ file: index.js ~ line 217 ~ onPressUseDefault ~ id',
-      id,
-      state.isGranted,
-    );
+    console.log('onPressUseDefault ~ id', id, state.isGranted);
     try {
       switch (id) {
         case 'ipAddress':
@@ -220,10 +209,7 @@ const SetupCompany = (props) => {
           break;
       }
     } catch (error) {
-      console.log(
-        '🚀 ~ file: index.js ~ line 155 ~ onPressUseDefault ~ error',
-        error,
-      );
+      console.log({error});
     }
   };
   return (
@@ -332,7 +318,7 @@ const SetupCompany = (props) => {
                   control,
                 }}
               />
-              <TextInputController
+              {/* <TextInputController
                 {...{
                   name: 'maxMinutesComeLate',
                   placeholder: 'Số phút đi muộn tối đa',
@@ -353,7 +339,7 @@ const SetupCompany = (props) => {
                   errors,
                   control,
                 }}
-              />
+              /> */}
 
               {/* <TextPressController
               {...{
@@ -408,6 +394,30 @@ const SetupCompany = (props) => {
                           commons.FORMAT_TIME_DIFF,
                         )
                       : config?.allowCheckout,
+                }}
+              />
+              <RowTextView
+                {...{
+                  title: 'Giờ nghỉ trưa',
+                  id: 'startBreak',
+                  value:
+                    currentPicker && form['startBreak']
+                      ? moment(form['startBreak']).format(
+                          commons.FORMAT_TIME_DIFF,
+                        )
+                      : config?.startBreak,
+                }}
+              />
+              <RowTextView
+                {...{
+                  title: 'Kết thúc nghỉ trưa',
+                  id: 'endBreak',
+                  value:
+                    currentPicker && form['endBreak']
+                      ? moment(form['endBreak']).format(
+                          commons.FORMAT_TIME_DIFF,
+                        )
+                      : config?.endBreak,
                 }}
               />
               <View style={{height: 15}} />

@@ -51,6 +51,9 @@ const AppImages = {
   female_original: {uri: 'https://i.imgur.com/xCplblE.jpg'},
 
   face_recognition: require('./face_recognition.png'),
+
+  excel_01: require('./excel_01.png'),
+  excel_02: require('./excel_02.png'),
 };
 
 export default AppImages;

@@ -34,7 +34,7 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import msgWarning from './msgWarning';
 moment.locale(commons.getDeviceLanguage(false));
 
-const DEFAULT_TIME = '--h : --p : --s';
+const DEFAULT_TIME = '--h : --m : --s';
 let locationData = {};
 
 const HomeScreen = (props) => {

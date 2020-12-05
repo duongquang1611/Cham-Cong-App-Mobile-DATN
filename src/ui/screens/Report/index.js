@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {Portal, Provider} from 'react-native-paper';
+
 import models from '../../../models';
 import API from '../../../networking';
 import commons from '../../commons';
@@ -20,8 +22,10 @@ import WorkDayCompany from './WorkDayCompany';
 import MonthPicker from 'react-native-month-year-picker';
 
 import styles from './styles';
-let filterMonthYear = commons.getDayMonthYear(undefined, false);
+import ButtonExportFAB from './ButtonExportFAB';
 let filterComeLeave = {comeLeave: true};
+let filterMonthYear = commons.getDayMonthYear(undefined, false);
+
 const Report = () => {
   const Tab = createMaterialTopTabNavigator();
   let user = models.getUserInfo();
@@ -37,14 +41,19 @@ const Report = () => {
     await Promise.all([
       API.getListUsersInCompany(dispatch),
       API.getListDayWorkCompany(dispatch, filterMonthYear),
-      API.getListAskComeLeaveInCompany(dispatch, filterComeLeave),
+      API.getListAskComeLeaveInCompany(dispatch, {
+        ...filterComeLeave,
+        ...filterMonthYear,
+      }),
       API.getListAskDayOffInCompany(dispatch),
     ]);
   };
 
   useEffect(() => {
+    filterMonthYear = commons.getDayMonthYear(date, false);
+    console.log({filterMonthYear});
     getData();
-  }, [detailDayWork]);
+  }, [detailDayWork, date]);
   const togglePicker = useCallback((value) => setShowPicker(value), []);
   const onValueChange = useCallback(
     (event, newDate) => {
@@ -56,6 +65,12 @@ const Report = () => {
     },
     [date, showPicker],
   );
+  const exportWorkDay = () => {
+    console.log('export work day');
+  };
+  const exportComeLeave = () => {
+    console.log('export come leave');
+  };
   return (
     <>
       <HeaderMenuDrawer
@@ -67,18 +82,23 @@ const Report = () => {
         sizeMenuRight={commons.sizeIcon20}
         onPressMenuRight={() => togglePicker(true)}
       />
-      {showPicker && (
-        <MonthPicker
-          onChange={onValueChange}
-          value={date}
-          minimumDate={new Date(1980, 1)}
-          maximumDate={new Date(2050, 12)}
-          locale="vi"
-          okButton="Đồng ý"
-          cancelButton="Hủy"
-        />
-      )}
-      <WorkDayCompany />
+      <Provider>
+        {showPicker && (
+          <MonthPicker
+            onChange={onValueChange}
+            value={date}
+            minimumDate={new Date(1980, 1)}
+            maximumDate={new Date(2050, 12)}
+            locale="vi"
+            okButton="Đồng ý"
+            cancelButton="Hủy"
+          />
+        )}
+        <WorkDayCompany date={date} />
+        <Portal>
+          <ButtonExportFAB {...{exportWorkDay, exportComeLeave}} />
+        </Portal>
+      </Provider>
 
       {/* <Tab.Navigator
         tabBarPosition="top"
