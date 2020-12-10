@@ -3,9 +3,10 @@ import React, {useState} from 'react';
 import {Image, Text, View} from 'react-native';
 import {FAB, Portal, Provider} from 'react-native-paper';
 import AppImages from '../../../../assets/images';
+import commons from '../../commons';
 
 const ButtonExportFAB = (props) => {
-  const {exportWorkDay, exportComeLeave} = props;
+  const {exportExcel} = props;
   const [state, setState] = useState({open: false});
   const onStateChange = ({open}) => setState({open});
 
@@ -15,7 +16,7 @@ const ButtonExportFAB = (props) => {
     <FAB.Group
       style={{padding: 16}}
       open={open}
-      fabStyle={{backgroundColor: 'black'}}
+      // fabStyle={{backgroundColor: 'black'}}
       icon={open ? 'close' : AppImages.excel_02}
       color={'white'}
       actions={[
@@ -35,8 +36,16 @@ const ButtonExportFAB = (props) => {
               ]}
             />
           ),
+
+          // style: {
+          //   height: 60,
+          //   width: 60,
+          //   justifyContent: 'center',
+          //   alignItems: 'center',
+          //   borderRadius: 100,
+          // },
           label: 'Xuất báo cáo chấm công',
-          onPress: exportWorkDay,
+          onPress: () => exportExcel('workDay'),
         },
         {
           icon: ({size, color, direction}) => (
@@ -54,8 +63,27 @@ const ButtonExportFAB = (props) => {
               ]}
             />
           ),
-          label: 'Xuất báo cáo đi muộn, về sớm',
-          onPress: exportComeLeave,
+          label: 'Xuất báo cáo đi muộn',
+          onPress: () => exportExcel('comeLate'),
+        },
+        {
+          icon: ({size, color, direction}) => (
+            <Image
+              source={AppImages.excel_02}
+              style={[
+                {
+                  transform: [{scaleX: direction === 'rtl' ? -1 : 1}],
+                },
+                {
+                  width: size,
+                  height: size,
+                  tintColor: color,
+                },
+              ]}
+            />
+          ),
+          label: 'Xuất báo cáo về sớm',
+          onPress: () => exportExcel('leaveEarly'),
         },
       ]}
       onStateChange={onStateChange}

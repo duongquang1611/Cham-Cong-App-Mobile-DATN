@@ -8,6 +8,8 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Portal, Provider} from 'react-native-paper';
@@ -15,9 +17,9 @@ import {Portal, Provider} from 'react-native-paper';
 import models from '../../../models';
 import API from '../../../networking';
 import commons from '../../commons';
-import {HeaderMenuDrawer, LoadingView} from '../../components';
-import AskComeLeaveCompany from './AskComeLeaveCompany';
-import AskDayOffCompany from './AskDayOffCompany';
+import {HeaderMenuDrawer, LoadingView, showAlert} from '../../components';
+// import AskComeLeaveCompany from './AskComeLeaveCompany';
+// import AskDayOffCompany from './AskDayOffCompany';
 import WorkDayCompany from './WorkDayCompany';
 import MonthPicker from 'react-native-month-year-picker';
 
@@ -28,6 +30,13 @@ import ComeLateReport from './ComeLeaveCompany/ComeLateReport';
 import LeaveEarlyReport from './ComeLeaveCompany/LeaveEarlyReport';
 import moment from 'moment';
 import {TypeTabReport} from './TypeTabReport';
+import {
+  DocumentDirectoryPath,
+  DownloadDirectoryPath,
+  writeFile,
+  readFile,
+} from 'react-native-fs';
+import XLSX from 'xlsx';
 let filterComeLeave = {comeLeave: true};
 let filterMonthYear = commons.getDayMonthYear(undefined, false);
 let sort = {sortType: 'roleId.level', sortValue: -1};
@@ -36,6 +45,8 @@ const sumComeLeave = (accumulator, currentValue, key) => {
   return accumulator + currentValue[key];
 };
 
+const DDP =
+  (Platform.OS === 'ios' ? DocumentDirectoryPath : DownloadDirectoryPath) + '/';
 const Report = () => {
   const context = useContext(Context);
 
@@ -48,64 +59,41 @@ const Report = () => {
     (state) => state.dayWorkReducer.detailDayWork,
   );
   const reportReducer = useSelector((state) => state.reportReducer);
+  const {dataReport} = reportReducer;
   const {
-    workDaysCompany,
-    askDayOffInCompany,
-    // askComeLeaveInCompany,
-    usersInCompany,
-  } = reportReducer;
-  // const [date, setDate] = useState(new Date());
+    workDays = {},
+    report = {
+      workDay: [],
+      comeLate: [],
+      leaveEarly: [],
+    },
+    tableHead = [],
+    widthArr = [],
+  } = dataReport;
+
   const [showPicker, setShowPicker] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   let daysInMonth = moment(date).daysInMonth();
 
-  const [state, setState] = useState({
-    tableHead: [],
-    widthArr: [],
-    // workDayTableData:[],
-    // comeLateTableData:[],
-    // leaveEarlyTableData:[]
-  });
-
-  const getData = async (getFullData = false, type) => {
-    // !isLoading && setIsLoading(true);
-    // commons.wait(2000).then(() => setIsLoading(false));
-    if (type && type === 'users') {
-      API.getListUsersInCompany(dispatch, {...sort});
-    } else if (getFullData) {
-      await Promise.all([
-        API.getListUsersInCompany(dispatch, {...sort}),
-        API.getListDayWorkCompany(dispatch, filterMonthYear),
-        // API.getListAskComeLeaveInCompany(dispatch, {
-        //   ...filterComeLeave,
-        //   ...filterMonthYear,
-        // }),
-        API.getListAskDayOffInCompany(dispatch),
-      ]);
-    } else {
-      await Promise.all([
-        API.getListDayWorkCompany(dispatch, filterMonthYear),
-        // API.getListAskComeLeaveInCompany(dispatch, {
-        //   ...filterComeLeave,
-        //   ...filterMonthYear,
-        // }),
-        API.getListAskDayOffInCompany(dispatch),
-      ]);
-    }
+  const getData = async () => {
+    API.getReportCompany(dispatch, filterMonthYear, user?.companyId?._id);
+    commons.wait(1000).then(setIsLoading(false));
   };
-  useEffect(() => {
-    console.log('effect1');
-    getData(false, 'users');
-  }, [user?._id]);
 
   useEffect(() => {
-    console.log('effect2');
     filterMonthYear = commons.getDayMonthYear(date, false);
-    console.log({filterMonthYear});
-    getData(false);
+    !isLoading && setIsLoading(true);
   }, [detailDayWork, date]);
-  const togglePicker = useCallback((value) => setShowPicker(value), []);
 
+  useEffect(() => {
+    isLoading && getData();
+  }, [isLoading]);
+
+  const togglePicker = useCallback((value) => setShowPicker(value), []);
+  const createSheetName = (text) => {
+    text = text.replace(/([:\\\/?*\[\]]+)/g, ' ');
+    return text + ' ' + filterMonthYear.month + ' - ' + filterMonthYear.year;
+  };
   const onValueChange = useCallback(
     (event, newDate) => {
       if (showPicker) {
@@ -120,152 +108,73 @@ const Report = () => {
     [date, showPicker],
   );
 
-  useEffect(() => {
-    let tableHeadDays = ['STT', 'Họ tên', 'Chức vụ', 'Ngày sinh'];
-    let widthArrDays = [40, 150, 100, 120];
-    for (let i = 0; i < daysInMonth + 1; i++) {
-      if (i === daysInMonth) {
-        tableHeadDays.push('Tổng');
-      } else tableHeadDays.push(i + 1);
-      widthArrDays.push(60);
-    }
-    setState({...state, tableHead: tableHeadDays, widthArr: widthArrDays});
-  }, [daysInMonth]);
-
-  const getDetailData = useCallback((key = '_id', value, data) => {
-    let detail = data?.find((item) => item[key] === value);
-    return detail || null;
-  });
-  let tableData = [];
-
-  const fillSheet = (
-    dataEachUser,
-    dataEachDay,
-    typeTab = TypeTabReport.work_day,
-  ) => {
-    let msg = '';
-    switch (typeTab) {
-      case TypeTabReport.work_day:
-        if (dataEachDay?.checkin && dataEachDay?.checkout) {
-          msg = 'X';
+  const exportExcel = async (typeExport = 'workDay') => {
+    // type: workDay, comeLate, leaveEarly
+    const requestWritePermission = async () => {
+      console.log('permission');
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Quyền truy cập bộ nhớ',
+            message: 'Ứng dụng cần cấp quyền truy cập bộ nhớ.',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          exportExcelAfterCheckPermission();
+        } else {
+          showAlert({
+            msg:
+              'Bạn đã từ chối quyền truy cập bộ nhớ của ứng dụng. Một số chức năng có thể không hoạt động.',
+          });
         }
+      } catch (error) {
+        console.log('Write permission err', error);
+      }
+    };
 
-        return msg;
-      case TypeTabReport.come_late:
-        if (dataEachDay?.minutesComeLate)
-          msg = dataEachDay?.minutesComeLate + 'ph';
-        return msg;
-      case TypeTabReport.leave_early:
-        if (dataEachDay?.minutesLeaveEarly)
-          msg = dataEachDay?.minutesLeaveEarly + 'ph';
-        return msg;
+    requestWritePermission();
 
-      default:
-        break;
-    }
-  };
-  const filterData = useCallback((data, key, value, type) => {
-    switch (type) {
-      case 'COME_LEAVE':
-        return data.filter(
-          (item) =>
-            item['minutesComeLate'] > 0 || item['minutesLeaveEarly'] > 0,
-        ).length;
-      case 'COME_LATE':
-        return data.filter((item) => item['minutesComeLate'] > 0).length;
-      case 'LEAVE_EARLY':
-        return data.filter((item) => item['minutesLeaveEarly'] > 0).length;
-      case 'MINUTES_COME_LATE':
-        return data.reduce(
-          (accumulator, currentValue) =>
-            sumComeLeave(accumulator, currentValue, key),
-          0,
-        );
-      case 'MINUTES_LEAVE_EARLY':
-        return data.reduce(
-          (accumulator, currentValue) =>
-            sumComeLeave(accumulator, currentValue, key),
-          0,
-        );
-      default:
-        return data.filter((item) => item[key] === value);
-    }
-  }, []);
-
-  for (let i = 0; i < usersInCompany.length; i++) {
-    let msg = '';
-    let rowDataWD = []; // work day
-    let rowDataCL = []; // come late
-    let rowDataLE = []; // leave early
-    let dataEachUser = getDetailData(
-      '_id',
-      usersInCompany[i]?._id,
-      workDaysCompany,
-    );
-
-    let dataEachDay = '';
-    for (let j = -3; j < daysInMonth + 2; j++) {
-      dataEachDay = getDetailData('day', j, dataEachUser?.results);
-
-      switch (j) {
-        case -3:
-          rowDataWD.push(i + 1);
-          rowDataCL.push(i + 1);
-          rowDataLE.push(i + 1);
+    const exportExcelAfterCheckPermission = async () => {
+      let dataSheet = [];
+      dataSheet = [tableHead, ...report[typeExport]];
+      console.log({typeExport});
+      let sheetName = '';
+      switch (typeExport) {
+        case 'workDay':
+          sheetName = createSheetName('Báo cáo chấm công tháng');
           break;
-        case -2:
-          let name = usersInCompany[i]?.name;
-          rowDataWD.push(name);
-          rowDataCL.push(name);
-          rowDataLE.push(name);
+        case 'comeLate':
+          sheetName = createSheetName('Báo cáo đi muộn tháng');
+
           break;
-        case -1:
-          let roleName = usersInCompany[i]?.roleId?.name;
-          rowDataWD.push(roleName);
-          rowDataWD.push(roleName);
-          rowDataWD.push(roleName);
-          break;
-        case 0:
-          let dateOfBirthFormat = commons.noData;
-          if (usersInCompany[i]?.dateOfBirth) {
-            dateOfBirthFormat = moment(usersInCompany[i]?.dateOfBirth).format(
-              commons.FORMAT_DATE_VN,
-            );
-          }
-          rowDataWD.push(dateOfBirthFormat);
-          rowDataCL.push(dateOfBirthFormat);
-          rowDataLE.push(dateOfBirthFormat);
-          break;
-        case daysInMonth + 1:
-          // sum
-          msg = 0;
-          if (dataEachUser) {
-            msg =
-              filterData(dataEachUser?.results || [], 'isSuccessDay', true)
-                .length || 0;
-          }
-          rowDataWD.push(msg);
+        case 'leaveEarly':
+          sheetName = createSheetName('Báo cáo về sớm tháng');
           break;
 
         default:
-          // check or uncheck
-          msg = '';
-          if (dataEachUser && dataEachDay) {
-            msg = fillSheet(dataEachUser, dataEachDay);
-          }
-
-          rowDataWD.push(msg);
           break;
       }
-    }
-    console.log({rowDataWD});
-    tableData.push(rowDataWD);
-  }
-  const exportWorkDay = () => {
-    console.log('export work day');
-  };
-  const exportComeLeave = () => {
-    console.log('export come leave');
+      dataSheet.unshift([sheetName]);
+      try {
+        // build new workbook
+        let worksheet = XLSX.utils.aoa_to_sheet(dataSheet);
+        let new_workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(new_workbook, worksheet, 'SheetJS');
+
+        // write file
+        const wbout = XLSX.write(new_workbook, {
+          type: 'binary',
+          bookType: 'xlsx',
+        });
+        const file = DDP + `${sheetName}.xlsx`;
+        let res = await writeFile(file, wbout, 'ascii');
+        showAlert({msg: `Lưu báo cáo thành công tại đường dẫn: ${file}`});
+      } catch (error) {
+        console.log({error});
+        showAlert({msg: 'Lỗi khi xuất báo cáo. Vui lòng thử lại.'});
+      }
+    };
   };
 
   return (
@@ -295,7 +204,7 @@ const Report = () => {
           />
         )}
         {/* <WorkDayCompany {...{date}} /> */}
-        {/* {isLoading && <LoadingView />} */}
+        {isLoading && <LoadingView />}
         <Tab.Navigator
           tabBarPosition="top"
           initialRouteName={'Account'}
@@ -316,23 +225,6 @@ const Report = () => {
             component={WorkDayCompany}
             options={{tabBarLabel: 'Chấm công'}}
           />
-          {/* <Tab.Screen
-            name={'AskComeLeaveCompany'}
-            component={AskComeLeaveCompany}
-            options={{tabBarLabel: 'Muộn, Sớm'}}
-           
-          />
-          <Tab.Screen
-            name={'AskDayOffCompany'}
-            component={AskDayOffCompany}
-            // initialParams={{filterMonthYear}}
-            options={{tabBarLabel: 'Xin nghỉ'}}
-            // listeners={({navigation}) => ({
-            //   focus: (e) => {
-            //     currentTabFocus = TypeTabManagement.company;
-            //   },
-            // })}
-          /> */}
 
           <Tab.Screen
             name={'ComeLateReport'}
@@ -346,7 +238,7 @@ const Report = () => {
           />
         </Tab.Navigator>
         <Portal>
-          <ButtonExportFAB {...{exportWorkDay, exportComeLeave}} />
+          <ButtonExportFAB {...{exportExcel}} />
         </Portal>
       </Provider>
     </>

@@ -8,8 +8,8 @@ const config = {
 
     baseApiUrlHeroku: 'https://cham-cong.herokuapp.com/api/',
     // ngrok
-    BASE_API_URL: 'http://3cb54dece7f7.ngrok.io/api/',
-    BASE_URL: 'http://3cb54dece7f7.ngrok.io/',
+    BASE_API_URL: 'http://1b80b12119c1.ngrok.io/api/',
+    BASE_URL: 'http://1b80b12119c1.ngrok.io/',
 
     // heroku
     // BASE_API_URL: `${baseUrlHeroku}/api/`,
@@ -39,10 +39,7 @@ const config = {
     searchCompanies: 'companies',
     detailCompany: (id) => `companies/${id}`,
     configCompany: 'companies/config',
-    workDayCompany: `companies/work-day`,
-    askComeLeaveInCompany: `companies/ask-come-leave`,
-    askDayOffInCompany: `companies/ask-day-off`,
-    usersInCompany: `companies/users`,
+    reportCompany: (id) => `companies/${id}/report`,
 
     workDay: 'work-day', // list work day: get, update workDay: put, checkout thi them isCheckout: true
     askComeLeave: 'work-day/ask-come-leave', // put, chua co thi tao moi

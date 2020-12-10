@@ -8,28 +8,48 @@ import React, {
   useState,
 } from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
-import {Table, TableWrapper, Row} from 'react-native-table-component';
-import Context from '../../../../context/context';
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Col,
+  Rows,
+  Cell,
+} from 'react-native-table-component';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
-import commons from '../../../commons';
+import Context from '../../../context/context';
+import commons from '../../commons';
+import {TypeTabReport} from './TypeTabReport';
 const sumComeLeave = (accumulator, currentValue, key) => {
   return accumulator + currentValue[key];
 };
-const AskDayOffCompany = (props) => {
+const ListReportCompany = (props) => {
   const context = useContext(Context);
+  const {typeTab = TypeTabReport.work_day} = props;
   const reportReducer = useSelector((state) => state.reportReducer);
   const {
     workDaysCompany,
     askDayOffInCompany,
-    askComeLeaveInCompany,
+    // askComeLeaveInCompany,
     usersInCompany,
   } = reportReducer;
 
+  let dayComeLate = workDaysCompany.filter((day) => {
+    if (day?.minutesComeLate) return day;
+    else return;
+  });
+  let dayLeaveEarly = workDaysCompany.filter((day) => {
+    if (day?.minutesLeaveEarly) return day;
+    else return;
+  });
   const {dateToFilter: date, setDateToFilter: setDate} = context;
   let daysInMonth = moment(date).daysInMonth();
 
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    tableHead: [],
+    widthArr: [],
+  });
   useEffect(() => {
     let tableHeadDays = ['STT', 'Họ tên', 'Chức vụ', 'Ngày sinh'];
     let widthArrDays = [40, 150, 100, 120];
@@ -46,11 +66,31 @@ const AskDayOffCompany = (props) => {
     let detail = data?.find((item) => item[key] === value);
     return detail || null;
   });
+  let tableData = [];
+
+  const fillSheet = (dataEachUser, dataEachDay) => {
+    let msg = '';
+    switch (typeTab) {
+      case TypeTabReport.work_day:
+        if (dataEachDay?.checkin && dataEachDay?.checkout) {
+          msg = 'X';
+        }
+
+        return msg;
+      case TypeTabReport.come_late:
+        if (dataEachDay?.minutesComeLate)
+          msg = dataEachDay?.minutesComeLate + 'ph';
+        return msg;
+      case TypeTabReport.leave_early:
+        if (dataEachDay?.minutesLeaveEarly)
+          msg = dataEachDay?.minutesLeaveEarly + 'ph';
+        return msg;
+
+      default:
+        break;
+    }
+  };
   const filterData = useCallback((data, key, value, type) => {
-    // console.log(
-    //   '🚀 ~ file: ListReportCompany.js ~ line 20 ~ filterData ~ data',
-    //   data,
-    // );
     switch (type) {
       case 'COME_LEAVE':
         return data.filter(
@@ -77,8 +117,6 @@ const AskDayOffCompany = (props) => {
         return data.filter((item) => item[key] === value);
     }
   }, []);
-
-  const tableData = [];
 
   for (let i = 0; i < usersInCompany.length; i++) {
     let msg = '';
@@ -115,6 +153,7 @@ const AskDayOffCompany = (props) => {
           }
           break;
         case daysInMonth + 1:
+          // sum
           msg = 0;
           if (dataEachUser) {
             msg =
@@ -125,12 +164,12 @@ const AskDayOffCompany = (props) => {
           break;
 
         default:
+          // check or uncheck
           msg = '';
-          if (dataEachUser) {
-            if (dataEachDay && dataEachDay?.checkin && dataEachDay?.checkout) {
-              msg = 'X';
-            }
+          if (dataEachUser && dataEachDay) {
+            msg = fillSheet(dataEachUser, dataEachDay);
           }
+
           rowData.push(msg);
           break;
       }
@@ -143,6 +182,12 @@ const AskDayOffCompany = (props) => {
       <ScrollView horizontal={true}>
         <View>
           <Table borderStyle={{borderWidth: 1, borderColor: 'lightgray'}}>
+            {/* <Col
+                data={usersInCompany.map((item) => item?.name)}
+                style={{backgroundColor: 'rgba(0,0,0,0.05)'}}
+                heightArr={state.widthArr}
+                textStyle={styles.text}
+              /> */}
             <Row
               data={state.tableHead}
               widthArr={state.widthArr}
@@ -152,6 +197,13 @@ const AskDayOffCompany = (props) => {
           </Table>
           <ScrollView style={styles.dataWrapper}>
             <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+              {/* <Rows
+                data={tableData}
+                // flexArr={[2, 1, 1]}
+                widthArr={state.widthArr}
+                style={styles.row}
+                textStyle={styles.text}
+              /> */}
               {tableData.map((rowData, index) => (
                 <Row
                   key={index}
@@ -171,7 +223,7 @@ const AskDayOffCompany = (props) => {
     </View>
   );
 };
-export default memo(AskDayOffCompany);
+export default memo(ListReportCompany);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -184,4 +236,7 @@ const styles = StyleSheet.create({
   dataWrapper: {marginTop: -1},
   row: {height: 40, backgroundColor: 'white'},
   // row: {height: 40, backgroundColor: '#E7E6E1'},
+  singleHead: {width: 80, height: 40, backgroundColor: '#c8e1ff'},
+  table: {borderWidth: 1, borderColor: '#C1C0B9'},
+  head: {height: 40, backgroundColor: '#f1f8ff'},
 });

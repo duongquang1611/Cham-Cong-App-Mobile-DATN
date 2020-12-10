@@ -6,11 +6,8 @@ import styles from '../styles';
 import {TypeTabReport} from '../TypeTabReport';
 const WorkDayCompany = (props) => {
   const reportReducer = useSelector((state) => state.reportReducer);
-  const {
-    workDaysCompany,
-    askDayOffInCompany,
-    // askComeLeaveInCompany,
-  } = reportReducer;
+  const {dataReport} = reportReducer;
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ListReportCompany typeTab={TypeTabReport.work_day} />
