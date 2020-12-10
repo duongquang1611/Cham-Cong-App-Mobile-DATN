@@ -47,3 +47,15 @@ export function restrictSpecialCharacter(text) {
   let regex = /[^0-9]/gi;
   return text.replace(regex, '');
 }
+
+export function moneyFormat(number, fixed = 0) {
+  if (isNaN(number)) return 0;
+  number = number.toFixed(fixed);
+  let delimeter = ',';
+  number += '';
+  let rgx = /(\d+)(\d{3})/;
+  while (rgx.test(number)) {
+    number = number.replace(rgx, '$1' + delimeter + '$2');
+  }
+  return number;
+}

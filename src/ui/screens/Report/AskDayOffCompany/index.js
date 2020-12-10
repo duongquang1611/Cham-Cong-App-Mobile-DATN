@@ -13,6 +13,9 @@ import Context from '../../../../context/context';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
 import commons from '../../../commons';
+const sumComeLeave = (accumulator, currentValue, key) => {
+  return accumulator + currentValue[key];
+};
 const AskDayOffCompany = (props) => {
   const context = useContext(Context);
   const reportReducer = useSelector((state) => state.reportReducer);

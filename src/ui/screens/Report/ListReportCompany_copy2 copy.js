@@ -6,7 +6,9 @@ import EmptyList from '../../components/CustomFlatList/EmptyList';
 import SeparatorView from '../../components/CustomFlatList/SeparatorView';
 import styles from './styles';
 import {TypeTabReport} from './TypeTabReport';
-
+const sumComeLeave = (accumulator, currentValue, key) => {
+  return accumulator + currentValue[key];
+};
 const ItemInfoRow = ({value, title, first = false, end = false}) => {
   return (
     <View
