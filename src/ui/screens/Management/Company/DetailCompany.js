@@ -84,16 +84,13 @@ const DetailCompany = (props) => {
           title="Người đại diện"
           value={state.detailCompany?.representativeName}
         />
-
-        <RowInfoModal
-          title="Cập nhật lần cuối"
-          value={moment(state.detailCompany?.updatedAt).format(
-            commons.FORMAT_DATE_VN,
-          )}
-        />
       </View>
     );
   }, [state.detailCompany]);
+  let isValidUsers =
+    state.detailCompany?.users &&
+    Array.isArray(state.detailCompany?.users) &&
+    state.detailCompany?.users.length > 0;
   return (
     <>
       <HeaderView
@@ -187,7 +184,9 @@ const DetailCompany = (props) => {
         }>
         <BaseInfoCompany />
         <List.Accordion
-          title="Danh sách nhân viên"
+          title={`Danh sách nhân viên (${
+            isValidUsers ? state.detailCompany?.users.length : 0
+          })`}
           titleStyle={{color: 'black', fontWeight: 'bold'}}
           //   left={() => (
           //     <IconView
@@ -198,9 +197,7 @@ const DetailCompany = (props) => {
           //   )}
           expanded={state.expanded}
           onPress={onPressExpanded}>
-          {state.detailCompany?.users &&
-          Array.isArray(state.detailCompany?.users) &&
-          state.detailCompany?.users.length > 0 ? (
+          {isValidUsers ? (
             state.detailCompany?.users.map((user, index) => (
               <TouchableOpacity
                 style={{
