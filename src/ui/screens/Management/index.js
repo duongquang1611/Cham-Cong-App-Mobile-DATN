@@ -89,9 +89,9 @@ const TabManagement = () => {
       />
       <Provider>
         <Tab.Navigator
-          // initialRouteName={'AskComeLeave'}
           tabBarPosition="top"
-          initialRouteName={'Account'}
+          initialRouteName={'Company'}
+          // initialRouteName={'Account'}
           backBehavior="none"
           style={{backgroundColor: 'white'}}
           sceneContainerStyle={{backgroundColor: 'white'}}

@@ -59,7 +59,7 @@ const Report = () => {
     (state) => state.dayWorkReducer.detailDayWork,
   );
   const reportReducer = useSelector((state) => state.reportReducer);
-  const {dataReport} = reportReducer;
+  const {dataReport = {}} = reportReducer;
   const {
     workDays = {},
     report = {
@@ -100,7 +100,7 @@ const Report = () => {
         const selectedDate = newDate || date;
         console.log('vao day', newDate);
         togglePicker(false);
-        setDate(selectedDate);
+        if (selectedDate) setDate(selectedDate);
       }
 
       // console.log({selectedDate});

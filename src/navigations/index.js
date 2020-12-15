@@ -33,6 +33,7 @@ import AddCompany from '../ui/screens/Management/Company/AddCompany';
 import ChooseAddress from '../ui/screens/SetupCompany/ChooseAddress';
 import EditAccount from '../ui/screens/Management/Account/EditAccount';
 import EditCompany from '../ui/screens/Management/Company/EditCompany';
+import DetailCompany from '../ui/screens/Management/Company/DetailCompany';
 import models from '../models';
 
 const RootNavigation = () => {
@@ -57,7 +58,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
-        initialRouteName={isAdminSystem ? 'TabManagement' : 'Report'}
+        initialRouteName={isAdminSystem ? 'TabManagement' : 'TabManagement'}
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -269,6 +270,7 @@ const RootNavigation = () => {
         <Stack.Screen name="AddAccount" component={AddAccount} />
         <Stack.Screen name="EditAccount" component={EditAccount} />
         <Stack.Screen name="EditCompany" component={EditCompany} />
+        <Stack.Screen name="DetailCompany" component={DetailCompany} />
         <Stack.Screen name="ChooseAddress" component={ChooseAddress} />
         {isLoginSuccess ? (
           <Stack.Screen name="DrawerStack" component={DrawerStack} />

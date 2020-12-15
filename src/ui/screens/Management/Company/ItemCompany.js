@@ -14,6 +14,8 @@ import AppImages from '../../../../../assets/images';
 import baseStyles from '../../../../baseStyles';
 import commons from '../../../commons';
 import moment from 'moment';
+import {useNavigation} from '@react-navigation/native';
+import {appNavigate} from '../../../../navigations';
 
 let row = [];
 let prevOpenedRow = null;
@@ -33,6 +35,7 @@ const RowInfoModal = (props) => {
 const ItemCompany = (props) => {
   const {item, index, deleteCompany, editCompany} = props;
   const [isVisible, setIsVisible] = useState(false);
+  const navigation = useNavigation();
   const closeRow = (index) => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
@@ -82,6 +85,11 @@ const ItemCompany = (props) => {
   };
   const changeVisibleModal = () => {
     setIsVisible(!isVisible);
+  };
+  const navToDetailCompany = () => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'DetailCompany', {
+      companyData: item,
+    });
   };
   return (
     <>
@@ -150,7 +158,9 @@ const ItemCompany = (props) => {
             padding: 10,
             paddingHorizontal: 15,
           }}
-          onPress={changeVisibleModal}>
+          onPress={navToDetailCompany}
+          // onPress={changeVisibleModal}
+        >
           <Text style={{fontSize: commons.fontSize16}}>{item?.name}</Text>
           <TextView
             style={{marginTop: 5}}

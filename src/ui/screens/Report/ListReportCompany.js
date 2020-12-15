@@ -26,7 +26,7 @@ const ListReportCompany = (props) => {
   const context = useContext(Context);
   const {typeTab = TypeTabReport.work_day} = props;
   const reportReducer = useSelector((state) => state.reportReducer);
-  const {dataReport} = reportReducer;
+  const {dataReport = {}} = reportReducer;
   const {
     workDays = {},
     report = {},
