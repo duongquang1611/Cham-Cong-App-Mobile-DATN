@@ -58,7 +58,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
-        initialRouteName={isAdminSystem ? 'TabManagement' : 'TabManagement'}
+        initialRouteName={isAdminSystem ? 'SetupServer' : 'HomeScreen'}
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -98,126 +98,142 @@ const RootNavigation = () => {
             drawerLabel: 'Thông tin người dùng',
           }}
         />
-        <Drawer.Screen
-          name="TabAskComeLateLeaveEarly"
-          component={TabAskComeLateLeaveEarly}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.ask1}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Xin đi muộn, về sớm',
-          }}
-        />
-        <Drawer.Screen
-          name="TabConfirmComeLateLeaveEarly"
-          component={TabConfirmComeLateLeaveEarly}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.confirm}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Duyệt đi muộn, về sớm',
-          }}
-        />
-        <Drawer.Screen
-          name="AskDayOff"
-          component={AskDayOff}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.ask2}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Xin nghỉ',
-          }}
-        />
-        <Drawer.Screen
-          name="TabConfirmDayOff"
-          component={TabConfirmDayOff}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.confirm}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Duyệt xin nghỉ',
-          }}
-        />
-        <Drawer.Screen
-          name="ReportIndividual"
-          component={ReportIndividual}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.report}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Chi tiết chấm công',
-          }}
-        />
-        <Drawer.Screen
-          name="Report"
-          component={Report}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.reports}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Tổng hợp báo cáo',
-          }}
-        />
+        {!isAdminSystem && (
+          <Drawer.Screen
+            name="TabAskComeLateLeaveEarly"
+            component={TabAskComeLateLeaveEarly}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.ask1}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Xin đi muộn, về sớm',
+            }}
+          />
+        )}
+        {!isAdminSystem && (
+          <Drawer.Screen
+            name="TabConfirmComeLateLeaveEarly"
+            component={TabConfirmComeLateLeaveEarly}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.confirm}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Duyệt đi muộn, về sớm',
+            }}
+          />
+        )}
+        {!isAdminSystem && (
+          <Drawer.Screen
+            name="AskDayOff"
+            component={AskDayOff}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.ask2}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Xin nghỉ',
+            }}
+          />
+        )}
+        {!isAdminSystem && (
+          <Drawer.Screen
+            name="TabConfirmDayOff"
+            component={TabConfirmDayOff}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.confirm}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Duyệt xin nghỉ',
+            }}
+          />
+        )}
+        {!isAdminSystem && (
+          <Drawer.Screen
+            name="ReportIndividual"
+            component={ReportIndividual}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.report}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Chi tiết chấm công',
+            }}
+          />
+        )}
+        {isAdminCompanyOrDirector && (
+          <Drawer.Screen
+            name="Report"
+            component={Report}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.reports}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Tổng hợp báo cáo',
+            }}
+          />
+        )}
 
-        <Drawer.Screen
-          name="TabManagement"
-          component={TabManagement}
-          options={{
-            drawerIcon: ({color, size}) => (
-              <Image
-                source={AppImages.management}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Quản lý',
-          }}
-        />
+        {(isAdminSystem || isAdminCompanyOrDirector) && (
+          <Drawer.Screen
+            name="TabManagement"
+            component={TabManagement}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.management}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Quản lý',
+            }}
+          />
+        )}
 
-        <Drawer.Screen
-          name="SetupCompany"
-          component={SetupCompany}
-          options={{
-            drawerIcon: ({color, size}) => (
-              // <IconView
-              //   name="account-check-outline"
-              //   size={size}
-              //   color={color}
-              //   type={'MaterialCommunityIcons'}
-              // />
-              <Image
-                source={AppImages.settings}
-                style={{width: size - 4, height: size}}
-                resizeMode="contain"
-              />
-            ),
-            drawerLabel: 'Cấu hình công ty',
-          }}
-        />
+        {isAdminCompanyOrDirector && (
+          <Drawer.Screen
+            name="SetupCompany"
+            component={SetupCompany}
+            options={{
+              drawerIcon: ({color, size}) => (
+                // <IconView
+                //   name="account-check-outline"
+                //   size={size}
+                //   color={color}
+                //   type={'MaterialCommunityIcons'}
+                // />
+                <Image
+                  source={AppImages.settings}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Cấu hình công ty',
+            }}
+          />
+        )}
         {/* <Drawer.Screen
           name="Notification"
           component={Notification}

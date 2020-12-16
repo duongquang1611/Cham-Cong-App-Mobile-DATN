@@ -36,6 +36,12 @@ const CompanyManagement = () => {
   const [state, setState] = useState({
     refreshing: true,
   });
+  const getData = async () => {
+    API.getListCompanies(dispatch, filter);
+    commons.wait(1000).then(() => {
+      setState({...state, refreshing: false});
+    });
+  };
 
   useEffect(() => {
     state.refreshing && getData();
@@ -58,13 +64,6 @@ const CompanyManagement = () => {
       onRefresh(true);
     }
   }, [searchReducer.textSearchCompany]);
-
-  const getData = async () => {
-    API.getListCompanies(dispatch, filter);
-    commons.wait(1000).then(() => {
-      setState({...state, refreshing: false});
-    });
-  };
 
   const deleteCompany = useCallback(async (item) => {
     const onPressDeleteCompany = async () => {

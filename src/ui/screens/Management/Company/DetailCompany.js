@@ -11,6 +11,19 @@ import commons from '../../../commons';
 import moment from 'moment';
 import {Modal} from 'react-native';
 
+const RowInfoModal = (props) => {
+  const {title, value} = props;
+
+  return (
+    <View style={styles.containerRowInfoModal}>
+      <Text style={{width: '25%', color: 'grey'}}>{title}</Text>
+      <Text style={{width: '70%', fontSize: commons.fontSize15}}>
+        {value || commons.noData}
+      </Text>
+    </View>
+  );
+};
+
 const DetailCompany = (props) => {
   const route = useRoute();
   const {companyData} = route.params;
@@ -48,18 +61,6 @@ const DetailCompany = (props) => {
   };
   const onPressExpanded = () => {
     setState({...state, expanded: !state.expanded});
-  };
-  const RowInfoModal = (props) => {
-    const {title, value} = props;
-
-    return (
-      <View style={styles.containerRowInfoModal}>
-        <Text style={{width: '25%', color: 'grey'}}>{title}</Text>
-        <Text style={{width: '70%', fontSize: commons.fontSize15}}>
-          {value || commons.noData}
-        </Text>
-      </View>
-    );
   };
 
   const toggleModal = (isShow, user) => {

@@ -70,8 +70,8 @@ const AccountManagement = () => {
   }, [searchReducer.textSearchUser]);
 
   const getData = async () => {
-    if (isAdminCompanyOrDirector) {
-      filter.companyId = user.companyId._id;
+    if (isAdminCompanyOrDirector || user?.companyId?._id) {
+      filter.companyId = user?.companyId?._id;
       console.log('AccountManagement -> filter', filter);
     }
     API.getListUsers(dispatch, {...filter, ...sort});

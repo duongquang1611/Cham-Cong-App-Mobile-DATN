@@ -54,7 +54,7 @@ instanceAPI.interceptors.request.use(async (request) => {
       baseApiUrl = urlAPI.BASE_API_URL;
     } else {
       let baseApiUrlObj = JSON.parse(baseApiUrl);
-      console.log({baseApiUrlObj});
+      // console.log({baseApiUrlObj});
       if (
         baseApiUrlObj.id === 0 &&
         baseApiUrlObj.server !== urlAPI.BASE_API_URL

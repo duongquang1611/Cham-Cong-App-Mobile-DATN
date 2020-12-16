@@ -221,7 +221,7 @@ const ItemAccount = (props) => {
             <View style={{marginLeft: 15}}>
               <Text style={styles.title}>{item?.username}</Text>
               <Text>{item?.name}</Text>
-              <Text>{item?.roleId?.name}</Text>
+              <Text>{item?.roleId?.name || 'Chưa có chức vụ'}</Text>
             </View>
           </View>
           {showUpdateFace && (
