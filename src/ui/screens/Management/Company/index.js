@@ -1,14 +1,23 @@
 import {useNavigation} from '@react-navigation/native';
-import {InputView, LoadingView, showAlert} from 'cc-components';
+import {
+  HeaderMenuDrawer,
+  InputView,
+  LoadingView,
+  showAlert,
+} from 'cc-components';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import models from '../../../../models';
 import {appNavigate} from '../../../../navigations';
 import API from '../../../../networking';
-import actions from '../../../../redux/actions';
 import commons from '../../../commons';
-import ItemAccount from './ItemAccount';
+import ItemCompany from './ItemCompany';
+import {Portal, Provider} from 'react-native-paper';
+import ButtonPlusFAB from './../ButtonPlusFAB';
+import {TypeTabManagement} from '../TypeTabManagement';
+import actions from '../../../../redux/actions';
+import {Keyboard} from 'react-native';
 let text = '';
 
 const EmptyList = () => {
@@ -16,8 +25,6 @@ const EmptyList = () => {
     <Text style={{textAlign: 'center', marginTop: 10}}>{commons.noData}</Text>
   );
 };
-let filter = {};
-
 const SeparatorView = () => {
   return (
     <View
@@ -27,27 +34,25 @@ const SeparatorView = () => {
       }}></View>
   );
 };
-let sort = {sortType: 'updatedAt', sortValue: -1};
 
-const AccountManagement = () => {
-  const dispatch = useDispatch();
-  const authReducer = useSelector((state) => state.authReducer);
-  const {userData} = authReducer;
-  const navigation = useNavigation();
+let filter = {};
+const CompanyManagement = () => {
   const companyReducer = useSelector((state) => state.companyReducer);
   const searchReducer = useSelector((state) => state.searchReducer);
-  const commonReducer = useSelector((state) => state.commonReducer);
-  let user = models.getUserInfo();
-  let isAdminSystem = commons.isRole('admin_system', user);
-  let isAdminCompanyOrDirector =
-    commons.isRole('admin_company', user) || commons.isRole('director', user);
 
-  console.log({searchReducer, commonReducer});
-  const {allUsers} = companyReducer;
+  const {allCompanies} = companyReducer;
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   const [state, setState] = useState({
-    refreshing: false,
-    isLoading: false,
+    refreshing: true,
   });
+  const getData = async () => {
+    commons.wait(1000).then(() => {
+      setState({...state, refreshing: false});
+    });
+    API.getListCompanies(dispatch, filter);
+  };
 
   useEffect(() => {
     state.refreshing && getData();
@@ -60,92 +65,59 @@ const AccountManagement = () => {
 
   useEffect(() => {
     if (
-      searchReducer.textSearchUser &&
-      searchReducer.textSearchUser.trim().length !== 0
+      searchReducer.textSearchCompany &&
+      searchReducer.textSearchCompany.trim().length !== 0
     ) {
       console.log('search');
-      filter.text = searchReducer.textSearchUser;
+      filter.text = searchReducer.textSearchCompany;
       onRefresh();
     } else {
       onRefresh(true);
     }
-  }, [searchReducer.textSearchUser]);
+  }, [searchReducer.textSearchCompany]);
 
-  const getData = async () => {
-    if (isAdminCompanyOrDirector || user?.companyId?._id) {
-      filter.companyId = user?.companyId?._id;
-      console.log('AccountManagement -> filter', filter);
-    }
-    API.getListUsers(dispatch, {...filter, ...sort});
-    // console.log('AccountManagement -> res', res);
-
-    commons.wait(1000).then(() => {
-      setState({...state, refreshing: false});
-    });
-  };
-
-  const deleteAccount = useCallback(async (item) => {
-    const onPressDeleteAccount = async () => {
+  const deleteCompany = useCallback(async (item) => {
+    const onPressDeleteCompany = async () => {
       try {
-        let res = await API.DELETE(API.detailUser(item._id));
+        let res = await API.DELETE(API.detailCompany(item._id));
         if (res && res.msg) {
           showAlert({msg: res.msg});
           onRefresh();
         }
       } catch (error) {
-        console.log('AccountManagement -> error', error);
+        console.log('CompanyManagement -> error', error);
       }
     };
     showAlert({
-      msg: `Xác nhận xóa tài khoản ${item.username} ?`,
+      msg: `Xác nhận xóa công ty ${item.name} ?`,
       showCancel: true,
-      onPressOK: onPressDeleteAccount,
+      onPressOK: onPressDeleteCompany,
     });
   }, []);
-  const editAccount = useCallback((item) => {
-    appNavigate.navToOtherScreen(navigation.dispatch, 'EditAccount', {
+  const editCompany = useCallback((item) => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'EditCompany', {
       data: item,
     });
   }, []);
 
-  const handleUploadRNFetchBlob = async (image, userId) => {
-    setState({...state, isLoading: true});
-    console.log({userId});
-    const form = new FormData();
-    try {
-      form.append('file', {
-        uri: image.path,
-        type: image.mime,
-        name: image.path.substring(image.path.lastIndexOf('/') + 1),
-      });
-      // upload image to add face user
-      let res = await API.POST(API.addFace(userId), form);
-      if (res && res.msg) {
-        setState({...state, isLoading: false});
-        showAlert({msg: res.msg});
-      } else {
-        setState({...state, isLoading: false});
-      }
-    } catch (error) {
-      setState({...state, isLoading: false});
-      console.log('handleUploadRNFetchBlob ~ error', error);
-    }
-  };
-
+  const navToDetailCompany = useCallback((item) => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'DetailCompany', {
+      companyData: item,
+    });
+  }, []);
   const renderItem = ({item, index}) => {
     return (
-      <ItemAccount
+      <ItemCompany
         item={item}
         index={index}
-        showUpdateFace={isAdminCompanyOrDirector}
-        {...{deleteAccount, editAccount, handleUploadRNFetchBlob}}
+        {...{deleteCompany, editCompany, navToDetailCompany}}
       />
     );
   };
-
   const onPressIconSearch = () => {
-    console.log({text, user: 'user'});
-    dispatch(actions.saveSearchUser(text));
+    console.log({text, user: 'company'});
+    Keyboard.dismiss();
+    dispatch(actions.saveSearchCompany(text));
   };
 
   const onSubmitSearchText = ({nativeEvent}) => {
@@ -155,7 +127,6 @@ const AccountManagement = () => {
   const onChangeTextSearch = ({id, data}) => {
     text = data;
   };
-
   return (
     <>
       <HeaderMenuDrawer
@@ -172,7 +143,7 @@ const AccountManagement = () => {
             }}
             styleContainerInput={{borderWidth: 0, paddingHorizontal: 5}}
             // onChangeText={onChangeTextSearch}
-            placeholder={'Nhập thông tin tìm kiếm ...'}
+            placeholder={'Nhập thông tin tìm kiếm người dùng...'}
             iconLeft="search"
             typeIconLeft="FontAwesome"
             // colorIconLeft={commons.colorMain}
@@ -185,26 +156,20 @@ const AccountManagement = () => {
         }
       />
 
-      {state.refreshing && <LoadingView />}
-      {state.isLoading && <LoadingView />}
       <Provider>
+        {state.refreshing && <LoadingView />}
         <FlatList
-          data={allUsers}
+          data={allCompanies}
           renderItem={renderItem}
           keyExtractor={(item, index) => {
             // return item.toString() + index.toString();
             return index.toString();
           }}
-          extraData={allUsers}
+          extraData={allCompanies}
           contentContainerStyle={{
             paddingTop: commons.margin5,
             paddingHorizontal: commons.margin,
           }}
-          ListEmptyComponent={EmptyList}
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          style={{backgroundColor: 'white'}}
           ItemSeparatorComponent={SeparatorView}
           refreshControl={
             <RefreshControl
@@ -212,19 +177,24 @@ const AccountManagement = () => {
               onRefresh={onRefresh}
             />
           }
-          removeClippedSubviews={true}
+          ListEmptyComponent={EmptyList}
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          style={{backgroundColor: 'white'}}
           initialNumToRender={10}
+          removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
         />
         <Portal>
-          <ButtonPlusFAB />
+          <ButtonPlusFAB typeTab={TypeTabManagement.company} />
         </Portal>
       </Provider>
     </>
   );
 };
 
-export default memo(AccountManagement);
+export default memo(CompanyManagement);
 
 const styles = StyleSheet.create({});

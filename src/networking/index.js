@@ -26,6 +26,7 @@ instanceAPI.interceptors.response.use(
     return response.data;
   },
   function (error) {
+    console.log('error networking');
     console.log({error});
     let messageError = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
     console.log('Error code:', error.response.status);

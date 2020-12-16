@@ -27,8 +27,9 @@ import SplashScreen from '../ui/screens/Splash';
 import AppImages from '../../assets/images';
 import SetupServer from '../ui/screens/SetupServer';
 import SetupCompany from '../ui/screens/SetupCompany';
-import TabManagement from '../ui/screens/Management';
-import AccountManagement from '../ui/screens/Management copy/Account';
+// import TabManagement from '../ui/screens/Management';
+import AccountManagement from '../ui/screens/Management/Account';
+import CompanyManagement from '../ui/screens/Management/Company';
 import AddAccount from '../ui/screens/Management/Account/AddAccount';
 import AddCompany from '../ui/screens/Management/Company/AddCompany';
 import ChooseAddress from '../ui/screens/SetupCompany/ChooseAddress';
@@ -59,7 +60,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
-        initialRouteName={isAdminSystem ? 'SetupServer' : 'HomeScreen'}
+        initialRouteName={isAdminSystem ? 'SetupServer' : 'CompanyManagement'}
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -196,7 +197,7 @@ const RootNavigation = () => {
           />
         )}
 
-        {(isAdminSystem || isAdminCompanyOrDirector) && (
+        {/* {(isAdminSystem || isAdminCompanyOrDirector) && (
           <Drawer.Screen
             name="TabManagement"
             component={TabManagement}
@@ -211,7 +212,7 @@ const RootNavigation = () => {
               drawerLabel: 'Quản lý',
             }}
           />
-        )}
+        )} */}
         {(isAdminSystem || isAdminCompanyOrDirector) && (
           <Drawer.Screen
             name="AccountManagement"
@@ -225,6 +226,22 @@ const RootNavigation = () => {
                 />
               ),
               drawerLabel: 'Quản lý người dùng',
+            }}
+          />
+        )}
+        {isAdminSystem && (
+          <Drawer.Screen
+            name="CompanyManagement"
+            component={CompanyManagement}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.management}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Quản lý công ty',
             }}
           />
         )}

@@ -75,7 +75,7 @@ const TabManagement = () => {
             }}
             styleContainerInput={{borderWidth: 0, paddingHorizontal: 5}}
             // onChangeText={onChangeTextSearch}
-            placeholder={'Nhập thông tin tìm kiếm ...'}
+            placeholder={'Nhập thông tin tìm kiếm công ty ...'}
             iconLeft="search"
             typeIconLeft="FontAwesome"
             // colorIconLeft={commons.colorMain}

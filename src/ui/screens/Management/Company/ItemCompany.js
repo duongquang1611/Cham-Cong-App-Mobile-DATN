@@ -33,7 +33,7 @@ const RowInfoModal = (props) => {
   );
 };
 const ItemCompany = (props) => {
-  const {item, index, deleteCompany, editCompany} = props;
+  const {item, index, deleteCompany, editCompany, navToDetailCompany} = props;
   const [isVisible, setIsVisible] = useState(false);
   const navigation = useNavigation();
   const closeRow = (index) => {
@@ -86,10 +86,11 @@ const ItemCompany = (props) => {
   const changeVisibleModal = () => {
     setIsVisible(!isVisible);
   };
-  const navToDetailCompany = () => {
-    appNavigate.navToOtherScreen(navigation.dispatch, 'DetailCompany', {
-      companyData: item,
-    });
+  const onPressItemCompany = () => {
+    // appNavigate.navToOtherScreen(navigation.dispatch, 'DetailCompany', {
+    //   companyData: item,
+    // });
+    navToDetailCompany(item);
   };
   return (
     <>
@@ -158,7 +159,7 @@ const ItemCompany = (props) => {
             padding: 10,
             paddingHorizontal: 15,
           }}
-          onPress={navToDetailCompany}
+          onPress={onPressItemCompany}
           // onPress={changeVisibleModal}
         >
           <Text style={{fontSize: commons.fontSize16}}>{item?.name}</Text>

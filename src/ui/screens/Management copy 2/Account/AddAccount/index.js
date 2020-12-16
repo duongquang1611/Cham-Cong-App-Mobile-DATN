@@ -92,7 +92,7 @@ const AddAccount = (props) => {
         setState({...state, refreshing: false});
       }
     } catch (error) {
-      console.log('🚀 ~ file: index.js ~ line 83 ~ getData ~ error', error);
+      console.log(' getData ~ error', error);
       setState({...state, refreshing: false});
     }
   };
@@ -138,15 +138,8 @@ const AddAccount = (props) => {
 
     try {
       let res = await API.POST(API.signup, formData);
+      console.log('🚀 ~ file: index.js ~ line 141 ~ onSubmit ~ res', res);
       if (res && res._id) {
-        console.log(
-          '🚀 ~ file: index.js ~ line 134 ~ getUserWhenSelectedCompany ~ error',
-          error,
-        );
-        console.log(
-          '🚀 ~ file: index.js ~ line 134 ~ getUserWhenSelectedCompany ~ error',
-          error,
-        );
         showAlert({msg: 'Tạo tài khoản thành công.'});
         setState({...state, isLoading: false});
       } else {
@@ -154,6 +147,7 @@ const AddAccount = (props) => {
       }
     } catch (error) {
       setState({...state, isLoading: false});
+      console.log({error});
       console.log('Signup error', error);
     }
   };

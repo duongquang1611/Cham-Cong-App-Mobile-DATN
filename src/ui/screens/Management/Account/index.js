@@ -1,5 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
-import {LoadingView, showAlert} from 'cc-components';
+import {
+  HeaderMenuDrawer,
+  InputView,
+  LoadingView,
+  showAlert,
+} from 'cc-components';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -9,6 +14,11 @@ import API from '../../../../networking';
 import actions from '../../../../redux/actions';
 import commons from '../../../commons';
 import ItemAccount from './ItemAccount';
+import {Portal, Provider} from 'react-native-paper';
+import ButtonPlusFAB from './../ButtonPlusFAB';
+import {Keyboard} from 'react-native';
+let text = '';
+
 const EmptyList = () => {
   return (
     <Text style={{textAlign: 'center', marginTop: 10}}>{commons.noData}</Text>
@@ -70,16 +80,15 @@ const AccountManagement = () => {
   }, [searchReducer.textSearchUser]);
 
   const getData = async () => {
+    commons.wait(1000).then(() => {
+      setState({...state, refreshing: false});
+    });
     if (isAdminCompanyOrDirector || user?.companyId?._id) {
       filter.companyId = user?.companyId?._id;
       console.log('AccountManagement -> filter', filter);
     }
     API.getListUsers(dispatch, {...filter, ...sort});
     // console.log('AccountManagement -> res', res);
-
-    commons.wait(1000).then(() => {
-      setState({...state, refreshing: false});
-    });
   };
 
   const deleteAccount = useCallback(async (item) => {
@@ -140,36 +149,87 @@ const AccountManagement = () => {
       />
     );
   };
+
+  const onPressIconSearch = () => {
+    console.log({text, user: 'user'});
+    Keyboard.dismiss();
+
+    dispatch(actions.saveSearchUser(text));
+  };
+
+  const onSubmitSearchText = ({nativeEvent}) => {
+    text = nativeEvent.text;
+    onPressIconSearch();
+  };
+  const onChangeTextSearch = ({id, data}) => {
+    text = data;
+  };
+
   return (
     <>
-      {state.refreshing && <LoadingView />}
-      {state.isLoading && <LoadingView />}
-      <FlatList
-        data={allUsers}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => {
-          // return item.toString() + index.toString();
-          return index.toString();
-        }}
-        extraData={allUsers}
-        contentContainerStyle={{
-          paddingTop: commons.margin5,
-          paddingHorizontal: commons.margin,
-        }}
-        ListEmptyComponent={EmptyList}
-        automaticallyAdjustContentInsets={false}
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-        style={{backgroundColor: 'white'}}
-        ItemSeparatorComponent={SeparatorView}
-        refreshControl={
-          <RefreshControl refreshing={state.refreshing} onRefresh={onRefresh} />
+      <HeaderMenuDrawer
+        // titleScreen={'Quản lý'}
+        titleScreen={''}
+        rightElement={
+          <InputView
+            id="search_text"
+            style={{
+              flex: 1,
+              backgroundColor: 'white',
+              borderRadius: 100,
+              borderWidth: 0,
+            }}
+            styleContainerInput={{borderWidth: 0, paddingHorizontal: 5}}
+            // onChangeText={onChangeTextSearch}
+            placeholder={'Nhập thông tin tìm kiếm ...'}
+            iconLeft="search"
+            typeIconLeft="FontAwesome"
+            // colorIconLeft={commons.colorMain}
+            onPressIconLeft={onPressIconSearch}
+            onChangeText={onChangeTextSearch}
+            sizeIconLeft={commons.sizeIcon20}
+            returnKeyType="search"
+            onSubmitEditing={onSubmitSearchText}
+          />
         }
-        removeClippedSubviews={true}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        windowSize={10}
       />
+
+      <Provider>
+        {state.refreshing && <LoadingView />}
+        {state.isLoading && <LoadingView />}
+        <FlatList
+          data={allUsers}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => {
+            // return item.toString() + index.toString();
+            return index.toString();
+          }}
+          extraData={allUsers}
+          contentContainerStyle={{
+            paddingTop: commons.margin5,
+            paddingHorizontal: commons.margin,
+          }}
+          ListEmptyComponent={EmptyList}
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          style={{backgroundColor: 'white'}}
+          ItemSeparatorComponent={SeparatorView}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          removeClippedSubviews={true}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={10}
+        />
+        <Portal>
+          <ButtonPlusFAB />
+        </Portal>
+      </Provider>
     </>
   );
 };

@@ -6,12 +6,13 @@ import AppImages from '../../../../assets/images';
 import models from '../../../models';
 import {appNavigate} from '../../../navigations';
 import commons from '../../commons';
+import {TypeTabManagement} from './TypeTabManagement';
 
-const ButtonPlusFAB = () => {
+const ButtonPlusFAB = (props) => {
   const [state, setState] = useState({open: false});
   let user = models.getUserInfo();
   let isAdminSystem = commons.isRole('admin_system', user);
-
+  const {typeTab = TypeTabManagement.account} = props;
   const onStateChange = ({open}) => setState({open});
 
   const {open} = state;
@@ -25,7 +26,7 @@ const ButtonPlusFAB = () => {
       icon={open ? 'close' : 'plus'}
       color={'white'}
       actions={
-        isAdminSystem
+        typeTab === TypeTabManagement.account
           ? [
               {
                 icon: ({size, color, direction}) => (
@@ -50,6 +51,8 @@ const ButtonPlusFAB = () => {
                     'AddAccount',
                   ),
               },
+            ]
+          : [
               {
                 icon: ({size, color, direction}) => (
                   <Image
@@ -71,31 +74,6 @@ const ButtonPlusFAB = () => {
                   appNavigate.navToOtherScreen(
                     navigation.dispatch,
                     'AddCompany',
-                  ),
-              },
-            ]
-          : [
-              {
-                icon: ({size, color, direction}) => (
-                  <Image
-                    source={AppImages.add_user}
-                    style={[
-                      {
-                        transform: [{scaleX: direction === 'rtl' ? -1 : 1}],
-                      },
-                      {
-                        width: size,
-                        height: size,
-                        tintColor: color,
-                      },
-                    ]}
-                  />
-                ),
-                label: 'Thêm người dùng',
-                onPress: () =>
-                  appNavigate.navToOtherScreen(
-                    navigation.dispatch,
-                    'AddAccount',
                   ),
               },
             ]

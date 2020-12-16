@@ -1,6 +1,6 @@
 import {useRoute} from '@react-navigation/native';
 import {HeaderView, IconView, TextView} from 'cc-components';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {RefreshControl} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
@@ -39,7 +39,7 @@ const DetailCompany = (props) => {
   const getData = async () => {
     try {
       let res = await API.GET(API.detailCompany(companyData?._id));
-      console.log({res});
+      // console.log({res});
       if (res) {
         setState({...state, refreshing: false, detailCompany: res});
       } else {
@@ -239,7 +239,7 @@ const DetailCompany = (props) => {
   );
 };
 
-export default DetailCompany;
+export default memo(DetailCompany);
 
 const styles = StyleSheet.create({
   ...baseStyles,
