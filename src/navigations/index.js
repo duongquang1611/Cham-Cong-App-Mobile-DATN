@@ -28,6 +28,7 @@ import AppImages from '../../assets/images';
 import SetupServer from '../ui/screens/SetupServer';
 import SetupCompany from '../ui/screens/SetupCompany';
 import TabManagement from '../ui/screens/Management';
+import AccountManagement from '../ui/screens/Management copy/Account';
 import AddAccount from '../ui/screens/Management/Account/AddAccount';
 import AddCompany from '../ui/screens/Management/Company/AddCompany';
 import ChooseAddress from '../ui/screens/SetupCompany/ChooseAddress';
@@ -208,6 +209,22 @@ const RootNavigation = () => {
                 />
               ),
               drawerLabel: 'Quản lý',
+            }}
+          />
+        )}
+        {(isAdminSystem || isAdminCompanyOrDirector) && (
+          <Drawer.Screen
+            name="AccountManagement"
+            component={AccountManagement}
+            options={{
+              drawerIcon: ({color, size}) => (
+                <Image
+                  source={AppImages.management}
+                  style={{width: size - 4, height: size}}
+                  resizeMode="contain"
+                />
+              ),
+              drawerLabel: 'Quản lý người dùng',
             }}
           />
         )}
