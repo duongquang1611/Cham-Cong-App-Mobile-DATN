@@ -55,7 +55,7 @@ const DetailCompany = (props) => {
     return (
       <View style={styles.containerRowInfoModal}>
         <Text style={{width: '25%', color: 'grey'}}>{title}</Text>
-        <Text style={{width: '70%', fontSize: commons.fontSize16}}>
+        <Text style={{width: '70%', fontSize: commons.fontSize15}}>
           {value || commons.noData}
         </Text>
       </View>

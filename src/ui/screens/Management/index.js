@@ -90,8 +90,8 @@ const TabManagement = () => {
       <Provider>
         <Tab.Navigator
           tabBarPosition="top"
-          initialRouteName={'Company'}
-          // initialRouteName={'Account'}
+          // initialRouteName={'Company'}
+          initialRouteName={'Account'}
           backBehavior="none"
           style={{backgroundColor: 'white'}}
           sceneContainerStyle={{backgroundColor: 'white'}}

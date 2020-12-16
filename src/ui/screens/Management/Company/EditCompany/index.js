@@ -19,7 +19,7 @@ const EditCompany = (props) => {
   const {data} = route.params;
   console.log('🚀 ~ file: index.js ~ line 19 ~ EditCompany ~ data', data);
   const form = useForm();
-  const {control, handleSubmit, errors, register, setValue} = form;
+  const {control, handleSubmit, errors, register, setValue, reset} = form;
   const [state, setState] = useState({
     isLoading: false,
   });

@@ -179,7 +179,7 @@ const RootNavigation = () => {
                 resizeMode="contain"
               />
             ),
-            drawerLabel: 'Tổng hợp chấm công',
+            drawerLabel: 'Tổng hợp báo cáo',
           }}
         />
 

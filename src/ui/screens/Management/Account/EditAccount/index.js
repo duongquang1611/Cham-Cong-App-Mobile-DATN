@@ -36,7 +36,7 @@ const viewSeparator = () => {
 };
 const EditAccount = (props) => {
   const form = useForm();
-  const {control, handleSubmit, errors, register, setValue} = form;
+  const {control, handleSubmit, errors, register, setValue, reset} = form;
   const route = useRoute();
   const {data} = route.params;
   let user = models.getUserInfo();
