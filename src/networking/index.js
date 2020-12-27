@@ -52,7 +52,7 @@ instanceAPI.interceptors.request.use(async (request) => {
     let baseApiUrl = await AsyncStorage.getItem(API.keyAsyncStorageBaseUrl);
 
     if (!baseApiUrl) {
-      baseApiUrl = urlAPI.BASE_API_URL;
+      baseApiUrl = urlAPI.baseApiUrlHeroku;
     } else {
       let baseApiUrlObj = JSON.parse(baseApiUrl);
       // console.log({baseApiUrlObj});

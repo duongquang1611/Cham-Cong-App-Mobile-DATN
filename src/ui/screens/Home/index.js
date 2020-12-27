@@ -45,7 +45,7 @@ const HomeScreen = (props) => {
     (state) => state.authReducer.isLoginSuccess,
   );
   let userInfo = models.getUserInfo();
-  let netInfo = useNetInfo();
+  // let netInfo = useNetInfo();
   const authReducer = useSelector((state) => state.authReducer);
   const detailDayWork = useSelector(
     (state) => state.dayWorkReducer.detailDayWork,
@@ -236,7 +236,7 @@ const HomeScreen = (props) => {
             ? 'Đã cấp quyền truy cập vị trí'
             : 'Chưa cấp quyền truy cập vị trí'}
         </TextView>
-        <TextView
+        {/* <TextView
           nameIconLeft={
             isValidIpToCheckin() ? 'checkbox-marked-circle' : 'close-circle'
           }
@@ -251,7 +251,7 @@ const HomeScreen = (props) => {
             ...styles.lineHeightText,
           }}>
           {`Địa chỉ IP ${isValidIpToCheckin() ? '' : 'không '}hợp lệ`}
-        </TextView>
+        </TextView> */}
         {/* <Text style={{...styles.lineHeightText}}>
           Tổng số phút đi muộn trong tháng:{' '}
           <Text style={{fontWeight: 'bold'}}>0 ph</Text>
@@ -359,12 +359,12 @@ const HomeScreen = (props) => {
       </View>
     );
   };
-  const isValidIpToCheckin = () => {
-    return commons.compareIpAddress(
-      detailCompany?.config?.ipAddress,
-      netInfo?.details?.ipAddress,
-    );
-  };
+  // const isValidIpToCheckin = () => {
+  //   return commons.compareIpAddress(
+  //     detailCompany?.config?.ipAddress,
+  //     netInfo?.details?.ipAddress,
+  //   );
+  // };
   const onPressShowMoreInfoIp = () => {
     showAlert({
       msg: msgWarning.network,
@@ -446,6 +446,9 @@ const HomeScreen = (props) => {
       width: 300,
       height: 400,
       cropping: false,
+      maxHeight: 1200,
+      maxWidth: 1200,
+      compressImageQuality: 0.8,
       includeBase64: false,
     })
       .then((image) => {
@@ -458,7 +461,7 @@ const HomeScreen = (props) => {
   const onPressCheckTime = async () => {
     try {
       console.log({
-        ip: netInfo?.details?.ipAddress,
+        // ip: netInfo?.details?.ipAddress,
         isGranted: state.isGrantedLocation,
       });
       // check time to checkin
@@ -518,12 +521,12 @@ const HomeScreen = (props) => {
       }
 
       // check have ip address
-      if (!netInfo?.details?.ipAddress) {
-        showAlert({
-          msg: msgWarning.network,
-        });
-        return;
-      }
+      // if (!netInfo?.details?.ipAddress) {
+      //   showAlert({
+      //     msg: msgWarning.network,
+      //   });
+      //   return;
+      // }
 
       // check grant location permission
       if (state.isGrantedLocation) {

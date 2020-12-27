@@ -10,8 +10,12 @@
     "lint": "eslint .",
     "adb": "adb -s 8a9bdac9 reverse tcp:8081 tcp:8081",
     "clean": "cd android && gradlew clean && cd ..",
+    "clean2": "cd android && gradlew clean",
     "cs": "cd android && gradlew clean && cd .. && react-native start",
-    "ca": "cd android && gradlew clean && cd .. && react-native run-android"
+    "ca": "cd android && gradlew clean && cd .. && react-native run-android",
+    "gen-bundle": "cd android && gradlew bundleRelease",
+    "gen-apk2": "cd android && gradlew assembleRelease",
+    "gen-apk":"./gradlew assembleRelease -x bundleReleaseJsAndAssets"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
