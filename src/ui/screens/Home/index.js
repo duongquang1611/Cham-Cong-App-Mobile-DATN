@@ -557,7 +557,7 @@ const HomeScreen = (props) => {
       <HeaderMenuDrawer
         titleScreen={`Chấm công ${moment().format('DD/MM/YYYY')}`}
       />
-      {state.isLoading && <LoadingView />}
+      {/* {state.isLoading && <LoadingView />} */}
       <Modal
         transparent={true}
         visible={state.visibleModal}

@@ -14,8 +14,9 @@
     "cs": "cd android && gradlew clean && cd .. && react-native start",
     "ca": "cd android && gradlew clean && cd .. && react-native run-android",
     "gen-bundle": "cd android && gradlew bundleRelease",
-    "gen-apk2": "cd android && gradlew assembleRelease",
-    "gen-apk":"./gradlew assembleRelease -x bundleReleaseJsAndAssets"
+    "gen-apk2": "./gradlew assembleRelease -x bundleReleaseJsAndAssets",
+    "gen-apk":"cd android && gradlew clean && gradlew assembleRelease -x bundleReleaseJsAndAssets",
+    "update-js": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
