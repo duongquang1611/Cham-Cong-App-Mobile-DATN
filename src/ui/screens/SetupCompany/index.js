@@ -186,11 +186,11 @@ const SetupCompany = (props) => {
     console.log('onPressUseDefault ~ id', id, state.isGranted);
     try {
       switch (id) {
-        case 'ipAddress':
-          if (netInfo?.details?.ipAddress) {
-            setValue(id, netInfo?.details?.ipAddress);
-          }
-          break;
+        // case 'ipAddress':
+        //   if (netInfo?.details?.ipAddress) {
+        //     setValue(id, netInfo?.details?.ipAddress);
+        //   }
+        //   break;
 
         case 'location':
           if (state.isGranted) {
@@ -258,7 +258,7 @@ const SetupCompany = (props) => {
               />
             }>
             <View>
-              {state.isEditing && (
+              {/* {state.isEditing && (
                 <TextView
                   id="ipAddress"
                   title="(Sử dụng mạng hiện tại)"
@@ -272,8 +272,8 @@ const SetupCompany = (props) => {
                   }}
                   onPress={onPressUseDefault}
                 />
-              )}
-              <TextInputController
+              )} */}
+              {/* <TextInputController
                 {...{
                   name: 'ipAddress',
                   placeholder: 'Địa chỉ IP',
@@ -282,7 +282,7 @@ const SetupCompany = (props) => {
                   errors,
                   control,
                 }}
-              />
+              /> */}
               {state.isEditing && (
                 <TextView
                   id="location"

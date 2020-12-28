@@ -285,6 +285,9 @@ const AccountScreen = (props) => {
       width: commons.SCREEN_WIDTH,
       height: commons.SCREEN_HEIGHT,
       cropping: true,
+      maxHeight: 1200,
+      maxWidth: 1200,
+      compressImageQuality: 0.8,
       includeBase64: true,
     })
       .then((image) => {

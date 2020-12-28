@@ -101,6 +101,9 @@ const ItemAccount = (props) => {
       width: 300,
       height: 400,
       cropping: false,
+      maxHeight: 1200,
+      maxWidth: 1200,
+      compressImageQuality: 0.8,
       includeBase64: false,
     })
       .then((image) => {
