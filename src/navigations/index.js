@@ -23,6 +23,7 @@ import ReportIndividual from '../ui/screens/Report/Individual';
 import Report from '../ui/screens/Report';
 import Notification from '../ui/screens/Notification';
 import LoginScreen from '../ui/screens/Account/LoginScreen';
+import ChangePassword from '../ui/screens/Account/ChangePassword';
 import SplashScreen from '../ui/screens/Splash';
 import AppImages from '../../assets/images';
 import SetupServer from '../ui/screens/SetupServer';
@@ -60,7 +61,7 @@ const RootNavigation = () => {
         }}
         drawerContent={(props) => <DrawerContent {...props} />}
         // initialRouteName={isAdminSystem ? 'TabManagement' : 'HomeScreen'}
-        initialRouteName={isAdminSystem ? 'SetupServer' : 'CompanyManagement'}
+        initialRouteName={isAdminSystem ? 'ChangePassword' : 'ChangePassword'}
         // initialRouteName="HomeScreen"
         // drawerType={isLargeScreen ? 'permanent' : 'back'}
         drawerStyle={{width: isLargeScreen ? null : '85%'}}>
@@ -288,6 +289,7 @@ const RootNavigation = () => {
             drawerLabel: 'Thông báo',
           }}
         /> */}
+
         <Drawer.Screen
           name="SetupServer"
           component={SetupServer}
@@ -300,6 +302,20 @@ const RootNavigation = () => {
               />
             ),
             drawerLabel: 'Server',
+          }}
+        />
+        <Drawer.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{
+            drawerIcon: ({color, size}) => (
+              <Image
+                source={AppImages.password}
+                style={{width: size - 4, height: size}}
+                resizeMode="contain"
+              />
+            ),
+            drawerLabel: 'Đổi mật khẩu',
           }}
         />
       </Drawer.Navigator>
@@ -322,6 +338,7 @@ const RootNavigation = () => {
         <Stack.Screen name="EditCompany" component={EditCompany} />
         <Stack.Screen name="DetailCompany" component={DetailCompany} />
         <Stack.Screen name="ChooseAddress" component={ChooseAddress} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
         {isLoginSuccess ? (
           <Stack.Screen name="DrawerStack" component={DrawerStack} />
         ) : (

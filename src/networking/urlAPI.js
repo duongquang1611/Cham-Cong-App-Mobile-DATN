@@ -35,6 +35,7 @@ const config = {
     searchUsers: 'users',
     searchUsersPublic: 'users/public',
     detailUser: (id) => `users/${id}`,
+    changePassword: 'users/change-password',
 
     searchCompanies: 'companies',
     detailCompany: (id) => `companies/${id}`,

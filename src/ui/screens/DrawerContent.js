@@ -3,7 +3,7 @@ import {
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {IconView, TextView} from 'cc-components';
 import {
@@ -22,14 +22,20 @@ import commons from '../commons';
 import {useDispatch} from 'react-redux';
 import actions from '../../redux/actions';
 import AppImages from '../../../assets/images';
+import {Image} from 'react-native';
+import {appNavigate} from '../../navigations';
+import {useNavigation} from '@react-navigation/native';
 
 const DrawerContent = (props) => {
   const userInfo = models.getUserInfo();
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const onPressLogout = () => {
     dispatch(actions.requestLogout());
   };
+  const onPressChangePassword = useCallback(() => {
+    appNavigate.navToOtherScreen(navigation.dispatch, 'ChangePassword');
+  }, []);
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
@@ -90,6 +96,14 @@ const DrawerContent = (props) => {
         </Drawer.Section>
         {/* <Drawer.Section title="Preferences"> */}
         <Drawer.Section>
+          {/* <DrawerItem
+            icon={({color, size}) => (
+              <IconView color={color} size={size} name={'password-outline'} />
+            )}
+            label={'Đổi mật khẩu'}
+            labelStyle={{fontSize: commons.fontSize16}}
+            onPress={onPressChangePassword}
+          /> */}
           <DrawerItem
             icon={({color, size}) => (
               <IconView

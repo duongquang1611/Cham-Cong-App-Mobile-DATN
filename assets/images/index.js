@@ -40,6 +40,7 @@ const AppImages = {
   settings: require('./settings.png'),
   add_company: require('./add_company.png'),
   management: require('./management.png'),
+  password: require('./password.png'),
   default_male_original: require('./default_male_original.jpg'),
   default_female_original: require('./default_female_original.jpg'),
   default_male_200: require('./default_male_200.jpg'),

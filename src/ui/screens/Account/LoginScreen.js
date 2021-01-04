@@ -16,7 +16,6 @@ import {
 } from 'cc-components';
 import styles from './styles';
 import {useForm} from 'react-hook-form';
-// import InputController from './InputController';
 import InputController from '../InputController';
 
 const LoginScreen = (props) => {
