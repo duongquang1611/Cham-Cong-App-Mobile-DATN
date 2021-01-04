@@ -467,12 +467,15 @@ const HomeScreen = (props) => {
       // check time to checkin
       if (!detailDayWork?.checkin) {
         // check in
+        // checkin trc gio cho phep
         let isBeforeAllowCheckin = commons.isBeforeDate(
           new Date(),
           allowCheckin,
         );
-        let isAfterAllowCheckout = commons.isBeforeDate(
-          allowCheckout,
+
+        // checkin sau gio checkout quy dinh
+        let isAfterDefaultCheckout = commons.isBeforeDate(
+          defaultCheckout,
           new Date(),
         );
 
@@ -482,25 +485,29 @@ const HomeScreen = (props) => {
           });
           return;
         }
-        if (isAfterAllowCheckout) {
+        if (isAfterDefaultCheckout) {
           showAlert({
-            msg: `Không thể thực hiện checkout sau ${detailCompany?.config?.allowCheckout}`,
+            msg: `Không thể thực hiện checkin sau ${detailCompany?.config?.checkout}`,
           });
           return;
         }
       } else {
         // checkout
-        let isBeforeAllowCheckin = commons.isBeforeDate(
+
+        // checkout trc giơ checkin mac dinh
+        let isBeforeDefaultCheckin = commons.isBeforeDate(
           new Date(),
-          allowCheckin,
+          defaultCheckin,
         );
+
+        //checkout sau gio cho phep checkout
         let isAfterAllowCheckout = commons.isBeforeDate(
           allowCheckout,
           new Date(),
         );
-        if (isBeforeAllowCheckin) {
+        if (isBeforeDefaultCheckin) {
           showAlert({
-            msg: `Không thể thực hiện checkout trước ${detailCompany?.config?.allowCheckin}`,
+            msg: `Không thể thực hiện checkout trước ${detailCompany?.config?.checkin}`,
           });
           return;
         }

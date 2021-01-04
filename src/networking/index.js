@@ -57,7 +57,7 @@ instanceAPI.interceptors.request.use(async (request) => {
       let baseApiUrlObj = JSON.parse(baseApiUrl);
       // console.log({baseApiUrlObj});
       if (
-        baseApiUrlObj.id === 0 &&
+        baseApiUrlObj.id === 1 &&
         baseApiUrlObj.server !== urlAPI.BASE_API_URL
       ) {
         baseApiUrl = urlAPI.BASE_API_URL;
@@ -65,7 +65,7 @@ instanceAPI.interceptors.request.use(async (request) => {
         baseApiUrl = baseApiUrlObj.server;
       }
     }
-    console.log({baseApiUrl});
+    // console.log({baseApiUrl});
     request.baseURL = baseApiUrl;
   } catch (error) {
     console.log('error', error);

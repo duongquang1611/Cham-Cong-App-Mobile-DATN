@@ -14,8 +14,8 @@ import baseStyles from '../../../baseStyles';
 import {useRoute} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 const SERVER = [
-  {id: 0, name: 'Local Server', server: API.BASE_API_URL},
-  {id: 1, name: 'Heroku Server', server: API.baseApiUrlHeroku},
+  {id: 0, name: 'Heroku Server', server: API.baseApiUrlHeroku},
+  {id: 1, name: 'Local Server', server: API.BASE_API_URL},
   {id: 2, name: 'Tùy chỉnh', server: API.BASE_API_URL},
 ];
 
@@ -23,8 +23,7 @@ const titleScreen = 'Cài đặt Server';
 const SetupServer = (props) => {
   const [dataServer, setDataServer] = useState(SERVER[0]);
   const route = useRoute();
-  let net = useNetInfo();
-  console.log('🚀 ~ file: index.js ~ line 28 ~ SetupServer ~ net', net);
+  // let net = useNetInfo();
   console.log(route.params);
   useEffect(() => {
     getServer();
@@ -36,8 +35,8 @@ const SetupServer = (props) => {
       console.log('SetupServer -> baseUrl', baseUrl);
       if (baseUrl !== null) {
         let baseUrlParse = JSON.parse(baseUrl);
-        if (baseUrlParse?.id === 0) {
-          baseUrlParse = SERVER[0];
+        if (baseUrlParse?.id === 1) {
+          baseUrlParse = SERVER[1];
         }
         setDataServer(baseUrlParse);
       }
@@ -92,7 +91,7 @@ const SetupServer = (props) => {
           //   }}
           styleLabel={{marginLeft: 10}}
         />
-        {dataServer?.id !== 1 && (
+        {dataServer?.id !== 0 && (
           <InputView
             id="custom"
             onChangeText={onChangeText}
@@ -100,6 +99,7 @@ const SetupServer = (props) => {
             editable={dataServer?.id === 2}
             isShowClean={false}
             value={dataServer?.server}
+            autoFocus={dataServer?.id === 2}
             placeholder={`Nhập base url (VD: ${API.baseApiUrlHeroku})`}
           />
         )}

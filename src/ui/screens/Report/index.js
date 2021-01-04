@@ -75,32 +75,47 @@ const Report = () => {
   const [isLoading, setIsLoading] = useState(true);
   let daysInMonth = moment(date).daysInMonth();
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
+    console.log({filterMonthYear});
     API.getReportCompany(dispatch, filterMonthYear, user?.companyId?._id);
-    commons.wait(1000).then(setIsLoading(false));
-  };
+    // commons.wait(1000).then(setIsLoading(false));
+  }, [filterMonthYear, user?.companyId?._id]);
 
   useEffect(() => {
     filterMonthYear = commons.getDayMonthYear(date, false);
-    !isLoading && setIsLoading(true);
+    getData();
+    // !isLoading && setIsLoading(true);
   }, [detailDayWork, date]);
 
-  useEffect(() => {
-    isLoading && getData();
-  }, [isLoading]);
+  // useEffect(() => {
+  //   isLoading && getData();
+  // }, [isLoading]);
 
   const togglePicker = useCallback((value) => setShowPicker(value), []);
-  const createSheetName = (text) => {
-    text = text.replace(/([:\\\/?*\[\]]+)/g, ' ');
-    return text + ' ' + filterMonthYear.month + ' - ' + filterMonthYear.year;
-  };
+  const createSheetName = useCallback(
+    (text) => {
+      text = text.replace(/([:\\\/?*\[\]]+)/g, ' ');
+      return text + ' ' + filterMonthYear.month + ' - ' + filterMonthYear.year;
+    },
+    [filterMonthYear],
+  );
+
   const onValueChange = useCallback(
     (event, newDate) => {
       if (showPicker) {
+        togglePicker(false);
+        if (event === 'dismissedAction') return;
         const selectedDate = newDate || date;
         console.log('vao day', newDate);
-        togglePicker(false);
-        if (selectedDate) setDate(selectedDate);
+        if (selectedDate) {
+          if (
+            JSON.stringify(filterMonthYear) ===
+            JSON.stringify(commons.getDayMonthYear(selectedDate, false))
+          ) {
+            console.log('same');
+            return;
+          } else setDate(selectedDate);
+        }
       }
 
       // console.log({selectedDate});
@@ -190,6 +205,7 @@ const Report = () => {
           togglePicker(true);
         }}
       />
+      {/* {isLoading && <LoadingView />} */}
 
       <Provider>
         {showPicker && (
@@ -204,7 +220,6 @@ const Report = () => {
           />
         )}
         {/* <WorkDayCompany {...{date}} /> */}
-        {isLoading && <LoadingView />}
         <Tab.Navigator
           tabBarPosition="top"
           initialRouteName={'Account'}
