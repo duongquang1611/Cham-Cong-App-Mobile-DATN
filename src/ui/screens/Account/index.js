@@ -276,7 +276,8 @@ const AccountScreen = (props) => {
     // upload image to update user
     let res = await API.PUT(API.detailUser(userLocal._id), form);
     if (res && res._id) {
-      setUserInfo(res);
+      // setUserInfo(res);
+      saveUserInApp(res);
     }
   };
 
