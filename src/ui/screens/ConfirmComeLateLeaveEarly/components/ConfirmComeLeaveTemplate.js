@@ -29,7 +29,9 @@ const ConfirmComeLeaveTemplate = (props) => {
   const refBottomSheet = useRef();
 
   let userInfo = models.getUserInfo();
-
+  let isAdminCompanyOrDirector =
+    commons.isRole('admin_company', userInfo) ||
+    commons.isRole('director', userInfo);
   const [state, setState] = useState({
     page: 0,
     refreshing: true,
@@ -39,12 +41,14 @@ const ConfirmComeLeaveTemplate = (props) => {
   });
 
   let filter = {
-    parentId: userInfo?._id,
     comeLeave: true,
     statusComeLeaveAsk: statusComeLeaveAsk,
     sortType: sortSelected?.type,
     sortValue: sortSelected?.value,
   };
+  if (!isAdminCompanyOrDirector) {
+    filter.parentId = userInfo?._id;
+  }
   if (reversed) {
     filter.reverseStatusComeLeaveAsk = true;
   }
@@ -81,12 +85,14 @@ const ConfirmComeLeaveTemplate = (props) => {
   const onRefresh = (newFilter = {}) => {
     dispatch(actions.changeListConfirmComeLeave(false));
     filter = {
-      parentId: userInfo?._id,
       comeLeave: true,
       sortType: sortSelected?.type,
       sortValue: sortSelected?.value,
       ...newFilter,
     };
+    if (!isAdminCompanyOrDirector) {
+      filter.parentId = userInfo?._id;
+    }
     setState({
       ...state,
       page: 0,
@@ -103,7 +109,6 @@ const ConfirmComeLeaveTemplate = (props) => {
         newFilter,
         state.page,
       );
-
       setState({
         ...state,
         data: state.page == 0 ? res : state.data.concat(res),

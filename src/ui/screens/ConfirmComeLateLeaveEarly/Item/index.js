@@ -29,7 +29,7 @@ const ItemConfirmComeLeave = (props) => {
   const dispatch = useDispatch();
   const {item, index, style, typeConfirm} = props;
   let type = item?.type?.code;
-  // console.log('ItemConfirmComeLeave -> item', item);
+  // console.log('ItemConfirmComeLeave -> item', item[type].acceptedBy);
   let {day, month, year} = item;
   let dayName = moment(item?.dayWork).format('dddd');
   dayName = commons.uppercaseFirstLetter(dayName, true);
@@ -123,11 +123,22 @@ const ItemConfirmComeLeave = (props) => {
               {moment(item[type]?.time).format('HH:mm')}
             </Text>
           </Text>
-          {typeConfirm && (
+          {typeConfirm ? (
             <ConfirmButtonView
               onPressAccept={onPressConfirm}
               onPressCancel={onPressConfirm}
             />
+          ) : (
+            <>
+              <Text>
+                Người duyệt:{' '}
+                <Text>
+                  {item[type]?.acceptedBy
+                    ? item[type]?.acceptedBy?.name
+                    : 'Đang cập nhật'}
+                </Text>
+              </Text>
+            </>
           )}
         </View>
       </View>

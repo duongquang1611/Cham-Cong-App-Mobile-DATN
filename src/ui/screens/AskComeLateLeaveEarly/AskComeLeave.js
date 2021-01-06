@@ -110,7 +110,7 @@ const AskComeLeave = (props) => {
   const onPressSend = async () => {
     try {
       let res = await API.PUT(API.askComeLeave, dataAsk);
-      console.log('AskComeLeave -> res', res);
+      console.log({dataAsk});
       if (res && res._id) {
         showAlert({
           msg: `Xin ${

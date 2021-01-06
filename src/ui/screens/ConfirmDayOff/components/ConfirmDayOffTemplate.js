@@ -30,7 +30,9 @@ const ConfirmDayOffTemplate = (props) => {
   const {statusDayOff = 0, reversed, showButton = true} = props;
 
   let userInfo = models.getUserInfo();
-
+  let isAdminCompanyOrDirector =
+    commons.isRole('admin_company', userInfo) ||
+    commons.isRole('director', userInfo);
   const [state, setState] = useState({
     page: 0,
     refreshing: true,
@@ -40,11 +42,13 @@ const ConfirmDayOffTemplate = (props) => {
   });
 
   let filter = {
-    parentId: userInfo?._id,
     status: statusDayOff,
     sortType: sortSelected?.type,
     sortValue: sortSelected?.value,
   };
+  if (!isAdminCompanyOrDirector) {
+    filter.parentId = userInfo?._id;
+  }
   if (reversed) {
     filter.reverseStatus = true;
   }
@@ -83,12 +87,14 @@ const ConfirmDayOffTemplate = (props) => {
   const onRefresh = (newFilter = {}) => {
     dispatch(actions.changeListConfirmDayOff(false));
     filter = {
-      parentId: userInfo?._id,
       status: statusDayOff,
       sortType: sortSelected?.type,
       sortValue: sortSelected?.value,
       ...newFilter,
     };
+    if (!isAdminCompanyOrDirector) {
+      filter.parentId = userInfo?._id;
+    }
     setState({
       ...state,
       page: 0,

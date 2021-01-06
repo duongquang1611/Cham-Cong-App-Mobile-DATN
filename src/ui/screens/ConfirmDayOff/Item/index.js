@@ -117,11 +117,15 @@ const ItemConfirmDayOff = (props) => {
             {item?.title}
           </Text>
           <Text>Lý do: {item?.reason}</Text>
-          {showButton && (
+          {showButton ? (
             <ConfirmButtonView
               onPressAccept={onPressConfirm}
               onPressCancel={onPressConfirm}
             />
+          ) : (
+            <Text>
+              Người duyệt: {item?.acceptedBy?.name || 'Đang cập nhật'}
+            </Text>
           )}
         </View>
       </View>
