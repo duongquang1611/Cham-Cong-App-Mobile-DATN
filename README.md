@@ -2,10 +2,14 @@
 ## App Mobile Chấm Công Đồ án tốt nghiệp
 
 #### Link file APK app Chấm công: [Google Drive](https://drive.google.com/drive/folders/1Yw_kMLRfZw1ba6V9HSiEZXFMMXJWwcYI?usp=sharing)
-Mã nguồn Mobile được đặt trong Folder “cham-cong-app-mobile”
-Link Source Github: [Source Github](https://github.com/duongquang1611/cham-cong-app-mobile)
-Ứng dụng được xây dựng bằng React Native version 0.63.3
+Mã nguồn Mobile được đặt trong Folder “cham-cong-app-mobile”.
+
+Link Source Github: [Source Github](https://github.com/duongquang1611/cham-cong-app-mobile).
+
+Ứng dụng được xây dựng bằng React Native version 0.63.3.
+
 IDE lập trình: Visual Studio Code.
+
 Cấu hình môi trường theo React Native CLI trên trang chủ: [Environment Setup](https://reactnative.dev/docs/environment-setup)
 #### Các bước chạy ứng dụng Mobile từ Mã nguồn:
 1.	Mở Folder ```cham-cong-app-mobile``` bằng ```Visual Studio Code```
