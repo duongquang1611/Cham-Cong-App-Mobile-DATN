@@ -112,6 +112,7 @@ const ItemHistoryAskDayOff = (props) => {
             {item?.title}
           </Text>
           <Text>Lý do: {item?.reason}</Text>
+          <Text>Người duyệt: {item?.acceptedBy?.name || 'Đang cập nhật'}</Text>
           {/* {typeConfirm && (
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <TextView

@@ -135,6 +135,10 @@ const ItemHistoryAskComeLeave = (props) => {
               {moment(item[type]?.time).format('HH:mm')}
             </Text>
           </Text>
+          <Text>
+            Người duyệt: {item[type]?.acceptedBy?.name || 'Đang cập nhật'}
+          </Text>
+
           {typeConfirm && (
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <TextView
