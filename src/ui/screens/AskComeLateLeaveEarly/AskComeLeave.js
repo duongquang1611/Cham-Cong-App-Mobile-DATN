@@ -16,6 +16,7 @@ import {useDispatch} from 'react-redux';
 import API from '../../../networking';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
+import {isPastTime} from '../../commons/utils/DateUtils';
 import {COME_LEAVE_DATA} from './COME_LEAVE_DATA';
 import styles from './styles';
 
@@ -59,7 +60,11 @@ const AskComeLeave = (props) => {
     date.setSeconds(0);
     date.setMilliseconds(0);
     hideDatePicker();
-    onChangeText({id: 'time', data: date.toISOString()});
+    if (isPastTime(date)) {
+      showAlert({msg: 'Không thể chọn mốc thời gian trong quá khứ !'});
+    } else {
+      onChangeText({id: 'time', data: date.toISOString()});
+    }
   }, []);
 
   // const handleTimeConfirm = useCallback((date) => {

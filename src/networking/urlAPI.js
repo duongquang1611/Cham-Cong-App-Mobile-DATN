@@ -8,8 +8,8 @@ const config = {
 
     baseApiUrlHeroku: 'https://cham-cong.herokuapp.com/api/',
     // ngrok
-    BASE_API_URL: 'http://0a5f62a4d6d8.ngrok.io/api/',
-    BASE_URL: 'http://0a5f62a4d6d8.ngrok.io/',
+    BASE_API_URL: 'http://e4886ed8d289.ngrok.io/api/',
+    BASE_URL: 'http://e4886ed8d289.ngrok.io/',
 
     // heroku
     // BASE_API_URL: `${baseUrlHeroku}/api/`,

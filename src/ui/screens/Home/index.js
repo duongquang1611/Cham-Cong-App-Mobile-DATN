@@ -465,59 +465,59 @@ const HomeScreen = (props) => {
         isGranted: state.isGrantedLocation,
       });
       // check time to checkin
-      if (!detailDayWork?.checkin) {
-        // check in
-        // checkin trc gio cho phep
-        let isBeforeAllowCheckin = commons.isBeforeDate(
-          new Date(),
-          allowCheckin,
-        );
+      // if (!detailDayWork?.checkin) {
+      //   // check in
+      //   // checkin trc gio cho phep
+      //   let isBeforeAllowCheckin = commons.isBeforeDate(
+      //     new Date(),
+      //     allowCheckin,
+      //   );
 
-        // checkin sau gio checkout quy dinh
-        let isAfterDefaultCheckout = commons.isBeforeDate(
-          defaultCheckout,
-          new Date(),
-        );
+      //   // checkin sau gio checkout quy dinh
+      //   let isAfterDefaultCheckout = commons.isBeforeDate(
+      //     defaultCheckout,
+      //     new Date(),
+      //   );
 
-        if (isBeforeAllowCheckin) {
-          showAlert({
-            msg: `Không thể thực hiện checkin trước ${detailCompany?.config?.allowCheckin}`,
-          });
-          return;
-        }
-        if (isAfterDefaultCheckout) {
-          showAlert({
-            msg: `Không thể thực hiện checkin sau ${detailCompany?.config?.checkout}`,
-          });
-          return;
-        }
-      } else {
-        // checkout
+      //   if (isBeforeAllowCheckin) {
+      //     showAlert({
+      //       msg: `Không thể thực hiện checkin trước ${detailCompany?.config?.allowCheckin}`,
+      //     });
+      //     return;
+      //   }
+      //   if (isAfterDefaultCheckout) {
+      //     showAlert({
+      //       msg: `Không thể thực hiện checkin sau ${detailCompany?.config?.checkout}`,
+      //     });
+      //     return;
+      //   }
+      // } else {
+      //   // checkout
 
-        // checkout trc giơ checkin mac dinh
-        let isBeforeDefaultCheckin = commons.isBeforeDate(
-          new Date(),
-          defaultCheckin,
-        );
+      //   // checkout trc giơ checkin mac dinh
+      //   let isBeforeDefaultCheckin = commons.isBeforeDate(
+      //     new Date(),
+      //     defaultCheckin,
+      //   );
 
-        //checkout sau gio cho phep checkout
-        let isAfterAllowCheckout = commons.isBeforeDate(
-          allowCheckout,
-          new Date(),
-        );
-        if (isBeforeDefaultCheckin) {
-          showAlert({
-            msg: `Không thể thực hiện checkout trước ${detailCompany?.config?.checkin}`,
-          });
-          return;
-        }
-        if (isAfterAllowCheckout) {
-          showAlert({
-            msg: `Không thể thực hiện checkout sau ${detailCompany?.config?.allowCheckout}`,
-          });
-          return;
-        }
-      }
+      //   //checkout sau gio cho phep checkout
+      //   let isAfterAllowCheckout = commons.isBeforeDate(
+      //     allowCheckout,
+      //     new Date(),
+      //   );
+      //   if (isBeforeDefaultCheckin) {
+      //     showAlert({
+      //       msg: `Không thể thực hiện checkout trước ${detailCompany?.config?.checkin}`,
+      //     });
+      //     return;
+      //   }
+      //   if (isAfterAllowCheckout) {
+      //     showAlert({
+      //       msg: `Không thể thực hiện checkout sau ${detailCompany?.config?.allowCheckout}`,
+      //     });
+      //     return;
+      //   }
+      // }
 
       // check have personId to check face
       if (!state.selectedUser?.personId) {

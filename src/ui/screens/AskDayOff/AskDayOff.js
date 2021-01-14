@@ -17,6 +17,7 @@ import {useDispatch} from 'react-redux';
 import API from '../../../networking';
 import actions from '../../../redux/actions';
 import commons from '../../commons';
+import {isPastTime} from '../../commons/utils/DateUtils';
 import {DAY_OFF_DATA} from './DAY_OFF_DATA';
 import styles from './styles';
 let currentPicker;
@@ -62,6 +63,22 @@ const AskDayOff = (props) => {
     date.setSeconds(0);
     date.setMilliseconds(0);
     hideDatePicker();
+    if (commons.isPreviousDay(date)) {
+      showAlert({msg: 'Không thể chọn mốc thời gian trong quá khứ !'});
+      return;
+    } else if (dataAsk?.toDate && currentPicker === 'fromDate') {
+      // check from -> to
+      if (commons.isPastTime(new Date(dataAsk.toDate), date)) {
+        showAlert({msg: 'Ngày bắt đầu không được lớn hơn ngày kết thúc !'});
+        return;
+      }
+    } else if (dataAsk?.fromDate && currentPicker === 'toDate') {
+      // check from -> to
+      if (commons.isPastTime(date, new Date(dataAsk.fromDate))) {
+        showAlert({msg: 'Ngày kết thúc không được nhỏ hơn ngày bắt đầu !'});
+        return;
+      }
+    }
     onChangeText({id: currentPicker, data: date.toISOString()});
   }, []);
 

@@ -146,3 +146,16 @@ export const isBeforeDate = (date1, date2 = new Date()) => {
   let check = rangeTimeDate(date1, date2);
   return check < 0;
 };
+export const isPastTime = (date1, date2 = new Date()) => {
+  if (date1 < date2) {
+    return true;
+  }
+  return false;
+};
+
+export const isPreviousDay = (date1) => {
+  let date2 = new Date();
+  date2.setDate(date2.getDate() - 1);
+
+  return isPastTime(date1, date2);
+};
