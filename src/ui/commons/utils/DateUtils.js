@@ -74,9 +74,10 @@ export const dateFromCurrenDate = (numberDay) => {
 const pad = (num) => {
   return ('0' + num).slice(-2);
 };
-export const convertSecondToHHmmss = (seconds) => {
+const convertSecondToHHmmss = (seconds) => {
   // duration: milisecond
-
+  let isNegative = seconds < 0;
+  if (isNegative) seconds = Math.abs(seconds);
   let convert = '';
 
   let minutes = Math.floor(seconds / 60);
@@ -87,7 +88,7 @@ export const convertSecondToHHmmss = (seconds) => {
   convert = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 
   // convert = pad(hours)+":"+pad(minutes)+":"+pad(seconds); // for old browsers
-  return convert;
+  return `${isNegative ? '-' : ''}${convert}`;
 };
 
 export const getDayMonthYear = (date = new Date(), showFull = true) => {
