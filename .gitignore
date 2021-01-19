@@ -58,3 +58,4 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 index.android.bundle
+app-release.apk

@@ -74,7 +74,7 @@ export const dateFromCurrenDate = (numberDay) => {
 const pad = (num) => {
   return ('0' + num).slice(-2);
 };
-const convertSecondToHHmmss = (seconds) => {
+export const convertSecondToHHmmss = (seconds) => {
   // duration: milisecond
   let isNegative = seconds < 0;
   if (isNegative) seconds = Math.abs(seconds);
